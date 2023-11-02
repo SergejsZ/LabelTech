@@ -1,0 +1,28 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+.gridItem {
+  width: 100%;
+  height: 200px;
+  transition: transform 0.2s ease;
+}
+
+.expanded {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.overlay {
+  /* ... styles existants */
+  width: 100vw;
+  height: 100vh;
+}
+
+  
