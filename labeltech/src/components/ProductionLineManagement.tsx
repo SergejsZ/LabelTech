@@ -22,9 +22,9 @@ const ProductionLineManagement = () => {
                 <button>Resume</button>
                 <button>Edit production line</button>
             </div>
-            <div className='flex flex-col border-solid border-2 border-black rounded m-2'>
-                <button>Save and Exit</button>
-                <button>Exit without saving</button>
+            <div className='flex flex-col m-2 p-5'>
+                <button className='greenbtn mb-1'>Save and Exit</button>
+                <button className='greenbtn mt-1'>Exit without saving</button>
             </div>
         </div>
     </div>

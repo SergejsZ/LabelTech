@@ -29,8 +29,8 @@ const Grid: React.FC<GridProps> = ({ components }) => {
         <div
           key={index}
           className={styles.gridItem}
-          onClick={(event) => handleClick(Component, event)}
-        >
+          // onClick={(event) => handleClick(Component, event)}
+          >
           {Component}
         </div>
       ))}
