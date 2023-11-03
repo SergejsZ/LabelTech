@@ -16,3 +16,18 @@
   }
 }
 
+/* Tailwind Styles */
+
+.greenbtn {
+  @apply bg-lime-500 text-black font-bold py-2 px-4 rounded-lg;
+}
+
+.greyinput {
+  @apply bg-gray-200 text-black py-2 px-5 rounded-lg;
+}
+
+.input{
+  @apply border-solid border-2 border-black text-black py-2 px-5 rounded-lg;
+}
+
+
