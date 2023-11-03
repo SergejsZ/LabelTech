@@ -1,4 +1,3 @@
-// components/Grid.tsx
 import { useState, ReactElement } from 'react';
 import styles from '../styles/Grid.module.css';
 

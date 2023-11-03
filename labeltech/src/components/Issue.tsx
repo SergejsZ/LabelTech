@@ -2,8 +2,8 @@ import React from 'react'
 
 const Issue = () => {
   return (
-    <div>
-        <h1>Report an Issue</h1>
+    <div className='border-solid border-2 border-black rounded-lg'>
+        <h1 className='text-center'>Report an Issue</h1>
         <form>
             <label>
                 <input type="text" name="issue" />

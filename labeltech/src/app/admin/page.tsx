@@ -14,10 +14,10 @@ const page = () => {
   const gridComponents = [
     <ProductionLineManagement />,
     <ProductionManagement />,
-    // <LabelErrorHistory />,
-    // <ActivationPorductionLine />,
-    // <Statistics />,
-    // <Issue />,
+    <LabelErrorHistory />,
+    <ActivationPorductionLine />,
+    <Statistics />,
+    <Issue />,
   ];
 
   return (

@@ -6,7 +6,7 @@
   
 .gridItem {
   width: 100%;
-  height: 200px;
+  /* height: 400px; */
   transition: transform 0.2s ease;
 }
 
@@ -20,7 +20,6 @@
 }
 
 .overlay {
-  /* ... styles existants */
   width: 100vw;
   height: 100vh;
 }
