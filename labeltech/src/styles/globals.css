@@ -16,6 +16,11 @@
   }
 }
 
+body{
+  padding: 0;
+  margin: 0;
+}
+
 /* Tailwind Styles */
 
 .greenbtn {
@@ -26,8 +31,15 @@
   @apply bg-gray-200 text-black py-2 px-5 rounded-lg;
 }
 
-.input{
+.basicinput{
   @apply border-solid border-2 border-black text-black py-2 px-5 rounded-lg;
 }
 
+.logininput{
+  @apply text-sm appearance-none rounded w-full py-2 px-3 text-gray-700 bg-gray-200 h-10
+}
+
+.loginlabel{
+  @apply block text-gray-700 text-sm font-semibold mb-2
+}
 
