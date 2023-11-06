@@ -1,6 +1,6 @@
 "use client"
 
-import ActivationPorductionLine from '@/components/ActivationPorductionLine';
+import ActivationProductionLine from '@/components/ActivationProductionLine';
 import Grid from '@/components/Grid'
 import Issue from '@/components/Issue';
 import LabelErrorHistory from '@/components/LabelErrorHistory';
@@ -15,14 +15,14 @@ const page = () => {
     <ProductionLineManagement />,
     <ProductionManagement />,
     <LabelErrorHistory />,
-    <ActivationPorductionLine />,
+    <ActivationProductionLine />,
     <Statistics />,
     <Issue />,
   ];
 
   return (
     <div className='mt-16 mx-16'>
-        <Grid components={gridComponents} />
+        <Grid items={gridComponents} />
     </div>    
   )
 }

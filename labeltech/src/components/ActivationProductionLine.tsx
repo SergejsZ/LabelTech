@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ActivationPorductionLine = () => {
+const ActivationProductionLine = () => {
   const lines = Array.from({length: 8}, (_, i) => i + 1);
   return (
     <div>
@@ -29,4 +29,4 @@ const ActivationPorductionLine = () => {
   )
 }
 
-export default ActivationPorductionLine
+export default ActivationProductionLine

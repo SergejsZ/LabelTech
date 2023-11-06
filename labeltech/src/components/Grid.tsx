@@ -1,53 +1,43 @@
-import { useState, ReactElement } from 'react';
+import React, { useState, ReactNode } from 'react';
 import styles from '../styles/grid.module.css';
 
-type GridProps = {
-  components: ReactElement[];
-};
+interface GridProps {
+  items: ReactNode[];
+}
 
+const Grid: React.FC<GridProps> = ({ items }) => {
+  const [selectedItem, setSelectedItem] = useState<ReactNode | null>(null);
 
-let isComponentExpended = false;
+  const selectItem = (item: ReactNode) => {
+    setSelectedItem(item);
+  };
 
-const Grid: React.FC<GridProps> = ({ components }) => {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
-
-  const handleClick = (id: number) => {
-    if (!isComponentExpended) {
-      setExpandedId(expandedId === id ? null : id);
-      isComponentExpended = true;
-      //get all the grid items
-      document.querySelectorAll(`.${styles.gridItem}`).forEach((element) => {
-        if (element !== document.querySelectorAll(`.${styles.gridItem}`)[id]) {
-          element.classList.add(styles.blurEffect);
-        }
-      });
-    }
-    else {
-      if (expandedId !== id) {
-        setExpandedId(null);
-        isComponentExpended = false;
-        document.querySelectorAll(`.${styles.gridItem}`).forEach((element) => {
-          element.classList.remove(styles.blurEffect);
-        });
-      }
-    }
+  const clearSelection = () => {
+    setSelectedItem(null);
   };
 
   return (
-    <div className={styles.grid}>
-      {components.map((Component, index) => (
-          <div 
-            key={index}
-            className={`${styles.gridItem} ${expandedId === index ? styles.expanded : ''} border-solid border-2 border-black rounded-lg`}
-            onClick={() => handleClick(index)}
-          >
-            {Component}
+    <>
+      {selectedItem && (
+        <div className={styles.overlay} onClick={clearSelection}>
+          <div className={styles.detail} onClick={e => e.stopPropagation()}>
+            {selectedItem}
           </div>
-          
-      ))}
-    </div>
+        </div>
+      )}
+      <div className={styles.grid}>
+        {items.map((item, index) => (
+          <div
+            key={index}
+            className={`${styles.item} ${selectedItem && styles.blurred}`}
+            onClick={() => selectItem(item)}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
 export default Grid;
-  

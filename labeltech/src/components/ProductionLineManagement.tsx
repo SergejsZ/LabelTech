@@ -6,7 +6,7 @@ const ProductionLineManagement = () => {
   return (
     <div>
         <h2 className='text-center font-bold'>Production Line Management</h2>
-        <div className='flex flex-wrap'>
+        <div className='flex flex-wrap mt-5'>
             <div className='flex flex-col border-solid border-2 border-black rounded m-2'>
                     <h2 className='text-center'>Edit production line</h2>
                     <div className='pl-2 flex flex-raw mx-5'>
@@ -37,8 +37,6 @@ const ProductionLineManagement = () => {
                 <button className='greyinput'>Stop</button>
                 <button className='greyinput'>Resume</button>
                 <button className='greyinput'>Edit line</button>
-            </div>
-            <div className='flex flex-col m-2 p-5'>
                 <button className='greenbtn mb-1'>Save and Exit</button>
                 <button className='greenbtn mt-1'>Exit without saving</button>
             </div>
