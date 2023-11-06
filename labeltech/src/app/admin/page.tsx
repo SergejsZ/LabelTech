@@ -11,12 +11,21 @@ import React from 'react'
 
 const page = () => {
 
+  const fakeStats = {
+    totalErrors: 78,
+    downtime: '2h 35m',
+    mostCommonError: 'Porduct code input error',
+    errorRate: '2.5%',
+    warnings: 56,
+    informationLogs: 1500
+  };
+
   const gridComponents = [
     <ProductionLineManagement />,
     <ProductionManagement />,
     <LabelErrorHistory />,
     <ActivationProductionLine />,
-    <Statistics />,
+    <Statistics stats={fakeStats}/>,
     <Issue />,
   ];
 
