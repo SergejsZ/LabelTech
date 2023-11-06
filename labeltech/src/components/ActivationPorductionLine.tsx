@@ -3,19 +3,27 @@ import React from 'react'
 const ActivationPorductionLine = () => {
   const lines = Array.from({length: 8}, (_, i) => i + 1);
   return (
-    <div className='border-solid border-2 border-black rounded-lg'>
-      <p>ACTIVE/INACTIVE PRODUCTION LINES</p>
+    <div>
+      <h2 className='text-center font-bold'>Active/inactive production lines</h2>
       <div className='flex flex-raw'>
-        <div className='border-solid border-2 border-black rounded m-2'>
-            <ul className='w-64'>
+        <div className='m-2'>
+            <ul className='w-32'>
                 {lines.map((line) => (
-                    <li key={line}>Line {line}</li>
+                  <>
+                  {/* si la ligne est pair, alors elle est active, sinon inactive */}
+                    {line % 2 === 0 ? (
+                      <li key={line} className='border-solid border-black border-y active'>Line {line}</li>
+                    ) : (
+                      <li key={line} className='border-solid border-black border-y inactive'>Line {line}</li>
+                    )}
+
+                  </>
                 ))}
             </ul>
         </div>
-        <div className='flex flex-col'>
-            <p>Activate</p>
-            <p>Inactive</p>
+        <div className='flex flex-col mt-5'>
+            <p className='active'>Activate</p>
+            <p className='inactive'>Inactive</p>
         </div>
       </div>  
     </div>

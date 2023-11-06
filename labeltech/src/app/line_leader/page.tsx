@@ -1,11 +1,19 @@
 import React from 'react'
 
 const page = () => {
+
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+
+  const currentDate = `${day}/${month}/${year}`;
+
   return (
     <div className='text-3xl'>
       <div className='flex justify-end w-full mt-10'>
         <p className='mr-5'>Today's date</p>
-        <p className='greyinput mr-16'>29/11/2023</p>
+        <p className='greyinput mr-16'>{currentDate}</p>
       </div>
       <div className='flex justify-around py-5'>
         <div className='border-solid border-2 border-black rounded-lg w-5/12 py-5 px-3'>
@@ -18,7 +26,7 @@ const page = () => {
             <p className='basicinput ml-5'>30/11/2023</p>
           </div>
           <div className='flex flex-raw py-5'>
-            <p className='pt-2'>Confirm details before scanning</p>
+            <p className='pt-2 mr-4'>Confirm details before scanning</p>
             <button className='greenbtn'>Confirm</button>
           </div>
         </div>

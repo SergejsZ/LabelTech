@@ -10,7 +10,7 @@ import Statistics from '@/components/Statistics';
 import React from 'react'
 
 const page = () => {
-    // Create an array of components to be rendered in the grid
+
   const gridComponents = [
     <ProductionLineManagement />,
     <ProductionManagement />,
@@ -21,8 +21,7 @@ const page = () => {
   ];
 
   return (
-    <div>
-        <h1 className="text-center">Admin</h1>
+    <div className='mt-16 mx-16'>
         <Grid components={gridComponents} />
     </div>    
   )

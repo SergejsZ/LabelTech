@@ -2,8 +2,8 @@ import React from 'react'
 
 const LabelErrorHistory = () => {
   return (
-    <div className='border-solid border-2 border-black rounded-lg'>
-      <h1 className='text-center'>Label Error History</h1>
+    <div>
+      <h2 className='text-center font-bold'>Label Error History</h2>
       <div className='flex justify-around'>
         <div className='flex flex-col'>
           <button className='greyinput my-2'>Select date from</button>
