@@ -27,9 +27,9 @@ const ProductionManagement = () => {
                 </div>
                 <div className='ml-2'>
                     <h2 className='text-center'>Product Code</h2>
-                    <ul className='border-solid border-2 border-black rounded m-2 w-32'>
+                    <ul className='m-2 w-32'>
                         {productCode.map((productCode) => (
-                            <li key={productCode} className='border-solid border-black border-y'> {productCode}</li>
+                            <li key={productCode} className='border-solid border-black border rounded-lg text-center'> {productCode}</li>
                         ))}
                     </ul>
                 </div>

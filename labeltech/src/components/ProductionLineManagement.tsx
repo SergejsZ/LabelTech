@@ -29,7 +29,7 @@ const ProductionLineManagement = () => {
             <div className='m-2 w-32'>
                 <ul>
                     {lines.map((line) => (
-                        <li key={line} className='border-solid border-black border rounded-lg'>Line {line}</li>
+                        <li key={line} className='border-solid border-black border rounded-lg text-center'>Line {line}</li>
                     ))}
                 </ul>
             </div>
