@@ -19,11 +19,11 @@ const page = () => {
         <div className='border-solid border-2 border-black rounded-lg w-5/12 py-5 px-3'>
           <div className='flex flex-raw py-5'>
             <p>Select product code</p>
-            <p className='basicinput ml-5'>532</p>
+            <input type="text" className='basicinput w-1/2 ml-2'/>
           </div>
           <div className='flex flex-raw py-5'>
             <p>Select depot date</p>
-            <p className='basicinput ml-5'>30/11/2023</p>
+            <input type="text" className='basicinput w-1/2 ml-2' />
           </div>
           <div className='flex flex-raw py-5'>
             <p className='pt-2 mr-4'>Confirm details before scanning</p>

@@ -8,7 +8,7 @@ const Home = () => {
     // if !connected
     // else the user is redirect to the dashboard page corresponding to his role (admin or line leader)    
     <div className='mt-32'>
-      <div className="container max-w-md mx-auto xl:max-w-3xl h-full flex bg-white rounded-lg shadow overflow-hidden">
+      <div className="container max-w-md mx-auto xl:max-w-3xl h-full flex bg-slate-100 rounded-lg shadow overflow-hidden">
         <div className="relative hidden xl:block xl:w-1/2 h-full">
           <img
             className="absolute h-auto w-full object-cover"

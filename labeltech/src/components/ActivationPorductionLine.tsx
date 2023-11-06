@@ -10,7 +10,6 @@ const ActivationPorductionLine = () => {
             <ul className='w-32'>
                 {lines.map((line) => (
                   <>
-                  {/* si la ligne est pair, alors elle est active, sinon inactive */}
                     {line % 2 === 0 ? (
                       <li key={line} className='border-solid border-black border-y active'>Line {line}</li>
                     ) : (
