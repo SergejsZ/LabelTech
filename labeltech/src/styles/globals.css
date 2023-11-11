@@ -25,7 +25,7 @@ body{
 /* Tailwind Styles */
 
 .greenbtn {
-  @apply bg-lime-500 text-black font-bold py-1 px-4 rounded-lg;
+  @apply bg-green-500 text-black font-bold py-1 px-4 rounded-lg;
 }
 
 .yellowbtn {
