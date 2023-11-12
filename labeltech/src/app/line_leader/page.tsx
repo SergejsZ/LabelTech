@@ -75,12 +75,6 @@ const page = () => {
           <label htmlFor="packedWithoutError" className="text-lg font-semibold">Packed without error:</label>
           <span className="text-xl font-bold p-2 bg-gray-200 rounded">{packedWithoutError}</span>
         </div>
-
-        <button 
-          onClick={handleStartScanning} 
-          className="bg-green-500 hover:bg-green-600 text-black font-bold py-2 px-4 rounded  ">
-          Start
-        </button>
       </div>
     </div>
     <div className='flex justify-center mt-16'>
