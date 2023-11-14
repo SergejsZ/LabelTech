@@ -13,7 +13,7 @@ const Home = () => {
           <img
             className="absolute h-auto w-full object-cover"
             src="../utils/images/Logo_lablelTech.png"
-            alt="logo labeltech"/>
+            alt="logo labeltech" />
         </div>
         <div className="w-full xl:w-1/2 p-8">
           <form method="post" action="#">
