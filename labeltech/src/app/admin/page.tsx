@@ -1,6 +1,7 @@
 "use client"
 
 import ActivationProductionLine from '@/components/ActivationProductionLine';
+import CreateUser from '@/components/CreateUsers';
 import Grid from '@/components/Grid'
 import Issue from '@/components/Issue';
 import LabelErrorHistory from '@/components/LabelErrorHistory';
@@ -23,7 +24,8 @@ const page = () => {
     <LabelErrorHistory key="LabelErrorHistory" />,
     <ActivationProductionLine key="ActivationProductionLine" />,
     <Statistics key="Statistics" stats={fakeStats} />,
-    <Issue key="Issue" />
+    <Issue key="Issue" />,
+    // <CreateUser key="CreateUser" />
   ];
 
   return (

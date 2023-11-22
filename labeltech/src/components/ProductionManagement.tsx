@@ -1,48 +1,114 @@
-import React from 'react'
+import React, { useState } from 'react';
+
+// Define types for product details
+type ProductDetails = {
+    code: number;
+    name: string;
+    description: string;
+    weight: number;
+};
 
 const ProductionManagement = () => {
-    const productCode = Array.from({length: 8}, (_, i) => i + 1);
+    const productCodes = Array.from({length: 8}, (_, i) => i + 1);
+
+    // State for selected product details
+    const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(null);
+
+    // State for editing product details
+    const [editDetails, setEditDetails] = useState<ProductDetails | null>(null);
+
+    const [showOnlyProductList, setShowOnlyProductList] = useState(false);
+
+
+    // Mock function to simulate fetching product details
+    const fetchProductDetails = async (productCode: number): Promise<ProductDetails> => {
+        return {
+            code: productCode,
+            name: `Product Name ${productCode}`,
+            description: `Description for product ${productCode}`,
+            weight: 100 + productCode // Just a mock value
+        };
+    };
+
+     // Handle form submission
+     const handleEditSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        console.log('Updated Product Details:', editDetails);
+        // send the updated data to the server
+    };
+
+    // Handle form field changes
+    const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEditDetails({
+            ...editDetails,
+            [event.target.name]: event.target.value
+        } as ProductDetails);
+    };
+
+    // Handle product code click
+    const handleProductClick = async (productCode: number) => {
+        const details = await fetchProductDetails(productCode);
+        setSelectedProduct(details);
+    };
+
+
+    if (showOnlyProductList) {
+        return (
+            <div>
+                <h2 className='text-center font-bold'>Product Management</h2>
+                <ul className='m-2 w-32'>
+                    {productCodes.map((code) => (
+                        <li key={code} className='border-solid border-black border rounded-lg text-center'>
+                            {code}
+                        </li>
+                    ))}
+                </ul>
+                <button onClick={() => setShowOnlyProductList(!showOnlyProductList)}>
+                    {showOnlyProductList ? "Show Full View" : "Show Only Product List"}
+                 </button>
+            </div>
+        );
+    }
+
     return (
         <div>
-            <h2 className='text-center font-bold'>Product Management</h2>
-            <div className='flex flex-wrap mt-5'>
-                <div className='flex flex-col border-solid border-2 border-black rounded m-2'>
-                    <h2 className='text-center'>Edit product details</h2>
-                    <div className='pl-2 flex flex-raw mx-5'>
-                        <div className='flex flex-col'>
-                            <p className='mr-2 py-2'>Product code</p>
-                            <p className='mr-2 py-2'>Product name</p>
-                            <p className='mr-2 py-3'>Product description</p>
-                            <p className='mr-2 py-3'>Product Weight in Grams</p>
-                        </div>
-                        <div className='flex flex-col'>
-                            <p className='basicinput'>986</p>
-                            <p className='basicinput'>white mushrooms</p>
-                            <p className='basicinput'>pack of 6 big white mushrooms</p>                            
-                            <p className='basicinput'>250</p>
-                        </div>
-                            
-                    </div>
-                    <button className='greenbtn mx-30pc my-5'>Save and change</button>
-                </div>
-                <div className='ml-2'>
-                    <h2 className='text-center'>Product Code</h2>
-                    <ul className='m-2 w-32'>
-                        {productCode.map((productCode) => (
-                            <li key={productCode} className='border-solid border-black border rounded-lg text-center'> {productCode}</li>
-                        ))}
-                    </ul>
-                </div>
-                <div className='flex flex-col m-2'>
-                    <button className='yellowbtn m-1'>Edit product details</button>
-                    <button className='yellowbtn m-1'>Add product</button>
-                    <button className='yellowbtn m-1'>Delete product</button>
-                    <button className='greenbtn m-1'>Save and Exit</button>
-                    <button className='greenbtn m-1'>Exit without saving</button>
-                </div>
-            </div>
-        </div>
-    )
-}
 
-export default ProductionManagement
+            <h2 className='text-center font-bold'>Product Management</h2>
+            <div className='flex flew-raw'>
+                <ul className='m-2 w-32 border-solid border-2 border-black'>
+                    {productCodes.map((code) => (
+                        <li key={code} className='border-solid border-black border rounded-lg text-center' onClick={() => handleProductClick(code)}>
+                            {code}
+                        </li>
+                    ))}
+                </ul>
+
+                {selectedProduct && (
+                    <div className='product-details border-solid border-2 border-black'>
+                        <div className='border-solid border-2 border-black'>
+                            <p>Code: {selectedProduct.code}</p>
+                            <p>Name: {selectedProduct.name}</p>
+                            <p>Description: {selectedProduct.description}</p>
+                            <p>Weight: {selectedProduct.weight}g</p>
+                            <h3>Edit Product Details</h3>
+                        </div>
+                        <div className='border-solid border-2 border-black'> 
+                            <form onSubmit={handleEditSubmit}>
+                                <input type="text" name="name" value={editDetails?.name || ''} onChange={handleEditChange} placeholder="Product Name" />
+                                <input type="text" name="description" value={editDetails?.description || ''} onChange={handleEditChange} placeholder="Product Description" />
+                                <input type="number" name="weight" value={editDetails?.weight || 0} onChange={handleEditChange} placeholder="Product Weight" />
+                                <button className='greenbtn m-1' type="submit">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <button onClick={() => setShowOnlyProductList(!showOnlyProductList)}>
+                {showOnlyProductList ? "Show Full View" : "Show Only Product List"}
+            </button>
+        </div>
+    );
+};
+
+export default ProductionManagement;
