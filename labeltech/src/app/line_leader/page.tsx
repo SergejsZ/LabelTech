@@ -20,7 +20,7 @@ const page = () => {
         <p className='mr-5'>Today&apos;s date</p>
         <p className='greyinput mr-16'>{currentDate}</p>
       </div>
-      <div className="flex justify-between p-5">
+      <div className="flex p-5 flex-col md:flex-row">
       <div className="flex-1 bg-white shadow-lg rounded-lg p-6 mr-3 text-center">
         <div className="mb-4">
           <label htmlFor="productCode" className="block text-lg font-semibold mb-2">Select product code:</label>
