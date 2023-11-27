@@ -65,7 +65,7 @@ const page = () => {
       </div>
     </div>
     <div className='flex justify-center mt-16'>
-      <p className='mr-10 pt-2'>Start scanning</p>
+      <p className='mr-10 pt-2'>Start scanning: </p>
       <button className='greenbtn'>Start</button>
     </div>
   </div>
