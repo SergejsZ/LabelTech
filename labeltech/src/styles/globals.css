@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body{
+  padding: 0;
+  margin: 0;
+}
+
+
+/* Tailwind Styles */
+
+.greenbtn {
+  @apply bg-green-500 text-black font-bold py-1 px-4 rounded-lg;
+}
+
+.yellowbtn {
+  @apply bg-yellow-200 text-black font-bold py-1 px-4 rounded-lg;
+}
+
+.greyinput {
+  @apply bg-gray-200 text-black py-1 px-5 rounded-lg;
+}
+
+.basicinput{
+  @apply border-solid border-2 border-black text-black py-1 px-5 rounded-lg;
+}
+
+.logininput{
+  @apply text-sm appearance-none rounded w-full py-1 px-3 text-gray-700 bg-gray-200 h-10
+}
+
+.loginlabel{
+  @apply block text-gray-700 text-sm font-semibold mb-2
+}
+
+.mx-30pc{
+  margin-left: 30% ;
+  margin-right: 30% ;
+}
+
+.greyline{
+  @apply bg-gray-200 h-1 w-full;
+}
+
+.active{
+  @apply bg-green-200 text-black font-bold px-4 rounded-lg;
+}
+
+.inactive{
+  @apply bg-red-200 text-black font-bold px-4 rounded-lg;
+}
+
