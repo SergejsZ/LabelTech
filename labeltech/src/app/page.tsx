@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Home = () => {
-
+//Adding missing files from previous push
   const connected = false;
 
   return (
