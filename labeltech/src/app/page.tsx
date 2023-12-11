@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 interface UserData {
   username: string;
-  // Add more properties as needed
 }
 
 const Home = () => {
@@ -27,10 +26,10 @@ const Home = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Successful login, redirect to the specified route
+        //successful login, redirect to the specified route
         window.location.href = data.redirect;
       } else {
-        // Login error, display the error message
+        //login error, display the error message
         setLoginError(data.error);
       }
     } catch (error) {
@@ -40,11 +39,11 @@ const Home = () => {
   };
 
   const handleLoginClick = () => {
-    // Get input values
+    //get input values
     const idInput = document.getElementById('id') as HTMLInputElement;
     const passwordInput = document.getElementById('password') as HTMLInputElement;
 
-    // Call the handleLogin function with the input values
+    //call the handleLogin function with the input values
     handleLogin(idInput.value, passwordInput.value);
   };
 
@@ -91,16 +90,18 @@ const Home = () => {
                 >
                   Log in
                 </button>
+                
               </div>
+                {/* Error Message */}
+      {loginError && (
+        <div className="mt-2 text-red-500">{loginError}</div>
+      )}
             </form>
           </div>
         </div>
       )}
 
-      {/* Error Message */}
-      {loginError && (
-        <div className="mt-4 text-red-500">{loginError}</div>
-      )}
+    
     </div>
   );
 };

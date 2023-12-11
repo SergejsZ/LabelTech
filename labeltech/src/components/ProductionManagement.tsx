@@ -1,117 +1,146 @@
-import { randomBytes } from 'crypto';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-// Define types for product details
 type ProductDetails = {
-    code: number;
-    name: string;
-    description: string;
-    weight: number;
+  productCode: number;
+  productName: string;
+  productWeight: number;
+  productCustomerID: number;
+  productExpiryDate: string;
 };
 
 const ProductionManagement = () => {
-    const productCodes = Array.from({length: 8}, (_, i) => i + 1);
+  const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(null);
+  const [selectedCode, setSelectedCode] = useState<number | null>(null);
+  const [editDetails, setEditDetails] = useState<ProductDetails | null>(null);
+  const [showOnlyProductList, setShowOnlyProductList] = useState(false);
+  const [products, setProducts] = useState<ProductDetails[]>([]);
 
-    const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(null);
-    const [selectedCode, setSelectedCode] = useState<number | null>(null);
-    const [editDetails, setEditDetails] = useState<ProductDetails | null>(null);
-    const [showOnlyProductList, setShowOnlyProductList] = useState(false);
-
-
-    // Mock function to simulate fetching product details
-    const fetchProductDetails = async (productCode: number): Promise<ProductDetails> => {
-        return {
-            code: productCode,
-            name: `${randomBytes(2).toString('hex')}`,
-            description: `This product is ${productCode}`,
-            weight: 100 + productCode // Just a mock value
-        };
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/products');
+        const products = response.data;
+        setProducts(products);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
     };
 
-     // Handle form submission
-     const handleEditSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log('Updated Product Details:', editDetails);
-        // send the updated data to the server
-    };
+    fetchProductDetails();
+  }, []);
 
-    // Handle form field changes
-    const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEditDetails({
-            ...editDetails,
-            [event.target.name]: event.target.value
-        } as ProductDetails);
-    };
+  const handleEditSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-    // Handle product code click
-    const handleProductClick = async (productCode: number) => {
-        const details = await fetchProductDetails(productCode);
-        setSelectedProduct(details);
-        setSelectedCode(productCode);
-    };
+    try {
+      if (selectedProduct) {
+        const { productCode } = selectedProduct;
+        await axios.put(`http://localhost:4000/api/products/${productCode}`, editDetails);
 
-
-    if (showOnlyProductList) {
-        return (
-            <div>
-                <h2 className='text-center font-bold'>Product Management</h2>
-                <ul className='m-2 w-32'>
-                    {productCodes.map((code) => (
-                        <li key={code} className={`border-solid border-black border rounded-lg text-center`}>
-                            {code}
-                        </li>
-                    ))}
-                </ul>
-                {/* <button onClick={() => setShowOnlyProductList(!showOnlyProductList)}>
-                    {showOnlyProductList ? "Show Full View" : "Show Only Product List"}
-                 </button> */}
-            </div>
-        );
+        //refresh products
+        const response = await axios.get('http://localhost:4000/api/products');
+        const updatedProducts = response.data;
+        setProducts(updatedProducts);
+        setSelectedProduct(null); //clear the selected product after update
+      }
+    } catch (error) {
+      console.error('Error updating product:', error);
     }
+  };
 
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditDetails({
+      ...editDetails,
+      [event.target.name]: event.target.value,
+    } as ProductDetails);
+  };
+
+  const handleProductClick = (productCode: number) => {
+    const product = products.find((p) => p.productCode === productCode);
+    if (product) {
+      setSelectedProduct(product);
+      setSelectedCode(productCode);
+      setEditDetails(product); // Set initial values for the edit form
+    }
+  };
+
+  const renderInputFields = () => {
+    return Object.entries(editDetails || {}).map(([key, value]) => (
+      <input
+        key={key}
+        type='text'
+        name={key}
+        className='p-2 border-solid border-2 rounded-lg border-black mt-4 mr-3'
+        value={value}
+        onChange={handleEditChange}
+        placeholder={`New ${key}`}
+      />
+    ));
+  };
+
+  if (showOnlyProductList) {
     return (
-        <div className='h-full'>
-            <h2 className='text-center font-bold'>Product Management</h2>
-            <div className='h-full pt-16'>
-                <div className='flex h-full'>
-                    <ul className='m-2 w-1/4 h-full'>
-                        {productCodes.map((code) => (
-                            <li key={code} className={`border-solid border-black border rounded-lg text-center ${code === selectedCode ? 'bg-green-400' : ''}`} onClick={() => handleProductClick(code)}>
-                                {code}
-                            </li>
-                        ))}
-                    </ul>
-
-                    {selectedProduct && (
-                        <div className='product-details border-solid border-2 rounded-lg border-black flex justify-around w-2/3 ml-16 pt-4 h-3/4'>
-                            <div>
-                                <h2 className='font-bold text-center'>Product detail</h2>
-                                <div className='max-w-[100%]'>
-                                    <p className='p-3'>Code: {selectedProduct.code}</p>
-                                    <p className='p-3'>Name: {selectedProduct.name}</p>
-                                    <p className='p-3'>Description: {selectedProduct.description}</p>
-                                    <p className='p-3'>Weight: {selectedProduct.weight}g</p>
-                                </div>
-                            </div>
-                            <div className='border-l-solid border-l-2 border-black pl-8'> 
-                                <h2 className='font-bold text-center'>Edit the product detail</h2>
-                                <form onSubmit={handleEditSubmit} className='flex flex-col'>
-                                    <input type="text" name="name" className='p-2 border-solid border-2 rounded-lg border-black mt-4 mr-3' value={editDetails?.name || ''} onChange={handleEditChange} placeholder="New Product Name" />
-                                    <input type="text" name="description" className='p-2 border-solid border-2 rounded-lg border-black mt-4 mr-3' value={editDetails?.description || ''} onChange={handleEditChange} placeholder="New Product Description" />
-                                    <input type="number" name="weight" className='p-2 border-solid border-2 rounded-lg border-black mt-4 mr-3' value={editDetails?.weight || 0} onChange={handleEditChange} placeholder="New Product Weight" />
-                                    <button className='greenbtn m-1 mt-4' type="submit">Save Changes</button>
-                                </form>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* <button onClick={() => setShowOnlyProductList(!showOnlyProductList)}>
-                    {showOnlyProductList ? "Show Full View" : "Show Only Product List"}
-                </button> */}
-            </div>
-        </div>
+      <div>
+        <h2 className='text-center font-bold'>Product Management</h2>
+        <ul className='m-2 w-32'>
+          {products.map((product) => (
+            <li key={product.productCode} className={`border-solid border-black border rounded-lg text-center`}>
+              {product.productCode}
+            </li>
+          ))}
+        </ul>
+      </div>
     );
+  }
+
+  return (
+    <div className='h-full'>
+      <h2 className='text-center font-bold'>Product Management</h2>
+      <div className='h-full pt-16'>
+        <div className='flex h-full'>
+          <ul className='m-2 w-1/4 h-full'>
+            {products.map((product) => (
+              <li
+                key={product.productCode}
+                className={`border-solid border-black border rounded-lg text-center ${
+                  product.productCode === selectedCode ? 'bg-green-400' : ''
+                }`}
+                onClick={() => handleProductClick(product.productCode)}
+              >
+                {product.productCode}
+              </li>
+            ))}
+          </ul>
+
+          {selectedProduct && (
+            <div className='product-details border-solid border-2 rounded-lg border-black flex justify-around w-2/3 ml-16 pt-4 h-3/4'>
+              <div>
+                <h2 className='font-bold text-center'>Product detail</h2>
+                <div className='max-w-[100%]'>
+                  {/* Display all columns for the selected product */}
+                  {Object.entries(selectedProduct).map(([key, value]) => (
+                    <p key={key} className='p-3'>
+                      {key}: {value}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <div className='border-l-solid border-l-2 border-black pl-8'>
+                <h2 className='font-bold text-center'>Edit the product detail</h2>
+               <form onSubmit={handleEditSubmit} className='flex flex-col'>
+                  {renderInputFields()}
+                  <button className='greenbtn m-1 mt-4' type='submit'>
+                    Save Changes
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ProductionManagement;

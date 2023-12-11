@@ -40,38 +40,80 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-// Your routes and other middleware go here
-//Fixed issue with git branch problems
-// Example route
-app.get("/", (req, res) => {
-  res.send("Hello, world!");
-});
-
-app.get('/api/users/first', async (req, res) => {
-    try {
-      const query = 'SELECT UserName FROM users WHERE UserID = 1';
+// app.get('/api/users/first', async (req, res) => {
+//     try {
+//       const query = 'SELECT UserName FROM users WHERE UserID = 1';
       
+//       db.query(query, (error, results) => {
+//         if (error) {
+//           console.error('Error executing SQL query:', error);
+//           return res.status(500).json({ error: 'Internal Server Error' });
+//         }
+  
+//         const user = results[0];
+  
+//         if (!user) {
+//           return res.status(404).json({ error: 'User not found' });
+//         }
+  
+//         res.json({ username: user.UserName });
+//       });
+//     } catch (error) {
+//       console.error('Error fetching user data:', error);
+//       res.status(500).json({ error: 'Internal Server Error' });
+//     }
+//   });
+
+  //edit a product
+  app.put('/api/products/:productId', async (req, res) => {
+    try {
+      const { productId } = req.params;
+      const { productName, productWeight, productCustomerID, productExpiryDate } = req.body;
+  
+      const updateQuery = 'UPDATE product SET ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ? WHERE ProductCode = ?';
+      db.query(updateQuery, [productName, productWeight, productCustomerID, productExpiryDate, productId], (error, results) => {
+        if (error) {
+          console.error('Error updating product:', error);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        }
+  
+        res.json({ success: true });
+      });
+    } catch (error) {
+      console.error('Error updating product:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  //display all products
+  app.get('/api/products', async (req, res) => {
+    try {
+      const query = 'SELECT ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate FROM product';
+  
       db.query(query, (error, results) => {
         if (error) {
           console.error('Error executing SQL query:', error);
           return res.status(500).json({ error: 'Internal Server Error' });
         }
   
-        const user = results[0];
+        const products = results.map(product => ({
+          productCode: product.ProductCode,
+          productName: product.ProductName,
+          productWeight: product.ProductWeight,
+          productCustomerID: product.ProductCustomerID,
+          productExpiryDate: product.ProductExpiryDate
+        }));
   
-        if (!user) {
-          // If no user is found
-          return res.status(404).json({ error: 'User not found' });
-        }
-  
-        res.json({ username: user.UserName });
+        res.json(products);
       });
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching product data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-
+  
+  
+  //login
   app.post('/api/login', async (req, res) => {
     try {
       const { id, password } = req.body;
@@ -83,8 +125,7 @@ app.get('/api/users/first', async (req, res) => {
   
       console.log('Request body:', req.body);
   
-      // Query the database to check if the user with the given id and password exists
-      const query = 'SELECT UserID, UserLevel FROM users WHERE UserName = ? AND UserPassword = ?';
+      const query = 'SELECT UserID, UserLevel FROM users WHERE BINARY UserName = ? AND UserPassword = ?';
   
       db.query(query, [id, password], (error, results) => {
         if (error) {
@@ -94,16 +135,13 @@ app.get('/api/users/first', async (req, res) => {
   
         const user = results[0];
         if (!user) {
-          // User not found
           console.log('User not found');
           return res.status(404).json({ error: 'User not found' });
         }
   
-        // User found, redirect based on UserLevel
         if (user.UserLevel === 'admin') {
           return res.json({ redirect: '/admin' });
         } else {
-          // Add more conditions based on user roles and corresponding redirects
           return res.json({ redirect: '/admin' });
         }
       });
@@ -112,12 +150,12 @@ app.get('/api/users/first', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
-
+  
+  //add products
   app.post('/api/products', async (req, res) => {
     try {
       const { productCode, productName, productWeight, productCustomerID, productExpiryDate } = req.body;
   
-      // Insert the new product directly
       const addQuery = 'INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate) VALUES (?, ?, ?, ?, ?)';
       db.query(addQuery, [productCode, productName, productWeight, productCustomerID, productExpiryDate], (error, results) => {
         if (error) {
@@ -125,7 +163,6 @@ app.get('/api/users/first', async (req, res) => {
           return res.status(500).json({ error: 'Internal Server Error' });
         }
   
-        // Product added successfully
         res.json({ success: true });
       });
     } catch (error) {
