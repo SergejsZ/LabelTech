@@ -13,6 +13,7 @@ const ProductionManagement = () => {
   const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(null);
   const [selectedCode, setSelectedCode] = useState<number | null>(null);
   const [editDetails, setEditDetails] = useState<ProductDetails | null>(null);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [showOnlyProductList, setShowOnlyProductList] = useState(false);
   const [products, setProducts] = useState<ProductDetails[]>([]);
 
@@ -43,6 +44,7 @@ const ProductionManagement = () => {
         const updatedProducts = response.data;
         setProducts(updatedProducts);
         setSelectedProduct(null); //clear the selected product after update
+        setShowDeleteButton(false);
       }
     } catch (error) {
       console.error('Error updating product:', error);
@@ -61,7 +63,8 @@ const ProductionManagement = () => {
     if (product) {
       setSelectedProduct(product);
       setSelectedCode(productCode);
-      setEditDetails(product); // Set initial values for the edit form
+      setEditDetails(product); //set initial values for the edit form
+      setShowDeleteButton(true);
     }
   };
 
@@ -78,6 +81,25 @@ const ProductionManagement = () => {
       />
     ));
   };
+
+  const handleDeleteClick = async () => {
+    try {
+      if (selectedProduct) {
+        const { productCode } = selectedProduct;
+        await axios.delete(`http://localhost:4000/api/products/${productCode}`);
+
+        //refresh the product list after deletion
+        const response = await axios.get('http://localhost:4000/api/products');
+        const updatedProducts = response.data;
+        setProducts(updatedProducts);
+        setSelectedProduct(null); //clear the selected product after deletion
+        setShowDeleteButton(false); //hide the delete button after deletion
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
+
 
   if (showOnlyProductList) {
     return (
@@ -133,6 +155,11 @@ const ProductionManagement = () => {
                   <button className='greenbtn m-1 mt-4' type='submit'>
                     Save Changes
                   </button>
+                  {showDeleteButton && (
+                <button className='redbtn m-1 mt-4' onClick={handleDeleteClick}>
+                  Delete Product
+                </button>
+              )}
                 </form>
               </div>
             </div>

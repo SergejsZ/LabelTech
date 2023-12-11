@@ -85,6 +85,26 @@ app.use(cookieParser());
     }
   });
 
+  //delete a product
+  app.delete('/api/products/:productId', async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const deleteQuery = 'DELETE FROM product WHERE ProductCode = ?';
+    db.query(deleteQuery, [productId], (error, results) => {
+      if (error) {
+        console.error('Error deleting product:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+  });
+
   //display all products
   app.get('/api/products', async (req, res) => {
     try {

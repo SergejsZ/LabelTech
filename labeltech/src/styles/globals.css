@@ -28,6 +28,10 @@ body{
   @apply bg-green-500 text-black font-bold py-1 px-4 rounded-lg;
 }
 
+.redbtn {
+  @apply bg-red-500 text-black font-bold py-1 px-4 rounded-lg;
+}
+
 .yellowbtn {
   @apply bg-yellow-200 text-black font-bold py-1 px-4 rounded-lg;
 }
