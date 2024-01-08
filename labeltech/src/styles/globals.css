@@ -8,6 +8,11 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+.selected-row {
+  background-color: #c7adad; /* Adjust the background color as needed */
+  color: #ffffff; /* Adjust the text color as needed */
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -16,11 +21,10 @@
   }
 }
 
-body{
+body {
   padding: 0;
   margin: 0;
 }
-
 
 /* Tailwind Styles */
 
@@ -40,32 +44,31 @@ body{
   @apply bg-gray-200 text-black py-1 px-5 rounded-lg;
 }
 
-.basicinput{
+.basicinput {
   @apply border-solid border-2 border-black text-black py-1 px-5 rounded-lg;
 }
 
-.logininput{
-  @apply text-sm appearance-none rounded w-full py-1 px-3 text-gray-700 bg-gray-200 h-10
+.logininput {
+  @apply text-sm appearance-none rounded w-full py-1 px-3 text-gray-700 bg-gray-200 h-10;
 }
 
-.loginlabel{
-  @apply block text-gray-700 text-sm font-semibold mb-2
+.loginlabel {
+  @apply block text-gray-700 text-sm font-semibold mb-2;
 }
 
-.mx-30pc{
-  margin-left: 30% ;
-  margin-right: 30% ;
+.mx-30pc {
+  margin-left: 30%;
+  margin-right: 30%;
 }
 
-.greyline{
+.greyline {
   @apply bg-gray-200 h-1 w-full;
 }
 
-.active{
+.active {
   @apply bg-green-200 text-black font-bold px-4 rounded-lg;
 }
 
-.inactive{
+.inactive {
   @apply bg-red-200 text-black font-bold px-4 rounded-lg;
 }
-

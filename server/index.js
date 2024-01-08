@@ -246,3 +246,23 @@ app.get("/api/users", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+//delete a user
+app.delete("/api/users/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const deleteQuery = "DELETE FROM users WHERE UserID = ?";
+    db.query(deleteQuery, [userId], (error, results) => {
+      if (error) {
+        console.error("Error deleting user:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
