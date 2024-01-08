@@ -266,3 +266,32 @@ app.delete("/api/users/:userId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Add user
+app.post("/api/users", async (req, res) => {
+  try {
+    const { userName, userPassword, userEmail, userLevel } = req.body;
+
+    const addUserQuery =
+      "INSERT INTO users (UserName, UserPassword, UserEmail, UserLevel) VALUES (?, ?, ?, ?)";
+
+    // Hash the password before saving it to the database
+    const hashedPassword = await bcrypt.hash(userPassword, 10);
+
+    db.query(
+      addUserQuery,
+      [userName, hashedPassword, userEmail, userLevel],
+      (error, results) => {
+        if (error) {
+          console.error("Error adding user:", error);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        res.json({ success: true });
+      }
+    );
+  } catch (error) {
+    console.error("Error adding user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
