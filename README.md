@@ -2,6 +2,8 @@
 
 label verification using camera vision
 
+testing git user conflict
+
 # MySQL Database Creation
 
 -- Create the database
