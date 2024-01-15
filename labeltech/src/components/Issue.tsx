@@ -11,10 +11,17 @@ const Issue = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAddingUser, setIsAddingUser] = useState(false);
+  const [isEditingUser, setIsEditingUser] = useState(false);
   const [newUser, setNewUser] = useState({
     userName: "",
     userPassword: "",
     userEmail: "",
+    userLevel: "",
+  });
+
+  // Separate state for editing user
+  const [editUser, setEditUser] = useState({
+    userName: "",
     userLevel: "",
   });
 
@@ -34,6 +41,12 @@ const Issue = () => {
 
   const handleRowClick = (user: User) => {
     setSelectedUser(user);
+
+    // When clicking a row, update the editUser state
+    setEditUser({
+      userName: user.userName,
+      userLevel: user.userLevel,
+    });
   };
 
   const handleDelete = async () => {
@@ -51,6 +64,13 @@ const Issue = () => {
         const updatedUsers = response.data;
         setUsers(updatedUsers);
         setSelectedUser(null); // Reset selected user after deletion
+        setNewUser({
+          userName: "",
+          userPassword: "",
+          userEmail: "",
+          userLevel: "",
+        });
+        setIsEditingUser(false);
       } catch (error) {
         console.error("Error deleting user:", error);
       }
@@ -73,6 +93,27 @@ const Issue = () => {
       });
     } catch (error) {
       console.error("Error adding user:", error);
+    }
+  };
+
+  const handleEditUser = async () => {
+    try {
+      await axios.put(
+        `http://localhost:4000/api/users/${selectedUser?.id}`,
+        editUser // Use the editUser state instead of newUser
+      );
+      // Refresh the user list after editing a user
+      const response = await axios.get("http://localhost:4000/api/users");
+      const updatedUsers = response.data;
+      setUsers(updatedUsers);
+      setIsEditingUser(false); // Hide the form after successful edit
+      setEditUser({
+        userName: "",
+        userLevel: "",
+      });
+      setSelectedUser(null);
+    } catch (error) {
+      console.error("Error editing user:", error);
     }
   };
 
@@ -119,67 +160,130 @@ const Issue = () => {
         </table>
       </div>
 
-      {isAddingUser ? (
+      {(isAddingUser || isEditingUser) && (
         <div className="mt-5">
-          <h3 className="text-center font-bold">Add User</h3>
+          <h3 className="text-center font-bold">
+            {isAddingUser ? "Add User" : "Edit User"}
+          </h3>
           <form className="mt-3 flex flex-col items-center">
             <input
               type="text"
               placeholder="UserName"
-              value={newUser.userName}
+              value={isAddingUser ? newUser.userName : editUser.userName}
               onChange={(e) =>
-                setNewUser({ ...newUser, userName: e.target.value })
+                isAddingUser
+                  ? setNewUser({ ...newUser, userName: e.target.value })
+                  : setEditUser({ ...editUser, userName: e.target.value })
               }
               className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
             />
-            <input
-              type="password"
-              placeholder="UserPassword"
-              value={newUser.userPassword}
-              onChange={(e) =>
-                setNewUser({ ...newUser, userPassword: e.target.value })
-              }
-              className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
-            />
-            <input
-              type="text"
-              placeholder="UserEmail"
-              value={newUser.userEmail}
-              onChange={(e) =>
-                setNewUser({ ...newUser, userEmail: e.target.value })
-              }
-              className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
-            />
+            {isAddingUser && (
+              <>
+                <input
+                  type="password"
+                  placeholder="UserPassword"
+                  value={newUser.userPassword}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, userPassword: e.target.value })
+                  }
+                  className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+                />
+                <input
+                  type="text"
+                  placeholder="UserEmail"
+                  value={newUser.userEmail}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, userEmail: e.target.value })
+                  }
+                  className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+                />
+              </>
+            )}
             <input
               type="text"
               placeholder="UserLevel"
-              value={newUser.userLevel}
+              value={isAddingUser ? newUser.userLevel : editUser.userLevel}
               onChange={(e) =>
-                setNewUser({ ...newUser, userLevel: e.target.value })
+                isAddingUser
+                  ? setNewUser({ ...newUser, userLevel: e.target.value })
+                  : setEditUser({ ...editUser, userLevel: e.target.value })
               }
               className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
             />
-            <button
-              className="greenbtn mt-3"
-              type="button"
-              onClick={handleAddUser}
-            >
-              Add User
-            </button>
+            {isAddingUser ? (
+              <div>
+                <button
+                  className="greenbtn mt-3"
+                  type="button"
+                  onClick={handleAddUser}
+                >
+                  Add User
+                </button>
+                <button
+                  className="redbtn mt-3 ml-2"
+                  type="button"
+                  onClick={() => {
+                    setIsAddingUser(false);
+                    setNewUser({
+                      userName: "",
+                      userPassword: "",
+                      userEmail: "",
+                      userLevel: "",
+                    });
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div>
+                <button
+                  className="greenbtn mt-3"
+                  type="button"
+                  onClick={handleEditUser}
+                >
+                  Save Changes
+                </button>
+                <button
+                  className="redbtn mt-3 ml-2"
+                  type="button"
+                  onClick={() => setIsEditingUser(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </form>
         </div>
-      ) : (
-        <button className="greenbtn mt-3" onClick={() => setIsAddingUser(true)}>
-          Add User
-        </button>
+      )}
+
+      {!isAddingUser && !isEditingUser && (
+        <>
+          <button
+            className="greenbtn mt-3"
+            onClick={() => setIsAddingUser(true)}
+          >
+            Add User
+          </button>
+          {selectedUser && (
+            <button
+              className="yellowbtn mt-3 ml-2"
+              onClick={() => {
+                setIsEditingUser(true);
+                setEditUser({
+                  userName: selectedUser.userName,
+                  userLevel: selectedUser.userLevel,
+                });
+              }}
+            >
+              Edit User
+            </button>
+          )}
+        </>
       )}
 
       {selectedUser && (
         <div className="mt-3">
-          {/* <h3 className="text-center font-bold">Selected User</h3>
-          <p>ID: {selectedUser.id}</p>
-          <p>UserName: {selectedUser.userName}</p>
-          <p>UserLevel: {selectedUser.userLevel}</p> */}
           <button className="redbtn mt-3" onClick={handleDelete}>
             Delete User
           </button>

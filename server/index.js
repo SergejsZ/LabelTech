@@ -295,3 +295,26 @@ app.post("/api/users", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Edit user
+app.put("/api/users/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { userName, userLevel } = req.body;
+
+    const editUserQuery =
+      "UPDATE users SET UserName = ?, UserLevel = ? WHERE UserID = ?";
+
+    db.query(editUserQuery, [userName, userLevel, userId], (error, results) => {
+      if (error) {
+        console.error("Error updating user:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
