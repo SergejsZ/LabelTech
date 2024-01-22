@@ -195,8 +195,10 @@ app.post("/api/products", async (req, res) => {
       productWeight,
       productCustomerID,
       productExpiryDate,
-      productImage,
+      NameImage,
     } = req.body;
+
+    console.log("Request body:", req.body);
 
     const addQuery =
       "INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate, ProductImage) VALUES (?, ?, ?, ?, ?, ?)";
@@ -208,7 +210,7 @@ app.post("/api/products", async (req, res) => {
         productWeight,
         productCustomerID,
         productExpiryDate,
-        productImage,
+        NameImage,
       ],
       (error, results) => {
         if (error) {

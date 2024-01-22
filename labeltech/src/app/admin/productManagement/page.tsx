@@ -60,7 +60,9 @@ const page = () => {
       const productWeight = formData.get('productWeight') as string;
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
-      const ProductImage = formData.get('productImage') as string;
+      const ProductImage = formData.get('productImage') as File;
+
+      const NameImage = ProductImage.name;
     
 
       // Log the form data
@@ -69,7 +71,7 @@ const page = () => {
       console.log('Product Weight:', productWeight);
       console.log('Product Customer ID:', productCustomerID);
       console.log('Product Expiry Date:', productExpiryDate);
-      console.log('Product Image:', ProductImage);
+      console.log('Product Image:', NameImage);
 
       // You can now send this data to the server to add it to the database
       const response = await fetch('http://localhost:4000/api/products', {
@@ -83,7 +85,7 @@ const page = () => {
           productWeight,
           productCustomerID,
           productExpiryDate,
-          ProductImage
+          NameImage,
         }),
       });
 
@@ -145,11 +147,11 @@ const page = () => {
             <input type="date" name="productExpiryDate" required />
           </label>
           <br />
-          <label>
+          {/* <label>
             Product Image:
             <input type="file" name="productImage" accept="image/*" required />
           </label>
-          <br />
+          <br /> */}
           <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Submit
           </button>

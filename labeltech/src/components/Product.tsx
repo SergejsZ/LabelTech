@@ -24,9 +24,9 @@ const Product = ({ productName, productCode, productCustomerID, productExpiryDat
             Product code: {productCode}
           </p>
         </div>
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <img src={ProductImage} alt={ProductImage} className="w-64 h-64" />
-        </div>
+        </div> */}
         <div className="px-6 pt-4 pb-2">
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Customer: {productCustomerID}</span>
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mb-2">Expiry: {productExpiryDate}</span>
