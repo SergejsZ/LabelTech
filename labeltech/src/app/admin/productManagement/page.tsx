@@ -1,7 +1,11 @@
+"use client";
+
 import PageLayout from '@/app/admin/page';
 import ProductGrid from '@/components/ProductGrid';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const products = [
+const fakeProducts = [
   { name: 'Mini portobello', code: '1234', retailer: 'Tesco', expiryDate: '2024/01/19', imageUrl: '../../../../utils/images/miniPortobello.jpeg' },
   { name: 'Baby button', code: '6543', retailer: 'Dubbes', expiryDate: '2024/01/20', imageUrl: '../../../../utils/images/babyButton.jpeg' },
   { name: 'White button', code: '9876', retailer: 'Tesco', expiryDate: '2024/01/21', imageUrl: '../../../../utils/images/button.jpeg' },
@@ -9,12 +13,135 @@ const products = [
 
 ];
 
+type ProductDetails = {
+  productCode: number;
+  productName: string;
+  productWeight: number;
+  productCustomerID: number;
+  productExpiryDate: string;
+};
+
 const page = () => {
+  
+  const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(
+    null
+  );
+  const [selectedCode, setSelectedCode] = useState<number | null>(null);
+  const [editDetails, setEditDetails] = useState<ProductDetails | null>(null);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const [showOnlyProductList, setShowOnlyProductList] = useState(false);
+  const [products, setProducts] = useState<ProductDetails[]>([]);
+
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/products");
+        const products = response.data;
+        setProducts(products);
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
+    };
+
+    fetchProductDetails();
+  }, []);
+
+  const handleEditSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      if (selectedProduct) {
+        const { productCode } = selectedProduct;
+        await axios.put(
+          `http://localhost:4000/api/products/${productCode}`,
+          editDetails
+        );
+
+        //refresh products
+        const response = await axios.get("http://localhost:4000/api/products");
+        const updatedProducts = response.data;
+        setProducts(updatedProducts);
+        setSelectedProduct(null); //clear the selected product after update
+        setShowDeleteButton(false);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditDetails({
+      ...editDetails,
+      [event.target.name]: event.target.value,
+    } as ProductDetails);
+  };
+
+  const handleProductClick = (productCode: number) => {
+    const product = products.find((p) => p.productCode === productCode);
+    if (product) {
+      setSelectedProduct(product);
+      setSelectedCode(productCode);
+      setEditDetails(product); //set initial values for the edit form
+      setShowDeleteButton(true);
+    }
+  };
+
+  const renderInputFields = () => {
+    return Object.entries(editDetails || {}).map(([key, value]) => (
+      <input
+        key={key}
+        type="text"
+        name={key}
+        className="p-2 border-solid border-2 rounded-lg border-black mt-4 mr-3"
+        value={value}
+        onChange={handleEditChange}
+        placeholder={`New ${key}`}
+      />
+    ));
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      if (selectedProduct) {
+        const { productCode } = selectedProduct;
+        await axios.delete(`http://localhost:4000/api/products/${productCode}`);
+
+        //refresh the product list after deletion
+        const response = await axios.get("http://localhost:4000/api/products");
+        const updatedProducts = response.data;
+        setProducts(updatedProducts);
+        setSelectedProduct(null); //clear the selected product after deletion
+        setShowDeleteButton(false); //hide the delete button after deletion
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  if (showOnlyProductList) {
+    return (
+      <div>
+        <h2 className="text-center font-bold">Product Management</h2>
+        <ul className="m-2 w-32">
+          {products.map((product) => (
+            <li
+              key={product.productCode}
+              className={`border-solid border-black border rounded-lg text-center`}
+            >
+              {product.productCode}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  
+  
   return (
     <PageLayout >
     <div className='ml-96 mt-10'>
       <h2 className='text-2xl font-bold mb-10'>products managment</h2>
-      <ProductGrid products={products} />
+      <ProductGrid products={fakeProducts} />
     </div>
     </PageLayout >
   );
