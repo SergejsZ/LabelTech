@@ -7,7 +7,7 @@ const page = () => {
   return (
     <PageLayout >
     <div className='ml-96 mt-10 w-9/12'>
-      <p>users managment</p>
+      <h2 className='text-2xl font-bold mb-10'>users managment</h2>
       <Issue />
     </div>
     </PageLayout >

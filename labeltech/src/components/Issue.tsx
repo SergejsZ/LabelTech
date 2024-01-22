@@ -119,9 +119,9 @@ const Issue = () => {
 
   return (
     <div className="p-5">
-      <h2 className="text-center font-bold">Report an Issue</h2>
+      {/* <h2 className="text-center font-bold">Report an Issue</h2>
 
-      {/* TODO: insert form in the database */}
+
       <form className="mt-5 flex flex-col items-center">
         <textarea
           id="issue"
@@ -130,7 +130,7 @@ const Issue = () => {
           placeholder="Please provide a detailed description of your issue."
         />
         <input className="greenbtn mt-3" type="submit" value="Submit" />
-      </form>
+      </form> */}
 
       <div className="mt-5">
         <h3 className="text-center font-bold">Users</h3>
