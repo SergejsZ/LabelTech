@@ -9,14 +9,7 @@ interface CalendarProps {
 const CalendarComponent = (props: CalendarProps) => {
   const { setDate, date, selectRange } = props;
   return (
-    <motion.div
-      initial={{ x: 1000 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 1, ease: "easeInOut", delay: 0.5 }}
-      className="calendar-container"
-    >
       <Calendar onChange={setDate} value={date} selectRange={selectRange} />
-    </motion.div>
   );
 };
 

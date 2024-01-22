@@ -1,0 +1,47 @@
+.timeline-container {
+    max-width: 600px;
+    margin: auto;
+    background: #f8f8f8;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .date-picker {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .line-item {
+    margin-bottom: 12px;
+  }
+  
+  .line-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .time-slots {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .time-slot {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .time-range {
+    font-size: 0.875rem;
+    color: #333333;
+  }
+  
+  .time-label {
+    font-size: 0.75rem;
+    color: #666666;
+  }
+  

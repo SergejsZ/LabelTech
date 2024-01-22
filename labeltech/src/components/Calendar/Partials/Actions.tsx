@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 interface ActionProps {
   setDate: any;
   date: any;
@@ -9,11 +7,7 @@ interface ActionProps {
 const Actions = (props: ActionProps) => {
   const { setDate, date, selectRange, setSelectRange } = props;
   return (
-    <motion.div
-      initial={{ y: 1000 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 1, ease: "easeInOut", delay: 0.5 }}
-    >
+    <div>
       {date.length > 0 && selectRange ? (
         <p className="text-center">
           {date[0].toDateString()}
@@ -44,7 +38,7 @@ const Actions = (props: ActionProps) => {
       >
         Select Range
       </button>
-    </motion.div>
+    </div>
   );
 };
 
