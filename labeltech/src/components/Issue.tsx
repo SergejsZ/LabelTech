@@ -133,7 +133,6 @@ const Issue = () => {
       </form> */}
 
       <div className="mt-5">
-        <h3 className="text-center font-bold">Users</h3>
         <table className="table-auto w-full mt-3">
           <thead>
             <tr>
