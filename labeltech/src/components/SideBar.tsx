@@ -4,8 +4,6 @@ import {
     List,
     ListItem,
     ListItemPrefix,
-    ListItemSuffix,
-    Chip,
   } from "@material-tailwind/react";
   import {
     PresentationChartBarIcon,
@@ -14,72 +12,81 @@ import {
     Cog6ToothIcon,
     InboxIcon,
     PowerIcon,
+    ChartBarIcon,
+    FolderIcon
   } from "@heroicons/react/24/solid";
 
-const userConnected = true;
-   
-{/* <div v-if="$route.path.startsWith('/admin')"> */}
-
 const SideBar = () => {
-  if (userConnected) {
-    return (
-      <Card className="h-[calc(100vh)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
-        <div className="mb-2 p-4">
-          <Typography variant="h5" color="blue-gray">
-            Sidebar
-          </Typography>
-        </div>
-        <List>
+  return (
+    <Card className="h-[calc(100vh)] w-full max-w-[21rem] p-4 shadow-xl shadow-blue-gray-900/5">
+      <div className="mb-2 p-4 flex">
+        <img src="../utils/images/Logo_lablelTech.png" alt="logo labeltech" className="w-12 h-" />
+        <Typography variant="h5" color="blue-gray" className="flex items-center pl-4">
+          LabelTech
+        </Typography>
+      </div>
+      <List>
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <PresentationChartBarIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Dashboard
+        </ListItem>
+        <a href="/admin/productManagement">
           <ListItem>
-            <ListItemPrefix>
-              <PresentationChartBarIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            Dashboard
-          </ListItem>
-          <ListItem>
-            <ListItemPrefix>
+            <ListItemPrefix className="pr-2">
               <ShoppingBagIcon className="h-5 w-5" />
             </ListItemPrefix>
-            <a href="/admin/productManagment">Product Managment</a>
+            Product Managment
           </ListItem>
-          <ListItem>
-            <ListItemPrefix>
-              <InboxIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            Inbox
-            <ListItemSuffix>
-              <Chip value="14" size="sm" variant="ghost" color="blue-gray" className="rounded-full" />
-            </ListItemSuffix>
-          </ListItem>
-          <ListItem>
-            <ListItemPrefix>
-              <UserCircleIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            Profile
-          </ListItem>
-          <ListItem>
-            <ListItemPrefix>
-              <Cog6ToothIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            Settings
-          </ListItem>
-          <ListItem>
-            <ListItemPrefix>
-              <PowerIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            Log Out
-          </ListItem>
-        </List>
-      </Card>
-    );
-  }
-  else{
-    return (
-      <div>
-
-      </div>
-    );
-  }
+        </a>
+        <a href="/admin/productionLineManagement">
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <InboxIcon className="h-5 w-5" />
+          </ListItemPrefix>
+         Production Line Management
+        </ListItem>
+        </a>
+        <a href="/admin/userManagement">
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <UserCircleIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          User Management
+        </ListItem>
+        </a>
+        <a href="/admin/labelErrorHistory">
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <FolderIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Label Error History
+        </ListItem>
+        </a>
+        <a href="/admin/statistics">
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <ChartBarIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Statistics
+        </ListItem>
+        </a>
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <Cog6ToothIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Settings
+        </ListItem>
+        <ListItem>
+          <ListItemPrefix className="pr-2">
+            <PowerIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Log Out
+        </ListItem>
+      </List>
+    </Card>
+  );
   }
 
 export default SideBar;

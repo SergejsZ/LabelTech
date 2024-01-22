@@ -56,7 +56,7 @@ const Home = () => {
              <div className="relative hidden xl:block xl:w-1/2 h-full">
           <img
             className="absolute h-auto w-full object-cover"
-            src="../utils/images/Logo_lablelTech.png"
+            src="@/../utils/images/Logo_lablelTech.png"
             alt="logo labeltech" />
         </div>
           <div className="w-full xl:w-1/2 p-8">
