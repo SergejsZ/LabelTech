@@ -5,7 +5,7 @@ import SideBar from '@/components/SideBar';
 
 const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div style={{ display: 'flex' }}>
+    <div className='flex'>
       <SideBar />
       {children}
     </div>

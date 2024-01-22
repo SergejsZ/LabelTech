@@ -18,7 +18,7 @@ import {
 
 const SideBar = () => {
   return (
-    <Card className="h-[calc(100vh)] w-full max-w-[21rem] p-4 shadow-xl shadow-blue-gray-900/5">
+    <Card className="h-screen w-full max-w-[21rem] p-4 fixed">
       <div className="mb-2 p-4 flex">
         <img src="../utils/images/Logo_lablelTech.png" alt="logo labeltech" className="w-12 h-" />
         <Typography variant="h5" color="blue-gray" className="flex items-center pl-4">
