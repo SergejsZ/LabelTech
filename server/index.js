@@ -68,7 +68,7 @@ app.use(cookieParser());
 app.put("/api/products/:productId", async (req, res) => {
   try {
     const { productId } = req.params;
-    const { productName, productWeight, productCustomerID, productExpiryDate } =
+    const { productName, productWeight, productCustomerID, productExpiryDate, productImage } =
       req.body;
 
     const updateQuery =
@@ -81,6 +81,7 @@ app.put("/api/products/:productId", async (req, res) => {
         productCustomerID,
         productExpiryDate,
         productId,
+        productImage,
       ],
       (error, results) => {
         if (error) {
@@ -121,7 +122,7 @@ app.delete("/api/products/:productId", async (req, res) => {
 app.get("/api/products", async (req, res) => {
   try {
     const query =
-      'SELECT ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate FROM product';
+      'SELECT ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImage FROM product';
 
     db.query(query, (error, results) => {
       if (error) {
@@ -135,6 +136,7 @@ app.get("/api/products", async (req, res) => {
         productWeight: product.ProductWeight,
         productCustomerID: product.ProductCustomerID,
         productExpiryDate: product.ProductExpiryDate,
+        productImage: product.ProductImage,
       }));
 
       res.json(products);
@@ -193,10 +195,11 @@ app.post("/api/products", async (req, res) => {
       productWeight,
       productCustomerID,
       productExpiryDate,
+      productImage,
     } = req.body;
 
     const addQuery =
-      "INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate, ProductImage) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(
       addQuery,
       [
@@ -205,6 +208,7 @@ app.post("/api/products", async (req, res) => {
         productWeight,
         productCustomerID,
         productExpiryDate,
+        productImage,
       ],
       (error, results) => {
         if (error) {

@@ -4,7 +4,6 @@ import PageLayout from '@/app/admin/page';
 import ProductGrid from '@/components/ProductGrid';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProductionManagement from '@/components/ProductionManagement';
 
 const fakeProducts = [
   { name: 'Mini portobello', code: 1234, retailer: 12, expiryDate: '2024/01/19'},
@@ -20,18 +19,11 @@ type ProductDetails = {
   productWeight: number;
   productCustomerID: number;
   productExpiryDate: string;
+  ProductImage: string;
 };
 
 const page = () => {
 
-
-  const [selectedProduct, setSelectedProduct] = useState<ProductDetails | null>(
-    null
-  );
-  const [selectedCode, setSelectedCode] = useState<number | null>(null);
-  const [editDetails, setEditDetails] = useState<ProductDetails | null>(null);
-  const [showDeleteButton, setShowDeleteButton] = useState(false);
-  const [showOnlyProductList, setShowOnlyProductList] = useState(false);
   const [products, setProducts] = useState<ProductDetails[]>([]);
 
   useEffect(() => {
@@ -68,6 +60,8 @@ const page = () => {
       const productWeight = formData.get('productWeight') as string;
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
+      const ProductImage = formData.get('productImage') as string;
+    
 
       // Log the form data
       console.log('Product Code:', productCode);
@@ -75,6 +69,7 @@ const page = () => {
       console.log('Product Weight:', productWeight);
       console.log('Product Customer ID:', productCustomerID);
       console.log('Product Expiry Date:', productExpiryDate);
+      console.log('Product Image:', ProductImage);
 
       // You can now send this data to the server to add it to the database
       const response = await fetch('http://localhost:4000/api/products', {
@@ -88,6 +83,7 @@ const page = () => {
           productWeight,
           productCustomerID,
           productExpiryDate,
+          ProductImage
         }),
       });
 
@@ -111,7 +107,8 @@ const page = () => {
     <PageLayout >
     <div className='ml-96 mt-10'>
       <h2 className='text-2xl font-bold mb-10'>products managment</h2>
-      <ProductGrid products={products.map((product) => ({ productName: product.productName, productCode: product.productCode, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate }))} />
+      <ProductGrid products={products.map((product) => ({ productName: product.productName, productCode: product.productCode, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
+
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         style={{ paddingTop: '5px', paddingBottom: '5px' }}
@@ -148,12 +145,16 @@ const page = () => {
             <input type="date" name="productExpiryDate" required />
           </label>
           <br />
+          <label>
+            Product Image:
+            <input type="file" name="productImage" accept="image/*" required />
+          </label>
+          <br />
           <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
             Submit
           </button>
         </form>
       )}
-      <ProductionManagement />
 
     </div>
     </PageLayout >

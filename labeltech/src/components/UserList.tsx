@@ -127,21 +127,21 @@ const UserList = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <table className="min-w-full">
+    <div className="container mx-auto p-5 pr-16">
+      <table className="w-full">
         <thead>
           <tr>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">user Level</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">user Level</th>
           </tr>
         </thead>
         <tbody>
           {users.map(user => (
             <tr key={user.id} onClick={() => handleRowClick(user)} className="hover:bg-gray-50">
-              <td className="px-6 py-4 border-b border-gray-200">{user.userName}</td>
-              <td className="px-6 py-4 border-b border-gray-200">{user.userEmail}</td>
-              <td className="px-6 py-4 border-b border-gray-200">{user.userLevel}</td>
+              <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userName}</td>
+              <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userEmail}</td>
+              <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userLevel}</td>
             </tr>
           ))}
         </tbody>
