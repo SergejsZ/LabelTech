@@ -17,7 +17,7 @@ const Actions = (props: ActionProps) => {
       ) : (
         <p className="text-center">{date.toDateString()}</p>
       )}
-      <button
+      {/* <button
         style={{
           color: selectRange ? "#6f48eb" : "#524d4d",
           cursor: "pointer",
@@ -37,7 +37,7 @@ const Actions = (props: ActionProps) => {
         }}
       >
         Select Range
-      </button>
+      </button> */}
     </div>
   );
 };

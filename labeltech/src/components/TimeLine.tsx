@@ -34,7 +34,7 @@ const Timeline = () => {
       </div>
       {timeSlotData.map((item, index) => (
         <div key={index} className="line-item flex">
-          <div className="line-title border-black border-2 mr-4 w-3/12 text-center">{item.line}</div>
+          <div className="line-title mr-4 w-3/12 flex items-center justify-center">{item.line}</div>
           <div className="time-slots w-full">
             {item.slots.map((slot, slotIndex) => (
               <div key={slotIndex} className="time-slot w-full">
