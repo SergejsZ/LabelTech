@@ -224,7 +224,7 @@ app.post("/api/products", async (req, res) => {
 // Add this route to get all users
 app.get("/api/users", async (req, res) => {
   try {
-    const query = "SELECT UserID, UserName, UserLevel FROM users";
+    const query = "SELECT UserID, UserName, UserLevel, UserEmail FROM users";
 
     db.query(query, (error, results) => {
       if (error) {
@@ -236,6 +236,7 @@ app.get("/api/users", async (req, res) => {
         id: user.UserID,
         userName: user.UserName,
         userLevel: user.UserLevel,
+        userEmail: user.UserEmail,
       }));
 
       res.json(users);
