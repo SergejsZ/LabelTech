@@ -1,4 +1,5 @@
 "use client";
+import SideBar from '@/components/SideBar';
 import React, { useState } from 'react';
 
 interface UserData {

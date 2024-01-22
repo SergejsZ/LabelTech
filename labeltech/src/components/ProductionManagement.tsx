@@ -132,7 +132,7 @@ const ProductionManagement = () => {
             {products.map((product) => (
               <li
                 key={product.productCode}
-                className={`border-solid border-black border rounded-lg text-center ${
+                className={`border-solid border-black border rounded-lg text-center mt-3 ${
                   product.productCode === selectedCode ? "bg-green-400" : ""
                 }`}
                 onClick={() => handleProductClick(product.productCode)}
@@ -161,7 +161,8 @@ const ProductionManagement = () => {
                 </h2>
                 <form onSubmit={handleEditSubmit} className="flex flex-col">
                   {renderInputFields()}
-                  <button className="greenbtn m-1 mt-4" type="submit">
+                  <div className="felx">
+                  <button className="greenbtn m-1 mt-10" type="submit">
                     Save Changes
                   </button>
                   {showDeleteButton && (
@@ -172,6 +173,7 @@ const ProductionManagement = () => {
                       Delete Product
                     </button>
                   )}
+                  </div>
                 </form>
               </div>
             </div>
