@@ -29,6 +29,7 @@ const ErrorTrackingChart = () => {
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1,
+        borderRadius: 10,
       },
     ],
   };
@@ -36,6 +37,10 @@ const ErrorTrackingChart = () => {
   const options = {
     responsive: true,
     plugins: {
+      title: {
+        display: true,
+        text: 'Error Tracking of last week'
+      },
       legend: {
         display: false,
       },

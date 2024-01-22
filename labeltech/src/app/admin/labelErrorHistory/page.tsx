@@ -21,19 +21,20 @@ const page = () => {
         <div className='w-full flex'>
           <div className='w-6/12'>
             <div>
-              <CustomCalendar 
-                date={date}
-                setDate={setDate}
-                selectRange={selectRange}
-                setSelectRange={setSelectRange}
-              />
+            <CustomCalendar 
+              date={date}
+              setDate={setDate}
+              selectRange={selectRange}
+              setSelectRange={setSelectRange}
+            />
+
             </div>
             <div className='mt-16'>
               <ErrorBarChart />
             </div>
           </div>
           <div className='w-9/12'>
-            <Timeline />
+            <Timeline selectedDate={date} />
           </div>
         </div>
       </div>

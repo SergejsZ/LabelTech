@@ -1,4 +1,7 @@
 import React from 'react';
+import {
+    CalendarIcon
+  } from "@heroicons/react/24/solid";
 
 // Define the type for your time slot items
 type TimeSlotItem = {
@@ -6,31 +9,34 @@ type TimeSlotItem = {
   slots: {
     start: string;
     end: string;
-    label: string;
   }[];
 };
 
 // Mock data - replace this with your actual data source
 const timeSlotData: TimeSlotItem[] = [
-  { line: 'Line 1', slots: [{ start: '8:00', end: '12:00', label: 'Task A' }] },
-  { line: 'Line 2', slots: [{ start: '8:00', end: '12:00', label: 'Task B' }] },
-  { line: 'Line 3', slots: [{ start: '8:00', end: '12:00', label: 'Task C' }] },
-  { line: 'Line 4', slots: [{ start: '8:00', end: '12:00', label: 'Task D' }] },
-  { line: 'Line 5', slots: [{ start: '8:00', end: '12:00', label: 'Task E' }] },
-  { line: 'Line 6', slots: [{ start: '8:00', end: '12:00', label: 'Task F' }] },
-  { line: 'Line 7', slots: [{ start: '8:00', end: '12:00', label: 'Task G' }] },
-  { line: 'Line 8', slots: [{ start: '8:00', end: '12:00', label: 'Task H' }] },
+  { line: 'Line 1', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 2', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 3', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 4', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 5', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 6', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 7', slots: [{ start: '8:00', end: '20:00'}] },
+  { line: 'Line 8', slots: [{ start: '8:00', end: '20:00'}] },
 ];
 
-const Timeline = () => {
+
+type PropsType = {
+    selectedDate: Date;
+};
+
+const Timeline = (props: PropsType) => {
   return (
     <div className="timeline-container">
       <div className="date-picker">
-        {/* Date picker UI here */}
-        <button>Day</button>
-        <div>Nov 16, 2023</div>
-        <button>{"<"}</button>
-        <button>{">"}</button>
+        <div className='flex w-full justify-center'> 
+            <CalendarIcon className="h-5 w-5 mr-2" />
+            {props.selectedDate.toDateString()}
+        </div>
       </div>
       {timeSlotData.map((item, index) => (
         <div key={index} className="line-item flex">
@@ -41,7 +47,6 @@ const Timeline = () => {
                 <div className="time-range">
                   {slot.start} - {slot.end}
                 </div>
-                <div className="time-label">{slot.label}</div>
               </div>
             ))}
           </div>

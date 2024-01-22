@@ -8,7 +8,7 @@ const Actions = (props: ActionProps) => {
   const { setDate, date, selectRange, setSelectRange } = props;
   return (
     <div>
-      {date.length > 0 && selectRange ? (
+      {/* {date.length > 0 && selectRange ? (
         <p className="text-center">
           {date[0].toDateString()}
           &nbsp;-&nbsp;
@@ -16,7 +16,7 @@ const Actions = (props: ActionProps) => {
         </p>
       ) : (
         <p className="text-center">{date.toDateString()}</p>
-      )}
+      )} */}
       {/* <button
         style={{
           color: selectRange ? "#6f48eb" : "#524d4d",
