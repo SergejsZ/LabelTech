@@ -17,7 +17,7 @@ const fakeUsers: User[] = [
 
 const UserList = () => {
 
-    const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAddingUser, setIsAddingUser] = useState(false);
   const [isEditingUser, setIsEditingUser] = useState(false);
@@ -133,12 +133,12 @@ const UserList = () => {
           <tr>
             <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
             <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">userLevel</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">user Level</th>
           </tr>
         </thead>
         <tbody>
           {users.map(user => (
-            <tr key={user.id} className="hover:bg-gray-50">
+            <tr key={user.id} onClick={() => handleRowClick(user)} className="hover:bg-gray-50">
               <td className="px-6 py-4 border-b border-gray-200">{user.userName}</td>
               <td className="px-6 py-4 border-b border-gray-200">{user.userEmail}</td>
               <td className="px-6 py-4 border-b border-gray-200">{user.userLevel}</td>
@@ -146,6 +146,136 @@ const UserList = () => {
           ))}
         </tbody>
       </table>
+      {(isAddingUser || isEditingUser) && (
+        <div className="mt-5">
+          <h3 className="text-center font-bold">
+            {isAddingUser ? "Add User" : "Edit User"}
+          </h3>
+          <form className="mt-3 flex flex-col items-center">
+            <input
+              type="text"
+              placeholder="UserName"
+              value={isAddingUser ? newUser.userName : editUser.userName}
+              onChange={(e) =>
+                isAddingUser
+                  ? setNewUser({ ...newUser, userName: e.target.value })
+                  : setEditUser({ ...editUser, userName: e.target.value })
+              }
+              className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+            />
+            {isAddingUser && (
+              <>
+                <input
+                  type="password"
+                  placeholder="UserPassword"
+                  value={newUser.userPassword}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, userPassword: e.target.value })
+                  }
+                  className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+                />
+                <input
+                  type="text"
+                  placeholder="UserEmail"
+                  value={newUser.userEmail}
+                  onChange={(e) =>
+                    setNewUser({ ...newUser, userEmail: e.target.value })
+                  }
+                  className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+                />
+              </>
+            )}
+            <input
+              type="text"
+              placeholder="UserLevel"
+              value={isAddingUser ? newUser.userLevel : editUser.userLevel}
+              onChange={(e) =>
+                isAddingUser
+                  ? setNewUser({ ...newUser, userLevel: e.target.value })
+                  : setEditUser({ ...editUser, userLevel: e.target.value })
+              }
+              className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+            />
+            {isAddingUser ? (
+              <div>
+                <button
+                  className="greenbtn mt-3"
+                  type="button"
+                  onClick={handleAddUser}
+                >
+                  Add User
+                </button>
+                <button
+                  className="redbtn mt-3 ml-2"
+                  type="button"
+                  onClick={() => {
+                    setIsAddingUser(false);
+                    setNewUser({
+                      userName: "",
+                      userPassword: "",
+                      userEmail: "",
+                      userLevel: "",
+                    });
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div>
+                <button
+                  className="greenbtn mt-3"
+                  type="button"
+                  onClick={handleEditUser}
+                >
+                  Save Changes
+                </button>
+                <button
+                  className="redbtn mt-3 ml-2"
+                  type="button"
+                  onClick={() => setIsEditingUser(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </form>
+        </div>
+      )}
+
+      {!isAddingUser && !isEditingUser && (
+        <>
+          <button
+            className="greenbtn mt-3"
+            onClick={() => setIsAddingUser(true)}
+          >
+            Add User
+          </button>
+          {selectedUser && (
+            <button
+              className="yellowbtn mt-3 ml-2"
+              onClick={() => {
+                setIsEditingUser(true);
+                setEditUser({
+                  userName: selectedUser.userName,
+                  userLevel: selectedUser.userLevel,
+                });
+              }}
+            >
+              Edit User
+            </button>
+          )}
+        </>
+      )}
+
+      {selectedUser && (
+        <div className="mt-3">
+          <button className="redbtn mt-3" onClick={handleDelete}>
+            Delete User
+          </button>
+        </div>
+      )}
+
     </div>
   );
 };
