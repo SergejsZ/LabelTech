@@ -8,12 +8,6 @@ type User = {
     userEmail: string;
     userLevel: string;
   };
-  
-//sample of data
-const fakeUsers: User[] = [
-  { id: 1, userName: 'Paul Aubry', userEmail: 'paul.aubry@gmail.com', userLevel: 'Quality insurance' },
-  { id: 2, userName: 'Baptiste Griva', userEmail: 'baptiste.griva@gmail.com', userLevel: 'Line leader' },
-];
 
 const UserList = () => {
 
@@ -138,7 +132,7 @@ const UserList = () => {
         </thead>
         <tbody>
           {users.map(user => (
-            <tr key={user.id} onClick={() => handleRowClick(user)} className="hover:bg-gray-50">
+            <tr key={user.id} onClick={() => handleRowClick(user)} className={selectedUser === user ? 'bg-slate-100' : ''}>
               <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userName}</td>
               <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userEmail}</td>
               <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userLevel}</td>
@@ -151,7 +145,7 @@ const UserList = () => {
           <h3 className="text-center font-bold">
             {isAddingUser ? "Add User" : "Edit User"}
           </h3>
-          <form className="mt-3 flex flex-col items-center">
+          <form className="mt-3 flex flex-col items-center w-full">
             <input
               type="text"
               placeholder="UserName"
@@ -161,7 +155,7 @@ const UserList = () => {
                   ? setNewUser({ ...newUser, userName: e.target.value })
                   : setEditUser({ ...editUser, userName: e.target.value })
               }
-              className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+              className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
             />
             {isAddingUser && (
               <>
@@ -172,7 +166,7 @@ const UserList = () => {
                   onChange={(e) =>
                     setNewUser({ ...newUser, userPassword: e.target.value })
                   }
-                  className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+                  className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
                 />
                 <input
                   type="text"
@@ -181,7 +175,7 @@ const UserList = () => {
                   onChange={(e) =>
                     setNewUser({ ...newUser, userEmail: e.target.value })
                   }
-                  className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+                  className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </>
             )}
@@ -194,22 +188,23 @@ const UserList = () => {
                   ? setNewUser({ ...newUser, userLevel: e.target.value })
                   : setEditUser({ ...editUser, userLevel: e.target.value })
               }
-              className="border-solid border-black border-2 rounded-lg w-full mt-1 p-2"
+              className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
             />
             {isAddingUser ? (
               <div>
                 <button
-                  className="greenbtn mt-3"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-300 mt-3"
                   type="button"
                   onClick={handleAddUser}
                 >
                   Add User
                 </button>
                 <button
-                  className="redbtn mt-3 ml-2"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
                   type="button"
                   onClick={() => {
                     setIsAddingUser(false);
+                    setSelectedUser(null);
                     setNewUser({
                       userName: "",
                       userPassword: "",
@@ -224,14 +219,14 @@ const UserList = () => {
             ) : (
               <div>
                 <button
-                  className="greenbtn mt-3"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-300 mt-3"
                   type="button"
                   onClick={handleEditUser}
                 >
                   Save Changes
                 </button>
                 <button
-                  className="redbtn mt-3 ml-2"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
                   type="button"
                   onClick={() => setIsEditingUser(false)}
                 >
@@ -242,20 +237,21 @@ const UserList = () => {
           </form>
         </div>
       )}
-
+      <div className='mt-10 flex justify-center'>
       {!isAddingUser && !isEditingUser && (
         <>
           <button
-            className="greenbtn mt-3"
-            onClick={() => setIsAddingUser(true)}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-300 mt-3"
+            onClick={() => {setIsAddingUser(true); setSelectedUser(null);}}
           >
             Add User
           </button>
           {selectedUser && (
             <button
-              className="yellowbtn mt-3 ml-2"
+            className="bg-yellow-300 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
               onClick={() => {
                 setIsEditingUser(true);
+                setSelectedUser(null);
                 setEditUser({
                   userName: selectedUser.userName,
                   userLevel: selectedUser.userLevel,
@@ -269,13 +265,15 @@ const UserList = () => {
       )}
 
       {selectedUser && (
-        <div className="mt-3">
-          <button className="redbtn mt-3" onClick={handleDelete}>
+        <div>
+          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
+           onClick={handleDelete}>
             Delete User
           </button>
         </div>
       )}
 
+      </div>
     </div>
   );
 };
