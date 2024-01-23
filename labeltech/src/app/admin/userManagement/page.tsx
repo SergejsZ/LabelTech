@@ -1,7 +1,6 @@
 "use client";
 
 import PageLayout from '@/app/admin/page';
-import Issue from '@/components/Issue';
 import UserList from '@/components/UserList';
 
 const page = () => {

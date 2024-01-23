@@ -49,10 +49,10 @@ const Home = () => {
   };
 
   return (
-    <div className='mt-32'>
+    <div className='pt-32 h-screen'>
       {/* Login Form */}
       {isLoginFormVisible && (
-        <div className="container max-w-md mx-auto xl:max-w-3xl h-full flex bg-slate-100 rounded-lg shadow overflow-hidden">
+        <div className="container max-w-md mx-auto xl:max-w-3xl bg-white h-fill flex rounded-lg shadow overflow-hidden">
              <div className="relative hidden xl:block xl:w-1/2 h-full">
           <img
             className="absolute h-auto w-full object-cover"

@@ -5,7 +5,7 @@ import SideBar from '@/components/SideBar';
 
 const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='flex'>
+    <div className='flex h-screen'>
       <SideBar />
       {children}
     </div>

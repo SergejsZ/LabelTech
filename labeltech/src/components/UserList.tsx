@@ -128,12 +128,12 @@ const UserList = () => {
 
   return (
     <div className="container mx-auto p-5 pr-16">
-      <table className="w-full">
+      <table className="w-full bg-white">
         <thead>
           <tr>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">user Level</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+            <th className="px-6 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">user Level</th>
           </tr>
         </thead>
         <tbody>

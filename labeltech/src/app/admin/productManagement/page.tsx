@@ -62,7 +62,7 @@ const page = () => {
       const productExpiryDate = formData.get('productExpiryDate') as string;
       const ProductImage = formData.get('productImage') as File;
 
-      const NameImage = ProductImage.name;
+      // const NameImage = ProductImage.name;
     
 
       // Log the form data
@@ -71,7 +71,7 @@ const page = () => {
       console.log('Product Weight:', productWeight);
       console.log('Product Customer ID:', productCustomerID);
       console.log('Product Expiry Date:', productExpiryDate);
-      console.log('Product Image:', NameImage);
+      // console.log('Product Image:', NameImage);
 
       // You can now send this data to the server to add it to the database
       const response = await fetch('http://localhost:4000/api/products', {
@@ -85,7 +85,7 @@ const page = () => {
           productWeight,
           productCustomerID,
           productExpiryDate,
-          NameImage,
+          // NameImage,
         }),
       });
 
@@ -95,6 +95,8 @@ const page = () => {
         // Product added successfully, you can handle this as needed
         console.log('Product added successfully:', data);
         setIsFormVisible(false); // Hide the form after successful submission
+        // rerender the page
+        window.location.reload();
       } else {
         // Error adding product, handle accordingly
         console.error('Error adding product:', data.error);
@@ -109,7 +111,7 @@ const page = () => {
     <PageLayout >
     <div className='ml-96 mt-10'>
       <h2 className='text-2xl font-bold mb-10'>products managment</h2>
-      <ProductGrid products={products.map((product) => ({ productName: product.productName, productCode: product.productCode, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
+      <ProductGrid products={products.map((product) => ({ productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
 
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -121,41 +123,64 @@ const page = () => {
 
       {/* Form */}
       {isFormVisible && (
-        <form onSubmit={handleSubmit} className="mt-4">
-          <label>
-            Product Code:
-            <input type="text" name="productCode" required />
-          </label>
-          <br />
-          <label>
-            Product Name:
-            <input type="text" name="productName" required />
-          </label>
-          <br />
-          <label>
-            Product Weight:
-            <input type="text" name="productWeight" required />
-          </label>
-          <br />
-          <label>
-            Product Customer ID:
-            <input type="text" name="productCustomerID" required />
-          </label>
-          <br />
-          <label>
-            Product Expiry Date:
-            <input type="date" name="productExpiryDate" required />
-          </label>
-          <br />
-          {/* <label>
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4 border-solid border-2 p-3">
+        <div className='flex flex-row justify-center'>
+          <div className="flex flex-col mr-10">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productCode">
+              Product Code:
+            </label>
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCode" id="productCode" required />
+          </div>
+        
+          <div className="flex flex-col">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productName">
+              Product Name:
+            </label>
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productName" id="productName" required />
+          </div>
+        </div>
+      
+        <div className='flex flex-row justify-center'>
+          <div className="flex flex-col mr-10">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productWeight">
+              Product Weight:
+            </label>
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productWeight" id="productWeight" required />
+          </div>
+        
+          <div className="flex flex-col">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productCustomerID">
+              Product Customer ID:
+            </label>
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCustomerID" id="productCustomerID" required />
+          </div>
+        </div>
+      
+        <div className='flex justify-center'>
+          <div className="flex flex-col">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productExpiryDate">
+              Product Expiry Date:
+            </label>
+            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="date" name="productExpiryDate" id="productExpiryDate" required />
+          </div>
+        </div>
+      
+        {/* 
+        <div className="flex flex-col">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productImage">
             Product Image:
-            <input type="file" name="productImage" accept="image/*" required />
           </label>
-          <br /> */}
-          <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" name="productImage" id="productImage" accept="image/*" required />
+        </div>
+        */}
+      
+        <div className="flex justify-center">
+          <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
             Submit
           </button>
-        </form>
+        </div>
+      </form>
+      
       )}
 
     </div>
