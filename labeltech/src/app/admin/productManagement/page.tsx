@@ -32,8 +32,6 @@ const page = () => {
         const response = await axios.get("http://localhost:4000/api/products");
         const products = response.data;
         setProducts(products);
-        console.log(products);
-        console.log(fakeProducts);
       } catch (error) {
         console.error("Error fetching product details:", error);
       }
