@@ -175,9 +175,9 @@ app.post("/api/login", async (req, res) => {
       }
 
       if (user.UserLevel === "admin") {
-        return res.json({ redirect: "/admin" });
+        return res.json({ redirect: "/admin/productManagement" });
       } else {
-        return res.json({ redirect: "/admin" });
+        return res.json({ redirect: "/line_leader" });
       }
     });
   } catch (error) {
@@ -283,11 +283,11 @@ app.post("/api/users", async (req, res) => {
       "INSERT INTO users (UserName, UserPassword, UserEmail, UserLevel) VALUES (?, ?, ?, ?)";
 
     // Hash the password before saving it to the database
-    const hashedPassword = await bcrypt.hash(userPassword, 10);
+    // const hashedPassword = await bcrypt.hash(userPassword, 10);
 
     db.query(
       addUserQuery,
-      [userName, hashedPassword, userEmail, userLevel],
+      [userName, userPassword, userEmail, userLevel],
       (error, results) => {
         if (error) {
           console.error("Error adding user:", error);

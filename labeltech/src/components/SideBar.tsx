@@ -26,12 +26,12 @@ const SideBar = () => {
         </Typography>
       </div>
       <List>
-        <ListItem>
+        {/* <ListItem>
           <ListItemPrefix className="pr-2">
             <PresentationChartBarIcon className="h-5 w-5" />
           </ListItemPrefix>
           Dashboard
-        </ListItem>
+        </ListItem> */}
         <a href="/admin/productManagement">
           <ListItem>
             <ListItemPrefix className="pr-2">
