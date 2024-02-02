@@ -17,7 +17,7 @@ const Page = () => {
   return (
     <PageLayout >
       <div className='ml-96 mt-10 w-9/12'>
-        <h2 className='text-2xl font-bold mb-10'>Label error history</h2>
+        <h2 className='text-2xl font-bold mb-10'>Label Error History</h2>
         <div className='w-full flex'>
           <div className='w-6/12'>
             <div>

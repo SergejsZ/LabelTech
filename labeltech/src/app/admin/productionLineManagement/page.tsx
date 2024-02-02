@@ -17,7 +17,7 @@ const Page = () => {
   return (
     <PageLayout >
     <div className='ml-96 mt-10 w-9/12 pr-16'>
-      <h2 className='text-2xl font-bold mb-10'>production line management</h2>
+      <h2 className='text-2xl font-bold mb-10'>Production Line Management</h2>
       <List lines={linesData} />
     </div>
     </PageLayout >
