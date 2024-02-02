@@ -1,9 +1,10 @@
 "use client";
 
+import React from 'react';
 import PageLayout from '@/app/admin/page';
 import UserList from '@/components/UserList';
 
-const page = () => {
+const PageContent = () => {
   return (
     <PageLayout >
     <div className='ml-96 mt-10 w-9/12'>
@@ -14,4 +15,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default PageContent;

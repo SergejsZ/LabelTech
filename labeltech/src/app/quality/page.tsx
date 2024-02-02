@@ -17,7 +17,7 @@ type ProductDetails = {
   ProductImage: string;
 };
 
-const page = () => {
+const Page = () => {
 
   const [products, setProducts] = useState<ProductDetails[]>([]);
   const [selectedProductCode, setSelectedProductCode] = useState('');
@@ -76,4 +76,4 @@ const page = () => {
   );
 };
 
-export default page
+export default Page

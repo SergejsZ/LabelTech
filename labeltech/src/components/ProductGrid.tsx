@@ -100,6 +100,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
               className="relative transform transition-transform duration-500 hover:scale-110"
               // onMouseEnter={() => setIsHovered(true)}
               // onMouseLeave={() => setIsHovered(false)}
+              key={product.productCode}
             >
               <Product
                 key={product.productCode}

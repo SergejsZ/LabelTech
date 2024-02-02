@@ -13,7 +13,7 @@ const CreateUser: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Nom d'utilisateur :
+        Nom d&apos;utilisateur :
         <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
       </label>
       <label>

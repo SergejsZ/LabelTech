@@ -1,9 +1,13 @@
 "use client";
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import SideBar from '@/components/SideBar';
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+type PageLayoutProps = {
+  children: ReactNode;
+};
+
+const PageLayout = ({ children }: PageLayoutProps) => {
   return (
     <div className='flex h-screen'>
       <SideBar />
