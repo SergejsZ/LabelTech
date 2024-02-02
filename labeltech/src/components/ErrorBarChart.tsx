@@ -19,9 +19,14 @@ ChartJS.register(
   Legend
 );
 
+
 const ErrorTrackingChart = () => {
+
+  const previous6Months = [ 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan' ];
+
   const data = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: previous6Months,
+
     datasets: [
       {
         label: 'Errors',
@@ -39,7 +44,7 @@ const ErrorTrackingChart = () => {
     plugins: {
       title: {
         display: true,
-        text: 'Error Tracking of last week'
+        text: 'Error Tracking of previous months'
       },
       legend: {
         display: false,

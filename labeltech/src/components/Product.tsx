@@ -1,8 +1,6 @@
 "use client";
 
 import React from 'react'
-import { useState } from 'react'
-import axios from 'axios';
 
 const Product = ({ productName, productCode, productWeight,  productCustomerID, productExpiryDate, ProductImage }: { productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage:string }) => {
 
