@@ -22,7 +22,7 @@ type ProductDetails = {
   ProductImage: string;
 };
 
-const page = () => {
+const Page = () => {
 
   const [products, setProducts] = useState<ProductDetails[]>([]);
 
@@ -131,4 +131,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -13,7 +13,7 @@ const linesData = [
 
 
 
-const page = () => {
+const Page = () => {
   return (
     <PageLayout >
     <div className='ml-96 mt-10 w-9/12 pr-16'>
@@ -24,4 +24,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

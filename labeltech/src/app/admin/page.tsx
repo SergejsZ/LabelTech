@@ -3,9 +3,9 @@
 import React, { ReactNode } from 'react';
 import SideBar from '@/components/SideBar';
 
-type PageLayoutProps = {
+interface PageLayoutProps {
   children: ReactNode;
-};
+}
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (

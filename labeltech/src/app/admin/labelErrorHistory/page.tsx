@@ -9,7 +9,7 @@ import ErrorBarChart from '@/components/ErrorBarChart';
 import Timeline from '@/components/TimeLine';
 
 
-const page = () => {
+const Page = () => {
 
   const [date, setDate] = useState<any>(new Date());
   const [selectRange, setSelectRange] = useState<boolean>(false);
@@ -42,4 +42,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -4,7 +4,7 @@ import React from 'react';
 import PageLayout from '@/app/admin/page';
 import UserList from '@/components/UserList';
 
-const PageContent = () => {
+const Page = () => {
   return (
     <PageLayout >
     <div className='ml-96 mt-10 w-9/12'>
@@ -15,4 +15,4 @@ const PageContent = () => {
   );
 };
 
-export default PageContent;
+export default Page;
