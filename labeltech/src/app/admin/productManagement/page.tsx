@@ -41,69 +41,13 @@ const page = () => {
   }, []);
   
 
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  // const [isFormVisible, setIsFormVisible] = useState(false);
 
-  const handleAddProduct = () => {
-    setIsFormVisible(true);
-  };
+  // const handleAddProduct = () => {
+  //   setIsFormVisible(true);
+  // };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    try {
-      const formData = new FormData(event.currentTarget);
-
-      const productCode = formData.get('productCode') as string;
-      const productName = formData.get('productName') as string;
-      const productWeight = formData.get('productWeight') as string;
-      const productCustomerID = formData.get('productCustomerID') as string;
-      const productExpiryDate = formData.get('productExpiryDate') as string;
-      const ProductImage = formData.get('productImage') as File;
-
-      // const NameImage = ProductImage.name;
-    
-
-      // Log the form data
-      console.log('Product Code:', productCode);
-      console.log('Product Name:', productName);
-      console.log('Product Weight:', productWeight);
-      console.log('Product Customer ID:', productCustomerID);
-      console.log('Product Expiry Date:', productExpiryDate);
-      // console.log('Product Image:', NameImage);
-
-      // You can now send this data to the server to add it to the database
-      const response = await fetch('http://localhost:4000/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productCode,
-          productName,
-          productWeight,
-          productCustomerID,
-          productExpiryDate,
-          // NameImage,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Product added successfully, you can handle this as needed
-        console.log('Product added successfully:', data);
-        setIsFormVisible(false); // Hide the form after successful submission
-        // rerender the page
-        window.location.reload();
-      } else {
-        // Error adding product, handle accordingly
-        console.error('Error adding product:', data.error);
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-  };
-
+  
   
   return (
     <PageLayout >
@@ -114,13 +58,13 @@ const page = () => {
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         style={{ paddingTop: '5px', paddingBottom: '5px' }}
-        onClick={handleAddProduct}
+        // onClick={handleAddProduct}
       >
         Add Product
       </button>
 
       {/* Form */}
-      {isFormVisible && (
+      {/* {isFormVisible && (
         <form onSubmit={handleSubmit} className="mt-4 space-y-4 border-solid border-2 p-3">
         <div className='flex flex-row justify-center'>
           <div className="flex flex-col mr-10">
@@ -170,7 +114,8 @@ const page = () => {
           </label>
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" name="productImage" id="productImage" accept="image/*" required />
         </div>
-        */}
+        $/}
+      
       
         <div className="flex justify-center">
           <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -179,7 +124,7 @@ const page = () => {
         </div>
       </form>
       
-      )}
+      )} */}
 
     </div>
     </PageLayout >
