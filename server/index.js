@@ -325,3 +325,37 @@ app.put("/api/users/:userId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+//display all errors
+app.get("/api/errors", async (req, res) => {
+  try {
+    const query =
+      'SELECT `LabelErrorID`, `ProductCode`, `DispatchDate`, `CameraCapture`, `ErrorDispatchDate`, `Output`, `ErrorLine`, `ErrorTime`, `ErrorDate` FROM `LabelErrorHistory` WHERE 1';
+
+    db.query(query, (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const errors = results.map((error) => ({
+        labelErrorID: error.LabelErrorID,
+        productCode: error.ProductCode,
+        dispatchDate: error.DispatchDate,
+        cameraCapture: error.CameraCapture,
+        errorDispatchDate: error.ErrorDispatchDate,
+        output: error.Output,
+        errorLine: error.ErrorLine,
+        errorTime: error.ErrorTime,
+        errorDate: error.ErrorDate,
+      }));
+
+      res.json(errors);
+    });
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
