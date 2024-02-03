@@ -281,6 +281,18 @@ app.post("/api/users", async (req, res) => {
   try {
     const { userName, userPassword, userEmail, userLevel } = req.body;
 
+    const hasUpperCase = /[A-Z]/.test(userPassword);
+    const hasLowerCase = /[a-z]/.test(userPassword);
+    const hasNumbers = /\d/.test(userPassword);
+    const hasSpecialChars = /[\W_]/.test(userPassword);
+    const isLongEnough = userPassword.length >= 8;
+
+    if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChars || !isLongEnough) {
+      return res.status(400).json({
+        error: "Password does not meet the strength criteria. It must be at least 8 characters long and include upper and lower case letters, numbers, and special characters."
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(userPassword, 10);
 
     const addUserQuery = "INSERT INTO users (UserName, UserPassword, UserEmail, UserLevel) VALUES (?, ?, ?, ?)";
