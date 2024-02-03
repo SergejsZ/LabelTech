@@ -1,6 +1,6 @@
 "use client";
 
-import PageLayout from '@/app/admin/page';
+import PageLayout from '@/components/PageLayout';
 import CustomCalendar from '@/components/Calendar/Calendar';
 import { useState } from 'react';
 import "@/styles/calendar.css";

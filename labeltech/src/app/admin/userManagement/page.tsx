@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import PageLayout from '@/app/admin/page';
+import PageLayout from '@/components/PageLayout';
 import UserList from '@/components/UserList';
 
 const Page = () => {

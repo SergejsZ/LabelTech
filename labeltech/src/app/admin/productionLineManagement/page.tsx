@@ -1,6 +1,6 @@
 "use client";
 
-import PageLayout from '@/app/admin/page';
+import PageLayout from '@/components/PageLayout';
 import List from '@/components/List';
 
 const linesData = [

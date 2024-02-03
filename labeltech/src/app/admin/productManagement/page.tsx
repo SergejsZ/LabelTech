@@ -1,6 +1,6 @@
 "use client";
 
-import PageLayout from '@/app/admin/page';
+import PageLayout from '@/components/PageLayout';
 import ProductGrid from '@/components/ProductGrid';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';

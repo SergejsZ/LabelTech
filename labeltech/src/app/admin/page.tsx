@@ -1,19 +1,13 @@
 "use client";
 
-import React, { ReactNode } from 'react';
-import SideBar from '@/components/SideBar';
+import React, { useEffect } from 'react';
 
-interface PageLayoutProps {
-  children: ReactNode;
-}
+const Page: React.FC = () => {
+  useEffect(() => {
+    window.location.href = "/admin/productManagement";
+  }, []);
 
-const PageLayout = ({ children }: PageLayoutProps) => {
-  return (
-    <div className='flex h-screen'>
-      <SideBar />
-      {children}
-    </div>
-  );
+  return null;
 };
 
-export default PageLayout;
+export default Page;
