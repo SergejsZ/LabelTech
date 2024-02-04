@@ -176,10 +176,13 @@ app.post("/api/login", async (req, res) => {
         return res.status(401).json({ error: "Invalid login credentials" });
       }
 
-      if (user.UserLevel === "admin") {
+      const userLevel = user.UserLevel.toLowerCase();
+      if (userLevel === "admin") {
         return res.json({ redirect: "/admin/productManagement" });
-      } else {
+      } else if (userLevel === "leader") {
         return res.json({ redirect: "/line_leader" });
+      } else {
+        return res.json({ redirect: "/quality" });
       }
     });
   } catch (error) {

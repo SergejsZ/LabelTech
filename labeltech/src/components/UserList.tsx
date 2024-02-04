@@ -179,17 +179,20 @@ const UserList = () => {
                 />
               </>
             )}
-            <input
-              type="text"
-              placeholder="UserLevel"
-              value={isAddingUser ? newUser.userLevel : editUser.userLevel}
-              onChange={(e) =>
-                isAddingUser
-                  ? setNewUser({ ...newUser, userLevel: e.target.value })
-                  : setEditUser({ ...editUser, userLevel: e.target.value })
-              }
-              className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
+            <select
+  value={isAddingUser ? newUser.userLevel : editUser.userLevel}
+  onChange={(e) =>
+    isAddingUser
+      ? setNewUser({ ...newUser, userLevel: e.target.value })
+      : setEditUser({ ...editUser, userLevel: e.target.value })
+  }
+  className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
+>
+  <option value="">Select Role</option>
+  <option value="Admin">Admin</option>
+  <option value="Leader">Leader</option>
+  <option value="Quality">Quality</option>
+</select>
             {isAddingUser ? (
               <div>
                 <button
