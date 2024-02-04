@@ -5,7 +5,7 @@ import List from '@/components/List';
 import React, { use, useState } from 'react';
 import axios from 'axios';
 
-const linesData = [
+const FakelinesData = [
   { number: 1, leader: 'Paul Aubry', state: 'Ready', action: () => console.log('Start line 1') },
   { number: 2, leader: 'Alexandre Desbos', state: 'Ready', action: () => console.log('Start line 2') },
   { number: 3, leader: 'Baptiste Griva', state: 'Ready', action: () => console.log('Start line 3') },
@@ -19,8 +19,6 @@ type LineDetails = {
   state: string;
   action: () => void;
 };
-
-
 
 const Page = () => {
 

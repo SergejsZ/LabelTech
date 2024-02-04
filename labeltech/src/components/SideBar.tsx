@@ -54,26 +54,14 @@ const SideBar = () => {
           </ListItemPrefix>
           Label Error History
         </ListItem>
-        </a>
-        {/* <a href="/admin/statistics">
-        <ListItem>
-          <ListItemPrefix className="pr-2">
-            <ChartBarIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Statistics
-        </ListItem>
-        </a>
-        <ListItem>
-          <ListItemPrefix className="pr-2">
-            <Cog6ToothIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Settings
-        </ListItem> */}
+        </a>      
+      </List>
+      <List className="mt-auto">
         <ListItem>
           <ListItemPrefix className="pr-2">
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Log Out
+          Logout
         </ListItem>
       </List>
     </Card>
