@@ -140,56 +140,50 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
         )}
         {isFormVisible && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center">
-          <form onSubmit={handleSubmit} className="space-y-8 bg-gray-50 shadow-xl rounded-lg p-8 w-full max-w-2xl mx-auto">
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <div className="flex flex-col">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="productCode">
-                  Product Code:
-                </label>
-                <input className="shadow-sm border-gray-300 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:ring-indigo-500 focus:border-indigo-500" type="text" name="productCode" id="productCode" required />
-              </div>
-            
-              <div className="flex flex-col">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="productName">
-                  Product Name:
-                </label>
-                <input className="shadow-sm border-gray-300 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:ring-indigo-500 focus:border-indigo-500" type="text" name="productName" id="productName" required />
-              </div>
-            </div>
-
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-              <div className="flex flex-col">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="productWeight">
-                  Product Weight:
-                </label>
-                <input className="shadow-sm border-gray-300 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:ring-indigo-500 focus:border-indigo-500" type="text" name="productWeight" id="productWeight" required />
-              </div>
-            
-              <div className="flex flex-col">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="productCustomerID">
-                  Product Customer ID:
-                </label>
-                <input className="shadow-sm border-gray-300 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:ring-indigo-500 focus:border-indigo-500" type="text" name="productCustomerID" id="productCustomerID" required />
-              </div>
-            </div>
-
-            <div className='flex justify-center'>
-              <div className="flex flex-col w-full md:w-1/2">
-                <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="productExpiryDate">
-                  Product Expiry Date:
-                </label>
-                <input className="shadow-sm border-gray-300 rounded-lg w-full py-2 px-4 text-gray-700 leading-tight focus:ring-indigo-500 focus:border-indigo-500" type="date" name="productExpiryDate" id="productExpiryDate" required />
-              </div>
-            </div>
-            
-            {/* Uncomment if you need to upload an image
+          <form onSubmit={handleSubmit} className="mt space-y-6 bg-gray-100 shadow-xl rounded-lg p-8 w-full max-w-lg mx-auto">
             <div className="flex flex-col">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="productImage">
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productCode">
+                Product Code:
+              </label>
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCode" id="productCode" required />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productName">
+                Product Name:
+              </label>
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productName" id="productName" required />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productWeight">
+                Product Weight:
+              </label>
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productWeight" id="productWeight" required />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productCustomerID">
+                Product Customer ID:
+              </label>
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCustomerID" id="productCustomerID" required />
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productExpiryDate">
+                Product Expiry Date:
+              </label>
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="date" name="productExpiryDate" id="productExpiryDate" required />
+            </div>
+            
+            <div className="flex flex-col">
+              {/* Uncomment if you need to upload an image
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productImage">
                 Product Image:
               </label>
-              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" name="productImage" id="productImage" accept="image/*" required />
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="file" name="productImage" id="productImage" accept="image/*" required />
+              */}
             </div>
-            */}
             
             <div className="flex justify-center space-x-4 pt-4">
               <button type="submit" className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
@@ -203,6 +197,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
               </button>
             </div>
           </form>
+
         </div>
         )}
         </div>
