@@ -34,7 +34,7 @@ const List = ({ lines }: { lines: Line[] }) => {
                   {line.number}
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {line.leader}
+                  {line.leader === null ? 'Unassigned' : line.leader}
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   {line.state}

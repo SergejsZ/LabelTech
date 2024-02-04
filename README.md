@@ -78,3 +78,11 @@ ProductDefectTally INT,
 FOREIGN KEY (ProductCode) REFERENCES Product(ProductCode),
 FOREIGN KEY (DefectID) REFERENCES Defects(DefectID)
 );
+
+-- Create the ProductionLine table
+CREATE TABLE IF NOT EXISTS ProductionLine (
+LineNumber INT PRIMARY KEY,
+LineLeader INT,
+State VARCHAR(255),
+FOREIGN KEY (LineLeader) REFERENCES Users(UserID)
+);

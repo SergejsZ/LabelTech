@@ -55,13 +55,13 @@ const Page = () => {
       <h2 className='text-2xl font-bold mb-10'>Product Managment</h2>
       <ProductGrid products={products.map((product) => ({ productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
 
-      <button
+      {/* <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         style={{ paddingTop: '5px', paddingBottom: '5px' }}
         // onClick={handleAddProduct}
       >
         Add Product
-      </button>
+      </button> */}
 
       {/* Form */}
       {/* {isFormVisible && (

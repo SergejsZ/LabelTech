@@ -368,3 +368,32 @@ app.get("/api/errors", async (req, res) => {
   }
 });
 
+
+//display LineDetails
+app.get("/api/lineDetails", async (req, res) => {
+  try {
+    const query =
+      'SELECT `LineNumber`, `LineLeader`, `State` FROM `ProductionLine` WHERE 1';
+
+    db.query(query, (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const lineDetails = results.map((lineDetail) => ({
+        number: lineDetail.LineNumber,
+        leader: lineDetail.LineLeader,
+        state: lineDetail.State,
+      }));
+
+      res.json(lineDetails);
+    }
+    );
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
