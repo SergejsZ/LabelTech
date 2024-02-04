@@ -1,18 +1,22 @@
-# Mushies
+# LabelTech
 
-label verification using camera vision
+![teamlogo](https://github.com/SergejsZ/LabelTech/assets/93885587/c0bfda70-fa8b-4335-ba7c-5f6cbcbd47a8)
 
-testing git user conflict
+# Application
 
-# MySQL Database Creation
+LabelTech is a web app used to spot manufacturing label issues due to human error. It uses a camera and smart image analysis system to scan for incorrect labels of various products. The app provides admins and users to spot incorrectly labeled products by comparing the human input data label to the correct data in the database. Our goal is to correct human error and finds ways to allow for a more seamless factory line system. Our software system is planning to provide the best quality assurance of on-the-shelf goods and items for manufacturers.
 
+# SQL Database
 -- Create the database
+
 CREATE DATABASE IF NOT EXISTS labeltech;
 
 -- Switch to the labeltech database
+
 USE labeltech;
 
 -- Create the Customer table
+
 CREATE TABLE IF NOT EXISTS Customer (
 CustomerID INT PRIMARY KEY,
 CustomerName VARCHAR(255),
@@ -20,6 +24,7 @@ CustomerEmail VARCHAR(50)
 );
 
 -- Create the Product table
+
 CREATE TABLE IF NOT EXISTS Product (
 ProductCode INT PRIMARY KEY,
 ProductName VARCHAR(255),
@@ -30,6 +35,7 @@ FOREIGN KEY (ProductCustomerID) REFERENCES Customer(CustomerID)
 );
 
 -- Create the Defects table
+
 CREATE TABLE IF NOT EXISTS Defects (
 DefectID VARCHAR(255) PRIMARY KEY,
 DefectType VARCHAR(255),
@@ -39,6 +45,7 @@ ImageURL VARCHAR(255)
 );
 
 -- Create the ProductsScannedLog table
+
 CREATE TABLE IF NOT EXISTS ProductsScannedLog (
 ProductScannedID INT PRIMARY KEY,
 ProductScannedCode INT,
@@ -49,6 +56,7 @@ FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductCode)
 );
 
 -- Create the LabelErrorHistory table
+
 CREATE TABLE IF NOT EXISTS LabelErrorHistory (
 LabelErrorID INT PRIMARY KEY,
 ProductCode INT,
@@ -60,6 +68,7 @@ FOREIGN KEY (ProductCode) REFERENCES Product(ProductCode)
 );
 
 -- Create the Users table
+
 CREATE TABLE IF NOT EXISTS Users (
 UserID INT PRIMARY KEY,
 UserName VARCHAR(255),
@@ -69,6 +78,7 @@ UserLevel VARCHAR(50)
 );
 
 -- Create the BadProducts table
+
 CREATE TABLE IF NOT EXISTS BadProducts (
 BadProductID INT PRIMARY KEY,
 ProductCode INT,
@@ -80,6 +90,7 @@ FOREIGN KEY (DefectID) REFERENCES Defects(DefectID)
 );
 
 -- Create the ProductionLine table
+
 CREATE TABLE IF NOT EXISTS ProductionLine (
 LineNumber INT PRIMARY KEY,
 LineLeader INT,
