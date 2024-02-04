@@ -71,6 +71,8 @@ app.put("/api/products/:productId", async (req, res) => {
     const { productName, productWeight, productCustomerID, productExpiryDate, productImage } =
       req.body;
 
+    console.log("Request body:", req.body);
+
     const updateQuery =
       "UPDATE product SET ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ? WHERE ProductCode = ?";
     db.query(
@@ -102,9 +104,11 @@ app.put("/api/products/:productId", async (req, res) => {
 app.delete("/api/products/:productId", async (req, res) => {
   try {
     const { productId } = req.params;
-
-    const deleteQuery = "DELETE FROM product WHERE ProductCode = ?";
-    db.query(deleteQuery, [productId], (error, results) => {
+    
+    console.log("Request body:", req.params);
+    
+    const deleteQuery = "DELETE FROM `Product` WHERE ProductCode = ?";
+    db.query(deleteQuery, [productId], (error, results) => { 
       if (error) {
         console.error("Error deleting product:", error);
         return res.status(500).json({ error: "Internal Server Error" });
@@ -263,6 +267,8 @@ app.get("/api/users", async (req, res) => {
 app.delete("/api/users/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+
+    console.log("Request body:", req.params);
 
     const deleteQuery = "DELETE FROM users WHERE UserID = ?";
     db.query(deleteQuery, [userId], (error, results) => {

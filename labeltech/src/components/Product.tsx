@@ -1,11 +1,48 @@
 "use client";
 
 import React from 'react'
+import axios from 'axios';
+import { useState } from 'react';
+import {
+  TrashIcon,
+  PencilIcon
+} from "@heroicons/react/24/solid";
 
-const Product = ({ productName, productCode, productWeight,  productCustomerID, productExpiryDate, ProductImage }: { productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage:string }) => {
+
+const Product = ({ productName, productCode, productWeight,  productCustomerID, productExpiryDate, ProductImage, onClick }: { productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage:string, onClick: () => void }) => {
+
+  const [products, setProducts] = useState([]);
+
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ${productName}?`
+    );
+
+    if (confirmDelete) {
+      try {
+        await axios.delete(
+          `http://localhost:4000/api/products/${productCode}`
+        );
+        // Refresh the user list after deletion
+        const response = await axios.get('http://localhost:4000/api/products');
+        const updatedProducts = response.data;
+        setProducts(updatedProducts);
+        window.location.reload();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+      }
+    }
+  };
 
   return (
     <div>
+      <button onClick={onClick} className="absolute top-1 right-8 px-4 py-2 text-black rounded">
+        <PencilIcon className="h-5 w-5" />
+      </button>
+      <button onClick={handleDelete} className="absolute top-0 right-0 px-4 py-2 text-black rounded">
+        <TrashIcon
+         className="h-6 w-6" />
+      </button>
       <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2">{productName}</div>

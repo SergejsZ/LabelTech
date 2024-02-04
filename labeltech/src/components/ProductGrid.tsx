@@ -1,26 +1,93 @@
 import Product from "./Product";
 import { useState } from "react";
 import axios from "axios";
+import React from "react";
 
 
 function ProductGrid({ products }: { products: Array<{ productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage: string}> }) {
   
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isEditingUser, setIsEditingUser] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState({
+    productName: "",
+    productCode: "",
+    productWeight: "",
+    productCustomerID: "",
+    productExpiryDate: "",
+  });
+
+  const [addProduct, setAddProduct] = useState({
+    productName: "",
+    productCode: "",
+    productWeight: "",
+    productCustomerID: "",
+    productExpiryDate: "",
+  });
 
   const handleAddProduct = () => {
     setIsFormVisible(!isFormVisible);
   };
 
-  const renderInputFields = () => {
-    const productProperties = ['name', 'product code', 'weight', 'customerId', 'expiryDate'];
-  
-    return productProperties.map((property) => (
-      <label key={property} className="flex flex-col mt-4">
-        {property.charAt(0).toUpperCase() + property.slice(1)}
-        <input type="text" name={property} required />
-      </label>
-    ));
-  };
+  const handleEditDisplay = (product: any) => {
+    setIsFormVisible(!isFormVisible);
+    setIsEditingUser(!isEditingUser);
+    setSelectedProduct(product);
+    setEditProduct({
+      productName: product.productName,
+      productCode: product.productCode,
+      productWeight: product.productWeight,
+      productCustomerID: product.productCustomerID,
+      productExpiryDate: product.productExpiryDate,
+    });
+    console.log('Edit button clicked');
+
+  }
+
+  const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      const formData = new FormData(event.currentTarget);
+
+      const productCode = formData.get('productCode') as string;
+      const productName = formData.get('productName') as string;
+      const productWeight = formData.get('productWeight') as string;
+      const productCustomerID = formData.get('productCustomerID') as string;
+      const productExpiryDate = formData.get('productExpiryDate') as string;
+      // const ProductImage = formData.get('productImage') as File;
+      // const NameImage = ProductImage.name;
+      console.log('Product Code:', productCode);
+      console.log('Product Name:', productName);
+      console.log('Product Weight:', productWeight);
+      console.log('Product Customer ID:', productCustomerID);
+      console.log('Product Expiry Date:', productExpiryDate);
+      // console.log('Product Image:', NameImage);
+
+      const response = await axios.put(
+        `http://localhost:4000/api/products/${productCode}`,
+        {
+          productName,
+          productWeight,
+          productCustomerID,
+          productExpiryDate,
+          // NameImage,
+        }
+      );
+
+      const data = response.data;
+
+      if (response.status === 200) {
+        console.log('Product updated successfully:', data);
+        setIsFormVisible(false);
+        window.location.reload();
+      } else {
+        console.error('Error updating product:', data.error);
+      }
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -79,27 +146,13 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
     }
   };
 
-  const handleDeleteClick = async (productCode: number) => {  
-    console.log('product deleted');
-    try {
-      await axios.put(
-        `http://localhost:4000/api/products/${productCode}`
-      );
-      window.location.reload();
-    } catch (error) {
-      console.error("Error updating product:", error);
-    }
-  };
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-4">
         {products.map((product) => {
-          // const [isHovered, setIsHovered] = useState(false);
           return (
             <div 
               className="relative transform transition-transform duration-500 hover:scale-110"
-              // onMouseEnter={() => setIsHovered(true)}
-              // onMouseLeave={() => setIsHovered(false)}
               key={product.productCode}
             >
               <Product
@@ -110,24 +163,8 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
                 productCustomerID={product.productCustomerID}
                 productExpiryDate={product.productExpiryDate} 
                 ProductImage={product.ProductImage}
+                onClick={() => handleEditDisplay(product)}
               />
-
-              {/* {isHovered && (
-                <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-                <button 
-                  onClick={() => renderInputFields()}
-                  className="absolute center top-1/4 right-2/4 m-2 bg-blue-500 text-white px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-                <button 
-                  onClick={() => handleDeleteClick(product.productCode)}
-                  className="absolute center top-1/4 right-1/4 m-2 bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete  
-                </button>
-              </div>
-              )} */}
             </div>
           );
         })}
@@ -135,45 +172,50 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
         {!isFormVisible && (
           <button className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full w-12 h-12 flex items-center justify-center"
           onClick={handleAddProduct}>
-          <span className="text-2xl leading-none">+</span>
+          <span className="text-2xl pb-1 leading-none">+</span>
         </button>
         )}
         {isFormVisible && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center">
-          <form onSubmit={handleSubmit} className="mt space-y-6 bg-gray-100 shadow-xl rounded-lg p-8 w-full max-w-lg mx-auto">
+          <form onSubmit={isEditingUser ? handleEdit : handleSubmit} className="space-y-6 bg-gray-100 shadow-xl rounded-lg p-8 w-full max-w-lg mx-auto">
             <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productCode">
                 Product Code:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCode" id="productCode" required />
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCode" id="productCode" required
+                      value={isEditingUser ? (editProduct.productCode) : (addProduct.productCode)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productCode: e.target.value }) : setAddProduct({ ...addProduct, productCode: e.target.value })} />
             </div>
 
             <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productName">
                 Product Name:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productName" id="productName" required />
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productName" id="productName" required 
+                      value={isEditingUser ? (editProduct.productName) : (addProduct.productName)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productName: e.target.value }) : setAddProduct({ ...addProduct, productName: e.target.value })} />
             </div>
 
             <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productWeight">
                 Product Weight:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productWeight" id="productWeight" required />
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productWeight" id="productWeight" required 
+                    value={isEditingUser ? (editProduct.productWeight) : (addProduct.productWeight)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productWeight: e.target.value }) : setAddProduct({ ...addProduct, productWeight: e.target.value })} />
             </div>
 
             <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productCustomerID">
                 Product Customer ID:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCustomerID" id="productCustomerID" required />
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCustomerID" id="productCustomerID" required 
+                    value={isEditingUser ? (editProduct.productCustomerID) : (addProduct.productCustomerID)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productCustomerID: e.target.value }) : setAddProduct({ ...addProduct, productCustomerID: e.target.value })} />
             </div>
 
             <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productExpiryDate">
                 Product Expiry Date:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="date" name="productExpiryDate" id="productExpiryDate" required />
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="date" name="productExpiryDate" id="productExpiryDate" required 
+                    value={isEditingUser ? (editProduct.productExpiryDate) : (addProduct.productExpiryDate)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productExpiryDate: e.target.value }) : setAddProduct({ ...addProduct, productExpiryDate: e.target.value })} />
             </div>
             
             <div className="flex flex-col">
@@ -187,12 +229,29 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
             
             <div className="flex justify-center space-x-4 pt-4">
               <button type="submit" className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
-                Submit
+                {isEditingUser ? 'Save' : 'Add'}
               </button>
               <button 
                 type="button"
-                onClick={() => setIsFormVisible(false)}
-                className="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                onClick={() => {
+                  setIsFormVisible(false);
+                  setIsEditingUser(false);
+                  setAddProduct({
+                    productName: "",
+                    productCode: "",
+                    productWeight: "",
+                    productCustomerID: "",
+                    productExpiryDate: "",
+                  });
+                  setEditProduct({
+                    productName: "",
+                    productCode: "",
+                    productWeight: "",
+                    productCustomerID: "",
+                    productExpiryDate: "",
+                  });
+                }}
+                className="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50" >
                   Cancel
               </button>
             </div>

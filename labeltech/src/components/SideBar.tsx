@@ -6,13 +6,10 @@ import {
     ListItemPrefix,
   } from "@material-tailwind/react";
   import {
-    PresentationChartBarIcon,
     ShoppingBagIcon,
     UserCircleIcon,
-    Cog6ToothIcon,
     InboxIcon,
     PowerIcon,
-    ChartBarIcon,
     FolderIcon
   } from "@heroicons/react/24/solid";
 
@@ -26,12 +23,6 @@ const SideBar = () => {
         </Typography>
       </div>
       <List>
-        {/* <ListItem>
-          <ListItemPrefix className="pr-2">
-            <PresentationChartBarIcon className="h-5 w-5" />
-          </ListItemPrefix>
-          Dashboard
-        </ListItem> */}
         <a href="/admin/productManagement">
           <ListItem>
             <ListItemPrefix className="pr-2">
