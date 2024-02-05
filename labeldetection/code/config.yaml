@@ -1,0 +1,7 @@
+path: \\Users\\serge\\FinalYear\\LabelDetection\\code\\data # Path to the data folder
+train: train\\imgs # Path to the train folder
+val: val\\imgs # Path to the val folder
+
+# Classes
+names:
+  0: labels
