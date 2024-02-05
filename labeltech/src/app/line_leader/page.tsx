@@ -67,6 +67,9 @@ useEffect(() => {
   const clearLocalStorage = () => {
     localStorage.removeItem('productCode');
     localStorage.removeItem('dispatchDate');
+    setCriticalPackingError(0);
+    setPackingError(0);
+    setPackedWithoutError(0);
     setProductCode('');
     setDispatchDate('');
     setIsButtonDisabled(true);
