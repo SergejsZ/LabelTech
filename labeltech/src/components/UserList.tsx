@@ -1,282 +1,198 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/solid';
 
 type User = {
-    id: number;
-    userName: string;
-    userEmail: string;
-    userLevel: string;
-  };
+  id: number;
+  userName: string;
+  userEmail: string;
+  userPassword: string;
+  userLevel: string;
+};
+
+const initialUserState = {
+  id: null,
+  userName: '',
+  userEmail: '',
+  userLevel: '',
+  userPassword: '',
+};
 
 const UserList = () => {
-
   const [users, setUsers] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isAddingUser, setIsAddingUser] = useState(false);
-  const [isEditingUser, setIsEditingUser] = useState(false);
-  const [newUser, setNewUser] = useState({
-    userName: "",
-    userPassword: "",
-    userEmail: "",
-    userLevel: "",
-  });
-
-  // Separate state for editing user
-  const [editUser, setEditUser] = useState({
-    userName: "",
-    userLevel: "",
-  });
+  const [currentUser, setCurrentUser] = useState(initialUserState);
+  const [isEditing, setIsEditing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/api/users");
-        const users = response.data;
-        setUsers(users);
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-
-    fetchUserDetails();
+    fetchUsers();
   }, []);
 
-  const handleRowClick = (user: User) => {
-    setSelectedUser(user);
-
-    // When clicking a row, update the editUser state
-    setEditUser({
-      userName: user.userName,
-      userLevel: user.userLevel,
-    });
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/api/users');
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
   };
 
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete ${selectedUser?.userName}?`
-    );
-
-    if (confirmDelete) {
+  const handleDeleteUser = async (id: number) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await axios.delete(
-          `http://localhost:4000/api/users/${selectedUser?.id}`
-        );
-        // Refresh the user list after deletion
-        const response = await axios.get("http://localhost:4000/api/users");
-        const updatedUsers = response.data;
-        setUsers(updatedUsers);
-        setSelectedUser(null); // Reset selected user after deletion
-        setNewUser({
-          userName: "",
-          userPassword: "",
-          userEmail: "",
-          userLevel: "",
-        });
-        setIsEditingUser(false);
+        await axios.delete(`http://localhost:4000/api/users/${id}`);
+        fetchUsers();
       } catch (error) {
-        console.error("Error deleting user:", error);
+        console.error('Error deleting user:', error);
       }
     }
   };
 
-  const handleAddUser = async () => {
+  const handleEditUserClick = (user: User) => {
+    setCurrentUser(user);
+    setIsEditing(true);
+    setModalVisible(true);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const method = isEditing ? 'put' : 'post';
+    const url = isEditing ? `http://localhost:4000/api/users/${currentUser.id}` : 'http://localhost:4000/api/users';
+    
     try {
-      await axios.post("http://localhost:4000/api/users", newUser);
-      // Refresh the user list after adding a new user
-      const response = await axios.get("http://localhost:4000/api/users");
-      const updatedUsers = response.data;
-      setUsers(updatedUsers);
-      setIsAddingUser(false); // Hide the form after successful addition
-      setNewUser({
-        userName: "",
-        userPassword: "",
-        userEmail: "",
-        userLevel: "",
-      });
+      await axios[method](url, currentUser);
+      fetchUsers();
+      closeModal();
     } catch (error) {
-      console.error("Error adding user:", error);
+      console.error('Error saving user:', error);
     }
   };
 
-  const handleEditUser = async () => {
-    try {
-      await axios.put(
-        `http://localhost:4000/api/users/${selectedUser?.id}`,
-        editUser // Use the editUser state instead of newUser
-      );
-      // Refresh the user list after editing a user
-      const response = await axios.get("http://localhost:4000/api/users");
-      const updatedUsers = response.data;
-      setUsers(updatedUsers);
-      setIsEditingUser(false); // Hide the form after successful edit
-      setEditUser({
-        userName: "",
-        userLevel: "",
-      });
-      setSelectedUser(null);
-    } catch (error) {
-      console.error("Error editing user:", error);
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setCurrentUser({ ...currentUser, [name]: value });
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setIsEditing(false);
+    setCurrentUser(initialUserState);
   };
 
   return (
-    <div className="container mx-auto p-5 pr-16">
-      <table className="w-full bg-white">
-        <thead>
+    <div className="container mx-auto p-5">
+      <div className="flex justify-end">
+        <button
+          onClick={() => setModalVisible(true)}
+          className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Add User
+        </button>
+      </div>
+      <table className="w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
           <tr>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-            <th className="px-6 py-3 border-b border-gray-200 bg-gray-200 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">user Level</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user.id} onClick={() => handleRowClick(user)} className={selectedUser === user ? 'bg-slate-100' : ''}>
-              <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userName}</td>
-              <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userEmail}</td>
-              <td className="px-6 py-4 border-b border-gray-200 text-center">{user.userLevel}</td>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{user.userName}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userEmail}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userLevel}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button onClick={() => handleEditUserClick(user)} className="text-indigo-600 hover:text-indigo-900 mr-3">
+                  <PencilIcon className="h-5 w-5" />
+                </button>
+                <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-900">
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {(isAddingUser || isEditingUser) && (
-        <div className="mt-5">
-          <h3 className="text-center font-bold">
-            {isAddingUser ? "Add User" : "Edit User"}
-          </h3>
-          <form className="mt-3 flex flex-col items-center w-full">
-            <input
-              type="text"
-              placeholder="UserName"
-              value={isAddingUser ? newUser.userName : editUser.userName}
-              onChange={(e) =>
-                isAddingUser
-                  ? setNewUser({ ...newUser, userName: e.target.value })
-                  : setEditUser({ ...editUser, userName: e.target.value })
-              }
-              className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-            {isAddingUser && (
-              <>
+
+      {modalVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            <div className="flex flex-col">
+              <label htmlFor="userName" className="block text-gray-800 text-sm font-semibold mb-2">User Name:</label>
+              <input
+                type="text"
+                name="userName"
+                id="userName"
+                value={currentUser.userName}
+                onChange={handleInputChange}
+                className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+      
+            <div className="flex flex-col">
+              <label htmlFor="userEmail" className="block text-gray-800 text-sm font-semibold mb-2">User Email:</label>
+              <input
+                type="email"
+                name="userEmail"
+                id="userEmail"
+                value={currentUser.userEmail}
+                onChange={handleInputChange}
+                className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+      
+            {!isEditing && (
+              <div className="flex flex-col">
+                <label htmlFor="userPassword" className="block text-gray-800 text-sm font-semibold mb-2">User Password:</label>
                 <input
                   type="password"
-                  placeholder="UserPassword"
-                  value={newUser.userPassword}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, userPassword: e.target.value })
-                  }
-                  className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
+                  name="userPassword"
+                  id="userPassword"
+                  value={currentUser.userPassword}
+                  onChange={handleInputChange}
+                  className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                  required={!isEditing}
                 />
-                <input
-                  type="text"
-                  placeholder="UserEmail"
-                  value={newUser.userEmail}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, userEmail: e.target.value })
-                  }
-                  className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </>
-            )}
-            <select
-  value={isAddingUser ? newUser.userLevel : editUser.userLevel}
-  onChange={(e) =>
-    isAddingUser
-      ? setNewUser({ ...newUser, userLevel: e.target.value })
-      : setEditUser({ ...editUser, userLevel: e.target.value })
-  }
-  className="border-gray-300 border-2 rounded-lg w-full mt-1 p-2 focus:ring-blue-500 focus:border-blue-500"
->
-  <option value="">Select Role</option>
-  <option value="Admin">Admin</option>
-  <option value="Leader">Leader</option>
-  <option value="Quality">Quality</option>
-</select>
-            {isAddingUser ? (
-              <div>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-300 mt-3"
-                  type="button"
-                  onClick={handleAddUser}
-                >
-                  Add User
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
-                  type="button"
-                  onClick={() => {
-                    setIsAddingUser(false);
-                    setSelectedUser(null);
-                    setNewUser({
-                      userName: "",
-                      userPassword: "",
-                      userEmail: "",
-                      userLevel: "",
-                    });
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
-              <div>
-                <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-300 mt-3"
-                  type="button"
-                  onClick={handleEditUser}
-                >
-                  Save Changes
-                </button>
-                <button
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
-                  type="button"
-                  onClick={() => setIsEditingUser(false)}
-                >
-                  Cancel
-                </button>
               </div>
             )}
+      
+            <div className="flex flex-col">
+              <label htmlFor="userLevel" className="block text-gray-800 text-sm font-semibold mb-2">User Level:</label>
+              <select
+                name="userLevel"
+                id="userLevel"
+                value={currentUser.userLevel}
+                onChange={handleInputChange}
+                className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                required
+              >
+                <option value="">Select Role</option>
+                <option value="Admin">Admin</option>
+                <option value="Leader">Leader</option>
+                <option value="Quality">Quality</option>
+              </select>
+            </div>
+      
+            <div className="flex justify-center space-x-4 pt-4">
+              <button type="submit" className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+                {isEditing ? 'Update User' : 'Add User'}
+              </button>
+              <button onClick={closeModal} type="button" className="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50">
+                Cancel
+              </button>
+            </div>
           </form>
         </div>
-      )}
-      <div className='mt-10 flex justify-center'>
-      {!isAddingUser && !isEditingUser && (
-        <>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-300 mt-3"
-            onClick={() => {setIsAddingUser(true); setSelectedUser(null);}}
-          >
-            Add User
-          </button>
-          {selectedUser && (
-            <button
-            className="bg-yellow-300 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
-              onClick={() => {
-                setIsEditingUser(true);
-                setSelectedUser(null);
-                setEditUser({
-                  userName: selectedUser.userName,
-                  userLevel: selectedUser.userLevel,
-                });
-              }}
-            >
-              Edit User
-            </button>
-          )}
-        </>
-      )}
-
-      {selectedUser && (
-        <div>
-          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-red-300 mt-3 ml-2"
-           onClick={handleDelete}>
-            Delete User
-          </button>
-        </div>
-      )}
-
       </div>
+      
+      )}
+
     </div>
   );
 };

@@ -170,7 +170,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
         })}
         <div className="flex flex-col justify-center items-center">
         {!isFormVisible && (
-          <button className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full w-12 h-12 flex items-center justify-center"
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full w-12 h-12 flex items-center justify-center"
           onClick={handleAddProduct}>
           <span className="text-2xl pb-1 leading-none">+</span>
         </button>

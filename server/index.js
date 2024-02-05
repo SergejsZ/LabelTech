@@ -255,7 +255,6 @@ app.get("/api/users", async (req, res) => {
       }));
 
       res.json(users);
-      console.log(users);
     });
   } catch (error) {
     console.error("Error fetching users data:", error);
@@ -290,6 +289,8 @@ app.post("/api/users", async (req, res) => {
   try {
     const { userName, userPassword, userEmail, userLevel } = req.body;
 
+    console.log("Request body:", req.body);
+
     const hasUpperCase = /[A-Z]/.test(userPassword);
     const hasLowerCase = /[a-z]/.test(userPassword);
     const hasNumbers = /\d/.test(userPassword);
@@ -323,12 +324,14 @@ app.post("/api/users", async (req, res) => {
 app.put("/api/users/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const { userName, userLevel } = req.body;
+    const { userName, userLevel, userEmail } = req.body;
+
+    console.log("Request body:", req.body);
 
     const editUserQuery =
-      "UPDATE users SET UserName = ?, UserLevel = ? WHERE UserID = ?";
+      "UPDATE users SET UserName = ?, UserLevel = ?, UserEmail = ? WHERE UserID = ?";
 
-    db.query(editUserQuery, [userName, userLevel, userId], (error, results) => {
+    db.query(editUserQuery, [userName, userLevel, userEmail, userId], (error, results) => {
       if (error) {
         console.error("Error updating user:", error);
         return res.status(500).json({ error: "Internal Server Error" });
