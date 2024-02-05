@@ -157,7 +157,7 @@ useEffect(() => {
             
             {/* Packed Without Error Display */}
             <div className="flex justify-between items-center mb-6 p-3 bg-gray-100 border border-gray-300 rounded mb-8">
-              <span>Packed without error:</span>
+              <span>packed scan:</span>
               <span className="text-xl font-bold p-2 bg-gray-200 rounded">{packedWithoutError}</span>
             </div>
 
