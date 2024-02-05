@@ -24,10 +24,11 @@ const Page = () => {
   const [dispatchDate, setDispatchDate] = useState('');
   const [products, setProducts] = useState([]);
   const [previouscriticalPackingError, setPreviouscriticalPackingError] = useState(criticalPackingError);
+  const [showAlert, setShowAlert] = useState(false);
 
 useEffect(() => {
   if (criticalPackingError > previouscriticalPackingError) {
-    alert('Critical error ! Please stop the production line!');
+    setShowAlert(true);
   }
   setPreviouscriticalPackingError(criticalPackingError);
 }, [criticalPackingError]);
@@ -83,7 +84,7 @@ useEffect(() => {
         if ((packedWithoutError + 1) % 5 === 0) {
           setPackingError((err) => err + 1);
         }
-        if ((packedWithoutError + 1) % 11 === 0) {
+        if ((packedWithoutError + 1) % 8 === 0) {
           setCriticalPackingError((err) => err + 1);
         }
       }, 2000);
@@ -183,7 +184,17 @@ useEffect(() => {
           {running ? 'Stop' : 'Start'} Scanning
         </button>
       </div>
-
+      {showAlert && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center bg-white p-4 rounded">
+        <div>
+          <ExclamationTriangleIcon className="h-30 w-30 text-red-500 animate-blink" />
+          <h1 className="text-lg font-semibold">Critical error detected, please stop the production line</h1>
+        </div>
+        <button className="mt-4" onClick={() => setShowAlert(false)}>Close</button>
+      </div>
+    </div>
+    )}
     </div>
   );
 };
