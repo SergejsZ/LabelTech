@@ -406,3 +406,48 @@ app.get("/api/lineDetails", async (req, res) => {
 }
 );
 
+//update LineLeader
+app.post('/api/line/:lineNumber', async (req, res) => {
+  const { lineNumber } = req.params;
+  const { lineLeader } = req.body;
+
+  console.log("Request body:", req.body);
+
+  const updateQuery = 'UPDATE `ProductionLine` SET `LineLeader` = ? WHERE `LineNumber` = ?';
+
+  // Assuming db.query returns a promise. If not, you'll need to promisify it or handle it with callbacks.
+  try {
+    const results = await db.query(updateQuery, [lineLeader, lineNumber]);
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error updating line leader:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+//update LineState
+app.post('/api/lineState/', async (req, res) => {
+  const { lineNumber } = req.params;
+  const { lineState } = req.body;
+
+  console.log("Request body:", req.body);
+
+  try{
+
+    const updateQuery = 'UPDATE `ProductionLine` SET `State` = ? WHERE `LineNumber` = ?';
+
+    db.query(updateQuery, [lineState, lineNumber], (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.json({ success: true });
+    }
+    );
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
