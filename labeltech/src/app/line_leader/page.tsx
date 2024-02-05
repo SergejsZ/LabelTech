@@ -100,7 +100,7 @@ useEffect(() => {
     <div className='text-3xl'>
       {/* Page content */}
       <div className='flex justify-end w-full mt-10'>
-        <p className='mr-5'>Today's date:</p>
+        <p className='mr-5'>Today&apos;s date:</p>
         <p className='greyinput mr-16'>{currentDate}</p>
       </div>
       <div className="flex p-5 flex-col md:flex-row">
@@ -158,7 +158,7 @@ useEffect(() => {
             
             {/* Packed Without Error Display */}
             <div className="flex justify-between items-center mb-6 p-3 bg-gray-100 border border-gray-300 rounded mb-8">
-              <span>packed scan:</span>
+              <span>scanned package:</span>
               <span className="text-xl font-bold p-2 bg-gray-200 rounded">{packedWithoutError}</span>
             </div>
 
