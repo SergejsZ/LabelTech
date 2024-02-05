@@ -1,4 +1,6 @@
 import React from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 interface Line {
     number: number;
@@ -8,6 +10,21 @@ interface Line {
 }
 
 const List = ({ lines }: { lines: Line[] }) => {
+
+  const [users, setUsers] = useState<any[]>([]);
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/users');
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
     return (
       <div className="rounded overflow-hidden shadow-lg bg-white">
         <table className="min-w-full leading-normal">
@@ -34,7 +51,7 @@ const List = ({ lines }: { lines: Line[] }) => {
                   {line.number}
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  {line.leader === null ? 'Unassigned' : line.leader}
+                  {line.leader === null ? 'Unassigned' : users.find((user) => user.id === line.leader)?.userName}
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   {line.state}
