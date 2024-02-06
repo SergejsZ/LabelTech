@@ -2,16 +2,23 @@
 
 import React from 'react'
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   TrashIcon,
   PencilIcon
 } from "@heroicons/react/24/solid";
 
+type Customer = {
+  CustomerID: number;
+  CustomerName: string;
+};
 
-const Product = ({ productName, productCode, productWeight,  productCustomerID, productExpiryDate, ProductImage, onClick }: { productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage:string, onClick: () => void }) => {
+
+
+const Product = ({productId, productName, productCode, productWeight,  productCustomerID, productExpiryDate, ProductImage, onClick }: { productId: number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage:string, onClick: () => void }) => {
 
   const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
@@ -31,6 +38,20 @@ const Product = ({ productName, productCode, productWeight,  productCustomerID, 
       } catch (error) {
         console.error('Error deleting product:', error);
       }
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+  
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/api/customers');
+      setCustomers(response.data);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
     }
   };
 
@@ -62,7 +83,7 @@ const Product = ({ productName, productCode, productWeight,  productCustomerID, 
           <img src={ProductImage} alt={ProductImage} className="w-64 h-64" />
         </div> */}
         <div className="px-6 pt-4 pb-2">
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Customer: {productCustomerID}</span>
+          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Customer: {customers.find((customer) => customer.CustomerID === productCustomerID)?.CustomerName}</span>
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mb-2">Expiry: {productExpiryDate}</span>
         </div>
       </div> 

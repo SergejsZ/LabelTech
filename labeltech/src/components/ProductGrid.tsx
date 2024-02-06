@@ -1,15 +1,21 @@
 import Product from "./Product";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
 
+type Customer = {
+  CustomerID: number;
+  CustomerName: string;
+};
 
-function ProductGrid({ products }: { products: Array<{ productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage: string}> }) {
+function ProductGrid({ products }: { products: Array<{ productId:number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage: string}> }) {
   
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditingUser, setIsEditingUser] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [editProduct, setEditProduct] = useState({
+    productId: "",
     productName: "",
     productCode: "",
     productWeight: "",
@@ -34,22 +40,42 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
     setIsEditingUser(!isEditingUser);
     setSelectedProduct(product);
     setEditProduct({
+      productId: product.productId,
       productName: product.productName,
       productCode: product.productCode,
       productWeight: product.productWeight,
       productCustomerID: product.productCustomerID,
       productExpiryDate: product.productExpiryDate,
     });
-    console.log('Edit button clicked');
-
   }
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+  
+
+  const fetchCustomers = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/api/customers');
+      setCustomers(response.data);
+    } catch (error) {
+      console.error('Error fetching customers:', error);
+    }
+  };
+ 
 
   const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Assurez-vous que productId est défini
+    if (!editProduct.productId) {
+      console.error("Product ID is required for editing.");
+      return;
+    }
 
     try {
       const formData = new FormData(event.currentTarget);
 
+      const productId = formData.get('productId') as string;
       const productCode = formData.get('productCode') as string;
       const productName = formData.get('productName') as string;
       const productWeight = formData.get('productWeight') as string;
@@ -57,6 +83,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
       const productExpiryDate = formData.get('productExpiryDate') as string;
       // const ProductImage = formData.get('productImage') as File;
       // const NameImage = ProductImage.name;
+      console.log('Product ID:', productId);
       console.log('Product Code:', productCode);
       console.log('Product Name:', productName);
       console.log('Product Weight:', productWeight);
@@ -65,8 +92,10 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
       // console.log('Product Image:', NameImage);
 
       const response = await axios.put(
-        `http://localhost:4000/api/products/${productCode}`,
+        `http://localhost:4000/api/products/${productId}`,
         {
+          productId,
+          productCode,
           productName,
           productWeight,
           productCustomerID,
@@ -95,6 +124,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
     try {
       const formData = new FormData(event.currentTarget);
 
+      const productId = formData.get('productId') as string;
       const productCode = formData.get('productCode') as string;
       const productName = formData.get('productName') as string;
       const productWeight = formData.get('productWeight') as string;
@@ -103,9 +133,10 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
       const ProductImage = formData.get('productImage') as File;
 
       // const NameImage = ProductImage.name;
-    
+      
 
       // Log the form data
+      console.log('Product ID:', productId);
       console.log('Product Code:', productCode);
       console.log('Product Name:', productName);
       console.log('Product Weight:', productWeight);
@@ -120,6 +151,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          productId,
           productCode,
           productName,
           productWeight,
@@ -153,10 +185,11 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
           return (
             <div 
               className="relative transform transition-transform duration-500 hover:scale-110"
-              key={product.productCode}
+              key={product.productId}
             >
               <Product
-                key={product.productCode}
+                key={product.productId}
+                productId={product.productId}
                 productName={product.productName}
                 productCode={product.productCode}
                 productWeight={product.productWeight}
@@ -178,6 +211,14 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
         {isFormVisible && (
           <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center">
           <form onSubmit={isEditingUser ? handleEdit : handleSubmit} className="space-y-6 bg-gray-100 shadow-xl rounded-lg p-8 w-full max-w-lg mx-auto">
+            {isEditingUser && (
+              <input
+                type="hidden"
+                name="productId"
+                value={editProduct.productId}
+              />
+            )}
+
             <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productCode">
                 Product Code:
@@ -206,8 +247,21 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productCustomerID">
                 Product Customer ID:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCustomerID" id="productCustomerID" required 
-                    value={isEditingUser ? (editProduct.productCustomerID) : (addProduct.productCustomerID)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productCustomerID: e.target.value }) : setAddProduct({ ...addProduct, productCustomerID: e.target.value })} />
+              {/* <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productCustomerID" id="productCustomerID" required 
+                    value={isEditingUser ? (editProduct.productCustomerID) : (addProduct.productCustomerID)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productCustomerID: e.target.value }) : setAddProduct({ ...addProduct, productCustomerID: e.target.value })} /> */}
+              <select 
+                className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" 
+                name="productCustomerID" 
+                id="productCustomerID" 
+                required 
+                value={isEditingUser ? (editProduct.productCustomerID) : (addProduct.productCustomerID)} 
+                onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productCustomerID: e.target.value }) : setAddProduct({ ...addProduct, productCustomerID: e.target.value })}
+              >
+                <option value="">Select Customer</option>
+                {customers.map((customer) => 
+                  <option key={customer.CustomerID} value={customer.CustomerID}>{customer.CustomerName}</option>
+                )}
+              </select>
             </div>
 
             <div className="flex flex-col">
@@ -244,6 +298,7 @@ function ProductGrid({ products }: { products: Array<{ productName: string, prod
                     productExpiryDate: "",
                   });
                   setEditProduct({
+                    productId: "",
                     productName: "",
                     productCode: "",
                     productWeight: "",

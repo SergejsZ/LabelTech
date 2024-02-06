@@ -68,24 +68,11 @@ app.use(cookieParser());
 app.put("/api/products/:productId", async (req, res) => {
   try {
     const { productId } = req.params;
-    const { productName, productWeight, productCustomerID, productExpiryDate, productImage } =
+    const { productCode, productName, productWeight, productCustomerID, productExpiryDate, productImage } =
       req.body;
 
-    console.log("Request body:", req.body);
-
-    const updateQuery =
-      "UPDATE product SET ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ? WHERE ProductCode = ?";
-    db.query(
-      updateQuery,
-      [
-        productName,
-        productWeight,
-        productCustomerID,
-        productExpiryDate,
-        productId,
-        productImage,
-      ],
-      (error, results) => {
+    const updateQuery = "UPDATE product SET ProductCode = ?, ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ?, ProductImage = ? WHERE ProductId = ?";
+    db.query(updateQuery, [productCode, productName, productWeight, productCustomerID, productExpiryDate, productImage, productId], (error, results) => {
         if (error) {
           console.error("Error updating product:", error);
           return res.status(500).json({ error: "Internal Server Error" });
@@ -126,7 +113,7 @@ app.delete("/api/products/:productId", async (req, res) => {
 app.get("/api/products", async (req, res) => {
   try {
     const query =
-      'SELECT ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImage FROM product';
+      'SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImage FROM product';
 
     db.query(query, (error, results) => {
       if (error) {
@@ -135,6 +122,8 @@ app.get("/api/products", async (req, res) => {
       }
 
       const products = results.map((product) => ({
+
+        productId: product.ProductId,
         productCode: product.ProductCode,
         productName: product.ProductName,
         productWeight: product.ProductWeight,
@@ -451,3 +440,27 @@ app.post('/api/lineState/', async (req, res) => {
 }
 );
 
+//get all customers
+app.get("/api/customers", async (req, res) => {
+
+  try {
+    const query = "SELECT CustomerID, CustomerName FROM Customer";
+
+    db.query(query, (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const customers = results.map((customer) => ({
+        CustomerID: customer.CustomerID,
+        CustomerName: customer.CustomerName,
+      }));
+
+      res.json(customers);
+    });
+  } catch (error) {
+    console.error("Error fetching customers data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});

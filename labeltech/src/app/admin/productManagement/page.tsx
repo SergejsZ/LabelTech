@@ -14,6 +14,7 @@ const fakeProducts = [
 ];
 
 type ProductDetails = {
+  productId: number;
   productCode: number;
   productName: string;
   productWeight: number;
@@ -53,7 +54,7 @@ const Page = () => {
     <PageLayout >
     <div className='ml-96 mt-10'>
       <h2 className='text-2xl font-bold mb-10'>Product Managment</h2>
-      <ProductGrid products={products.map((product) => ({ productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
+      <ProductGrid products={products.map((product) => ({ productId: product.productId,productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
     </div>
     </PageLayout >
   );
