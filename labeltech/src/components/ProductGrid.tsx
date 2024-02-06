@@ -180,11 +180,11 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
 
 
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-4 w-full">
         {products.map((product) => {
           return (
             <div 
-              className="relative transform transition-transform duration-500 hover:scale-110"
+              className="relative transform transition-transform duration-500 hover:scale-110 w-full"
               key={product.productId}
             >
               <Product
