@@ -57,12 +57,14 @@ const SideBar = () => {
         </a>      
       </List>
       <List className="mt-auto">
+      <a href="/">
         <ListItem>
           <ListItemPrefix className="pr-2">
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
-          Logout
+          Log Out
         </ListItem>
+        </a>
       </List>
     </Card>
   );
