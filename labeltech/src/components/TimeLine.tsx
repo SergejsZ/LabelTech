@@ -71,7 +71,7 @@ const Timeline = (props: PropsType) => {
                 <div className="time-range">
                     <div className='flex justify-around'>
                       {/* for each error where error.ErrorDate is equal to props.selectedDate and error.errorLine is equal to item.line */}
-                      {errors.map((error, index) => 
+                      {Array.isArray(errors) && errors.map((error, index) => 
                           <div key={index} >
                             {new Date(error.errorDate).toDateString() === props.selectedDate.toDateString() && (
                               <Flag time={error.errorTime} />
