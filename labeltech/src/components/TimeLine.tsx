@@ -70,13 +70,13 @@ const Timeline = (props: PropsType) => {
               <div key={slotIndex} className="time-slot w-full">
                 <div className="time-range">
                     <div className='flex justify-around'>
-                      {/* for each error where error.ErrorDate is equal to props.selectedDate */}
+                      {/* for each error where error.ErrorDate is equal to props.selectedDate and error.errorLine is equal to item.line */}
                       {errors.map((error, index) => 
-                        <div key={index}>
-                          {new Date(error.errorDate).toDateString() === props.selectedDate.toDateString() && (
-                            <Flag time={error.errorTime} />
-                          )}
-                        </div>
+                          <div key={index} >
+                            {new Date(error.errorDate).toDateString() === props.selectedDate.toDateString() && (
+                              <Flag time={error.errorTime} />
+                            )}
+                          </div>
                       )}
 
                     </div>

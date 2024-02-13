@@ -84,7 +84,7 @@ const Product = ({productId, productName, productCode, productWeight,  productCu
         </div> */}
         <div className="px-6 pt-4 pb-2 flex flex-col">
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Customer: {customers.find((customer) => customer.CustomerID === productCustomerID)?.CustomerName}</span>
-          <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mb-2">Expiry: {productExpiryDate}</span>
+          {/* <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mb-2">Expiry: {productExpiryDate}</span> */}
         </div>
       </div> 
     </div>

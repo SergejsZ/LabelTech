@@ -264,13 +264,13 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
               </select>
             </div>
 
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productExpiryDate">
                 Product Expiry Date:
               </label>
               <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="date" name="productExpiryDate" id="productExpiryDate" required 
                     value={isEditingUser ? (editProduct.productExpiryDate) : (addProduct.productExpiryDate)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productExpiryDate: e.target.value }) : setAddProduct({ ...addProduct, productExpiryDate: e.target.value })} />
-            </div>
+            </div> */}
             
             <div className="flex flex-col">
               {/* Uncomment if you need to upload an image
