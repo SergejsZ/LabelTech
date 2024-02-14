@@ -22,34 +22,59 @@ const Page = () => {
   const [products, setProducts] = useState<ProductDetails[]>([]);
   const [selectedProductCode, setSelectedProductCode] = useState('');
   
-  const productCodes = ['12471', '31741', '14567', '13567', '12784', '87452', '83647'];
+  const [errorData, setErrorData] = useState([]);
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/api/products");
-        const products = response.data;
-        setProducts(products);
-        console.log(products);
-      } catch (error) {
-        console.error("Error fetching product details:", error);
-      }
-    };
-
-    fetchProductDetails();
+      const fetchErrorData = async () => {
+          try {
+              const response = await axios.get('http://localhost:4000/api/qualityErrors');
+              setErrorData(response.data);
+          } catch (error) {
+              console.error("Error fetching error data:", error);
+          }
+      };
+  
+      fetchErrorData();
   }, []);
+
+  interface DataObject {
+    [key: string]: any;
+  }
+
+  function exportToCSV(data: DataObject[], filename: string) {
+    const csvRows = [];
+    const headers = Object.keys(data[0]);
+    csvRows.push(headers.join(','));
+  
+    for (const row of data) {
+      const values = headers.map(header => {
+        const escaped = ('' + row[header]).toString().replace(/"/g, '\\"');
+        return `"${escaped}"`;
+      });
+      csvRows.push(values.join(','));
+    }
+  
+    const csvString = csvRows.join('\n');
+    const blob = new Blob([csvString], { type: 'text/csv' });
+  
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  
 
   const handleProductCodeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedProductCode(e.target.value);
   };
 
   const takePicture = () => {
-    // Logic to take a picture, probably integrating with a device camera
     console.log('Open camera to take a picture');
   };
 
   const analyseMushrooms = () => {
-    // Logic to analyse the mushrooms using machine learning
     console.log('Analyse mushrooms with machine learning model');
   };
 
@@ -71,6 +96,10 @@ const Page = () => {
         >
           Analyse the mushrooms
         </button>
+        <button className="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => exportToCSV(errorData, 'error_data.csv')}>
+            Export to CSV
+          </button>
       </div>
     </div>
   );
