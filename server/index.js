@@ -465,10 +465,25 @@ app.get("/api/customers", async (req, res) => {
   }
 });
 
-//get the errors for exporting
+//get the quality errors for exporting
 app.get('/api/qualityErrors', async (req, res) => {
   try {
       const errorQuery = "SELECT * FROM defects";
+      db.query(errorQuery, (error, results) => {
+          if (error) {
+              return res.status(500).json({ error: "Internal Server Error" });
+          }
+          res.json(results);
+      });
+  } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//get the label errors for exporting
+app.get('/api/qualityErrors', async (req, res) => {
+  try {
+      const errorQuery = "SELECT * FROM labelerrorhistory";
       db.query(errorQuery, (error, results) => {
           if (error) {
               return res.status(500).json({ error: "Internal Server Error" });
