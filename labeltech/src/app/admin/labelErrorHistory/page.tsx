@@ -64,10 +64,12 @@ const Page = () => {
         <h2 className='text-2xl font-bold mb-10'>Label Error History</h2>
         <button className="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
         onClick={() => {
-          const fileName = `label_error_data.csv`; 
+          const today = new Date();
+          const dateString = today.toISOString().split('T')[0];
+          const fileName = `label_error_data_${dateString}.csv`; 
           exportToCSV(errorData, fileName);
         }}>
-            Export Error Data to CSV
+            Export Label Error Data to CSV
         </button>
         <div className='w-full flex'>
           <div className='w-6/12'>
