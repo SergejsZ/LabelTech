@@ -24,6 +24,9 @@ const UserList = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [passwordError, setPasswordError] = useState('');
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -71,6 +74,14 @@ const UserList = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setCurrentUser({ ...currentUser, [name]: value });
+
+    if (name === 'userPassword') {
+      if (!passwordRegex.test(value)) {
+        setPasswordError('Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.');
+      } else {
+        setPasswordError('');
+      }
+    }
   };
 
   const closeModal = () => {
@@ -149,17 +160,18 @@ const UserList = () => {
       
             {!isEditing && (
               <div className="flex flex-col">
-                <label htmlFor="userPassword" className="block text-gray-800 text-sm font-semibold mb-2">User Password:</label>
-                <input
-                  type="password"
-                  name="userPassword"
-                  id="userPassword"
-                  value={currentUser.userPassword}
-                  onChange={handleInputChange}
-                  className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-                  required={!isEditing}
-                />
-              </div>
+              <label htmlFor="userPassword" className="block text-gray-800 text-sm font-semibold mb-2">User Password:</label>
+              <input
+                type="password"
+                name="userPassword"
+                id="userPassword"
+                value={currentUser.userPassword}
+                onChange={handleInputChange}
+                className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+                required={!currentUser.isEditing}
+              />
+              {passwordError && <p className="text-red-500 text-xs mt-2">{passwordError}</p>}
+            </div>
             )}
       
             <div className="flex flex-col">
