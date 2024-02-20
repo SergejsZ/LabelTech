@@ -97,9 +97,14 @@ const Page = () => {
           Analyse the mushrooms
         </button>
         <button className="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => exportToCSV(errorData, 'error_data.csv')}>
-            Export to CSV
-          </button>
+        onClick={() => {
+          const today = new Date();
+          const dateString = today.toISOString().split('T')[0];
+          const fileName = `quality_error_data_${dateString}.csv`; 
+          exportToCSV(errorData, fileName);
+        }}>
+            Export Error Data to CSV
+        </button>
       </div>
     </div>
   );

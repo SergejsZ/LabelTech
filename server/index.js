@@ -481,7 +481,7 @@ app.get('/api/qualityErrors', async (req, res) => {
 });
 
 //get the label errors for exporting
-app.get('/api/qualityErrors', async (req, res) => {
+app.get('/api/labelErrors', async (req, res) => {
   try {
       const errorQuery = "SELECT * FROM labelerrorhistory";
       db.query(errorQuery, (error, results) => {
