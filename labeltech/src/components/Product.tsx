@@ -59,13 +59,6 @@ console.log("Product weight:", productWeight);
 console.log("Product url:", productUrl);
   return (
     <div>
-<button onClick={onClick} className="absolute top-1 right-8 px-4 py-2 text-black rounded">
-        <PencilIcon className="h-5 w-5" />
-      </button>
-      <button onClick={handleDelete} className="absolute top-0 right-0 px-4 py-2 text-black rounded">
-        <TrashIcon
-         className="h-6 w-6" />
-      </button>
       <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
         <div className="px-6 py-4">
           <div className='flex justify-between'>
