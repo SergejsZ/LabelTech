@@ -11,7 +11,7 @@ type Customer = {
 function ProductGrid({ products }: { products: Array<{ productId:number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage: string}> }) {
   
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 4;
+  const productsPerPage = 8;
   const totalPages = Math.ceil(products.length / productsPerPage);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -345,14 +345,43 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
           )}
           </div>
         </div>
-          <div className="pagination">
-          {Array.from(Array(totalPages).keys()).map(number => (
-            <button key={number + 1} onClick={() => paginate(number + 1)}>
-              {number + 1}
-            </button>
-          ))}
-        </div>
+        <div className="flex items-center gap-2 align-middle justify-center">
+          <button
+            className="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            type="button"
+            onClick={() => {
+              if (currentPage > 1) {
+                paginate(currentPage - 1);
+              }
+            }}
+            >
+            Previous
+          </button>
+            <div className="pagination space-x-2">
+            {!isFormVisible && Array.from(Array(totalPages).keys()).map(number => (
+              <button
+              className="relative h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-lg border border-gray-900 text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              type="button"
+              key={number + 1} onClick={() => paginate(number + 1)} >
+                <span className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                {number + 1}
+                </span>
+              </button>
+            ))}
+          </div>
+          <button
+          className="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          type="button"
+          onClick={() => {
+            if (currentPage < totalPages) {
+              paginate(currentPage + 1);
+            }
+          }}
+          >
+          Next
+        </button>
       </div>
+    </div>
     );
 }
 
