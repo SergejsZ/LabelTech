@@ -8,7 +8,7 @@ type Customer = {
   CustomerName: string;
 };
 
-function ProductGrid({ products }: { products: Array<{ productId:number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage: string}> }) {
+function ProductGrid({ products }: { products: Array<{ productId:number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, productUrl: string}> }) {
   
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditingUser, setIsEditingUser] = useState(false);
@@ -21,6 +21,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
     productWeight: "",
     productCustomerID: "",
     productExpiryDate: "",
+    productUrl: "",
   });
 
   const [addProduct, setAddProduct] = useState({
@@ -29,6 +30,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
     productWeight: "",
     productCustomerID: "",
     productExpiryDate: "",
+    productUrl: "",
   });
 
   const handleAddProduct = () => {
@@ -46,6 +48,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       productWeight: product.productWeight,
       productCustomerID: product.productCustomerID,
       productExpiryDate: product.productExpiryDate,
+      productUrl: product.productUrl,
     });
   }
 
@@ -81,7 +84,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       const productWeight = formData.get('productWeight') as string;
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
-      // const ProductImage = formData.get('productImage') as File;
+      const productUrl = formData.get('productUrl') as string;
       // const NameImage = ProductImage.name;
       console.log('Product ID:', productId);
       console.log('Product Code:', productCode);
@@ -100,7 +103,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
           productWeight,
           productCustomerID,
           productExpiryDate,
-          // NameImage,
+          productUrl
         }
       );
 
@@ -130,7 +133,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       const productWeight = formData.get('productWeight') as string;
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
-      const ProductImage = formData.get('productImage') as File;
+      const productUrl = formData.get('productUrl') as string;
 
       // const NameImage = ProductImage.name;
       
@@ -157,7 +160,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
           productWeight,
           productCustomerID,
           productExpiryDate,
-          // NameImage,
+          productUrl,
         }),
       });
 
@@ -195,7 +198,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
                 productWeight={product.productWeight}
                 productCustomerID={product.productCustomerID}
                 productExpiryDate={product.productExpiryDate} 
-                ProductImage={product.ProductImage}
+                productUrl={product.productUrl}
                 onClick={() => handleEditDisplay(product)}
               />
             </div>
@@ -264,13 +267,13 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
               </select>
             </div>
 
-            {/* <div className="flex flex-col">
-              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productExpiryDate">
-                Product Expiry Date:
+            <div className="flex flex-col">
+              <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productUrl">
+                Product Image Url:
               </label>
-              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="date" name="productExpiryDate" id="productExpiryDate" required 
-                    value={isEditingUser ? (editProduct.productExpiryDate) : (addProduct.productExpiryDate)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productExpiryDate: e.target.value }) : setAddProduct({ ...addProduct, productExpiryDate: e.target.value })} />
-            </div> */}
+              <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productUrl" id="productUrl" required 
+                      value={isEditingUser ? (editProduct.productUrl) : (addProduct.productUrl)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productUrl: e.target.value }) : setAddProduct({ ...addProduct, productUrl: e.target.value })} />
+            </div>
             
             <div className="flex flex-col">
               {/* Uncomment if you need to upload an image
@@ -296,6 +299,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
                     productWeight: "",
                     productCustomerID: "",
                     productExpiryDate: "",
+                    productUrl: "",
                   });
                   setEditProduct({
                     productId: "",
@@ -304,6 +308,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
                     productWeight: "",
                     productCustomerID: "",
                     productExpiryDate: "",
+                    productUrl: "",
                   });
                 }}
                 className="bg-gray-600 hover:bg-gray-800 text-white font-bold py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-opacity-50" >

@@ -12,7 +12,16 @@ CREATE TABLE IF NOT EXISTS Customer ( CustomerID INT PRIMARY KEY, CustomerName V
 
 -- Create the Product table
 
-CREATE TABLE IF NOT EXISTS Product ( ProductCode INT PRIMARY KEY, ProductName VARCHAR(255), ProductWeight INT, ProductCustomerID INT, ProductExpiryDate DATE, FOREIGN KEY (ProductCustomerID) REFERENCES Customer(CustomerID) );
+CREATE TABLE IF NOT EXISTS Product (
+  ProductId INT AUTO_INCREMENT PRIMARY KEY,  -- Added ProductId as primary key with auto-increment
+  ProductCode INT,
+  ProductName VARCHAR(255),
+  ProductWeight INT,
+  ProductCustomerID INT,
+  ProductExpiryDate DATE,
+  ProductImageURL VARCHAR(255),
+  FOREIGN KEY (ProductCustomerID) REFERENCES Customer(CustomerID)
+);
 
 -- Create the Defects table
 
@@ -20,8 +29,14 @@ CREATE TABLE IF NOT EXISTS Defects ( DefectID VARCHAR(255) PRIMARY KEY, DefectTy
 
 -- Create the ProductsScannedLog table
 
-CREATE TABLE IF NOT EXISTS ProductsScannedLog ( ProductScannedID INT PRIMARY KEY, ProductScannedCode INT, ProductScannedDate DATE, TotalScanned INT, TotalNumberErrors INT, FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductCode) );
-
+CREATE TABLE IF NOT EXISTS ProductsScannedLog (
+  ProductScannedID INT PRIMARY KEY,
+  ProductScannedCode INT,
+  ProductScannedDate DATE,
+  TotalScanned INT,
+  TotalNumberErrors INT,
+  FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductId)  -- Corrected reference to ProductId
+);
 -- Create the LabelErrorHistory table
 
 CREATE TABLE IF NOT EXISTS LabelErrorHistory ( LabelErrorID INT PRIMARY KEY, ProductCode INT, DispatchDate DATE, CameraCapture VARCHAR(255), ErrorDispatchDate DATE, Output VARCHAR(255), FOREIGN KEY (ProductCode) REFERENCES Product(ProductCode) );

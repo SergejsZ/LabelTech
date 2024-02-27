@@ -20,7 +20,7 @@ type ProductDetails = {
   productWeight: number;
   productCustomerID: number;
   productExpiryDate: string;
-  ProductImage: string;
+  productUrl: string;
 };
 
 const Page = () => {
@@ -54,7 +54,7 @@ const Page = () => {
     <PageLayout >
     <div className='ml-96 mt-10 w-full'>
       <h2 className='text-2xl font-bold mb-10'>Products Managment</h2>
-      <ProductGrid products={products.map((product) => ({ productId: product.productId,productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, ProductImage: product.ProductImage }))} />
+      <ProductGrid products={products.map((product) => ({ productId: product.productId,productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, productUrl: product.productUrl }))} />
     </div>
     </PageLayout >
   );

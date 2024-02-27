@@ -13,7 +13,8 @@ LabelTech is a web app used to spot manufacturing label issues due to human erro
 3. Go to git bash in terminal
 4. Type in “git clone -b main "https://github.com/SergejsZ/LabelTech.git"
 5. Open two powershell terminal tabs in visual studio code.
-6. Cd into the Labeltech folder for frontend. E.g “cd ./labeltech” and "./server"
-7. Run “npm install” in both terminals
-8. In the server powershell, run "npm start" and in the frontend, run "npm run dev"
-9. Open localhost:3000 in your preferred browser
+6. Run npm install @google-cloud/storage in one terminal
+7. Cd into the Labeltech folder for frontend. E.g “cd ./labeltech” and "./server"
+8. Run “npm install” in both terminals
+9. In the server powershell, run "npm start" and in the frontend, run "npm run dev"
+10. Open localhost:3000 in your preferred browser

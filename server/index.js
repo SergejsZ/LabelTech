@@ -68,11 +68,11 @@ app.use(cookieParser());
 app.put("/api/products/:productId", async (req, res) => {
   try {
     const { productId } = req.params;
-    const { productCode, productName, productWeight, productCustomerID, productExpiryDate, productImage } =
+    const { productCode, productName, productWeight, productCustomerID, productExpiryDate, productUrl } =
       req.body;
 
-    const updateQuery = "UPDATE product SET ProductCode = ?, ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ?, ProductImage = ? WHERE ProductId = ?";
-    db.query(updateQuery, [productCode, productName, productWeight, productCustomerID, productExpiryDate, productImage, productId], (error, results) => {
+    const updateQuery = "UPDATE product SET ProductCode = ?, ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ?, ProductImageURL = ? WHERE ProductId = ?";
+    db.query(updateQuery, [productCode, productName, productWeight, productCustomerID, productExpiryDate, productUrl, productId], (error, results) => {
         if (error) {
           console.error("Error updating product:", error);
           return res.status(500).json({ error: "Internal Server Error" });
@@ -113,7 +113,8 @@ app.delete("/api/products/:productId", async (req, res) => {
 app.get("/api/products", async (req, res) => {
   try {
     const query =
-      'SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImage FROM product';
+      'SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImageURL FROM product';
+      //'SELECT ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImageURL FROM product';
 
     db.query(query, (error, results) => {
       if (error) {
@@ -129,10 +130,12 @@ app.get("/api/products", async (req, res) => {
         productWeight: product.ProductWeight,
         productCustomerID: product.ProductCustomerID,
         productExpiryDate: product.ProductExpiryDate,
-        productImage: product.ProductImage,
+        productUrl: product.ProductImageURL,
+        
       }));
 
       res.json(products);
+      
     });
   } catch (error) {
     console.error("Error fetching product data:", error);
@@ -193,13 +196,13 @@ app.post("/api/products", async (req, res) => {
       productWeight,
       productCustomerID,
       productExpiryDate,
-      NameImage,
+      productUrl,
     } = req.body;
 
     console.log("Request body:", req.body);
 
     const addQuery =
-      "INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate, ProductImage) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate, ProductImageURL) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(
       addQuery,
       [
@@ -208,7 +211,7 @@ app.post("/api/products", async (req, res) => {
         productWeight,
         productCustomerID,
         productExpiryDate,
-        NameImage,
+        productUrl,
       ],
       (error, results) => {
         if (error) {

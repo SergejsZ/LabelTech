@@ -15,8 +15,9 @@ type Customer = {
 
 
 
-const Product = ({productId, productName, productCode, productWeight,  productCustomerID, productExpiryDate, ProductImage, onClick }: { productId: number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, ProductImage:string, onClick: () => void }) => {
+const Product = ({productId, productName, productCode, productWeight,  productCustomerID, productExpiryDate, productUrl, onClick }: { productId: number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, productUrl:string, onClick: () => void }) => {
 
+  
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
 
@@ -54,7 +55,8 @@ const Product = ({productId, productName, productCode, productWeight,  productCu
       console.error('Error fetching customers:', error);
     }
   };
-
+console.log("Product weight:", productWeight);
+console.log("Product url:", productUrl);
   return (
     <div>
       <button onClick={onClick} className="absolute top-1 right-8 px-4 py-2 text-black rounded">
@@ -79,9 +81,12 @@ const Product = ({productId, productName, productCode, productWeight,  productCu
             </div>
 
         </div>
-        {/* <div className="flex justify-center">
-          <img src={ProductImage} alt={ProductImage} className="w-64 h-64" />
-        </div> */}
+        <div className="flex justify-center">
+        
+  <img src={`${productUrl}`} alt="Product Image" className="w-64 h-64" />
+</div>
+
+
         <div className="px-6 pt-4 pb-2 flex flex-col">
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Customer: {customers.find((customer) => customer.CustomerID === productCustomerID)?.CustomerName}</span>
           {/* <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mb-2">Expiry: {productExpiryDate}</span> */}
