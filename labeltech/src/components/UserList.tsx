@@ -41,13 +41,21 @@ const UserList = () => {
   };
 
   const handleDeleteUser = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
+    try {
+      // Vérifier d'abord si l'utilisateur est associé à une ligne de production
+      const checkResponse = await axios.get(`http://localhost:4000/api/checkUser/${id}`);
+      if (checkResponse.data.isAssociated) {
+        alert('This user is associated with a production line and cannot be deleted.');
+        return;
+      }
+  
+      // Demander une confirmation pour la suppression
+      if (window.confirm('Are you sure you want to delete this user?')) {
         await axios.delete(`http://localhost:4000/api/users/${id}`);
         fetchUsers();
-      } catch (error) {
-        console.error('Error deleting user:', error);
       }
+    } catch (error) {
+      console.error('Error processing user deletion:', error);
     }
   };
 
