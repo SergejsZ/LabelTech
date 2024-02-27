@@ -106,7 +106,7 @@ useEffect(() => {
         <p className='mr-5'>Today&apos;s date:</p>
         <p className='greyinput mr-16'>{currentDate}</p>
       </div>
-      <div className="flex p-5 flex-col md:flex-row">
+      <div className="flex p-5 flex-col space-y-10 md:flex-row md:space-x-5 md:space-y-0">
         {/* Form for product code and dispatch date */}
         <form onSubmit={handleConfirm} className="flex-1 bg-white shadow-lg rounded-lg p-6 mr-3 text-center">
           {/* Product Code Input */}

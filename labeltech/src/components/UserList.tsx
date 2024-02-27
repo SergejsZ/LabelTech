@@ -116,7 +116,7 @@ const UserList = () => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userEmail}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userLevel}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button onClick={() => handleEditUserClick(user)} className="text-indigo-600 hover:text-indigo-900 mr-3">
+                <button onClick={() => handleEditUserClick(user)} className="text-blue-500 hover:text-blue-700 mr-3">
                   <PencilIcon className="h-5 w-5" />
                 </button>
                 <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-900">

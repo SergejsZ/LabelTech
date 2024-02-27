@@ -62,10 +62,10 @@ const Product = ({productId, productName, productCode, productWeight,  productCu
           <div className='flex justify-between'>
             <div className="font-bold text-xl mb-2">{productName}</div>
               <div className='space-x-2'>
-                <button onClick={onClick} className="text-black rounded">
+                <button onClick={onClick} className="text-blue-500 hover:text-blue-700 rounded">
                   <PencilIcon className="h-5 w-5" />
                 </button>
-                <button onClick={handleDelete} className="text-black rounded">
+                <button onClick={handleDelete} className="text-red-600 hover:text-red-900 rounded">
                   <TrashIcon
                   className="h-6 w-6" />
                 </button>

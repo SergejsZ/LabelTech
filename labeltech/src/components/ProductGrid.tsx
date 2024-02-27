@@ -180,7 +180,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
 
 
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 p-4 w-full">
+      <div className="grid grid-cols-1 gap-10 p-4 w-full" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
         {products.map((product) => {
           return (
             <div 

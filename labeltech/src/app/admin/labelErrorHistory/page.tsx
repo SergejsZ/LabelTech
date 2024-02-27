@@ -71,7 +71,9 @@ const Page = () => {
         }}>
             Export Label Error Data to CSV
         </button>
-        <div className='w-full flex'>
+
+        {/* si l'écran est petit, affiche en colonne, sinon en ligne */}
+        <div className='w-full flex flex-col lg:flex-row'>
           <div className='w-6/12'>
             <div>
             <CustomCalendar 

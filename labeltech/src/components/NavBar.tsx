@@ -81,7 +81,7 @@ const StickyNavbar = () => {
               <Button
                               variant="gradient"
                               size="sm"
-                              className="hidden lg:inline-block bg-black" placeholder={undefined}              >
+                              className="hidden lg:inline-block bg-blue-500 hover:bg-blue-700" placeholder={undefined}              >
                 <span>Log Out</span>
               </Button>
                 </a>
@@ -130,7 +130,7 @@ const StickyNavbar = () => {
           {navList}
           <div className="flex items-center gap-x-1">
             <a href="/">
-            <Button fullWidth variant="gradient" size="sm" className="bg-black" placeholder={undefined}>
+            <Button fullWidth variant="gradient" size="sm" className="bg-blue-500 hover:bg-blue-700" placeholder={undefined}>
               <span>Log Out</span>
             </Button>
             </a>
