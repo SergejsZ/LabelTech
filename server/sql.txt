@@ -8,7 +8,7 @@ USE labeltech;
 
 -- Create the Customer table
 
-CREATE TABLE IF NOT EXISTS Customer ( CustomerID INT PRIMARY KEY, CustomerName VARCHAR(255), CustomerEmail VARCHAR(50) );
+CREATE TABLE IF NOT EXISTS Customer ( CustomerID INT PRIMARY KEY AUTO_INCREMENT, CustomerName VARCHAR(255), CustomerEmail VARCHAR(50) );
 
 -- Create the Product table
 
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS LabelErrorHistory ( LabelErrorID INT PRIMARY KEY, Pro
 
 -- Create the Users table
 
-CREATE TABLE IF NOT EXISTS Users ( UserID INT PRIMARY KEY, UserName VARCHAR(255), UserPassword VARCHAR(255), UserEmail VARCHAR(255), UserLevel VARCHAR(50) );
+CREATE TABLE IF NOT EXISTS Users ( UserID INT PRIMARY KEY AUTO_INCREMENT, UserName VARCHAR(255), UserPassword VARCHAR(255), UserEmail VARCHAR(255), UserLevel VARCHAR(50) );
 
 -- Create the BadProducts table
 
