@@ -40,7 +40,7 @@ const Page = () => {
 
   return (
     <PageLayout >
-    <div className='ml-8 mt-10 w-full pr-16'>
+    <div className='pl-8 mt-10 w-full pr-16'>
       <h2 className='text-2xl font-bold mb-10'>Production Line Management</h2>
       <List lines={lines} />
     </div>
