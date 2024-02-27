@@ -20,7 +20,7 @@ const initialUserState = {
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [currentUser, setCurrentUser] = useState(initialUserState);
+  const [currentUser, setCurrentUser] = useState<{ id: number | null; userName: string; userEmail: string; userLevel: string; userPassword: string; }>({ id: null, userName: '', userEmail: '', userLevel: '', userPassword: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -77,7 +77,7 @@ const UserList = () => {
 
     if (name === 'userPassword') {
       if (!passwordRegex.test(value)) {
-        setPasswordError('Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.');
+        setPasswordError('The password must contain at least 8 characters, including an upper case letter, a lower case letter, a number and a special character.');
       } else {
         setPasswordError('');
       }
@@ -168,7 +168,7 @@ const UserList = () => {
                 value={currentUser.userPassword}
                 onChange={handleInputChange}
                 className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-                required={!currentUser.isEditing}
+                required={!currentUser} // .isediting
               />
               {passwordError && <p className="text-red-500 text-xs mt-2">{passwordError}</p>}
             </div>

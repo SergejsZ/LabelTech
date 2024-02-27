@@ -258,14 +258,27 @@ app.delete("/api/users/:userId", async (req, res) => {
 
     console.log("Request body:", req.params);
 
-    const deleteQuery = "DELETE FROM users WHERE UserID = ?";
-    db.query(deleteQuery, [userId], (error, results) => {
+    const checkQuery = "SELECT * FROM ProductionLine WHERE LineLeader = ?";
+    db.query(checkQuery, [userId], (error, results) => {
       if (error) {
-        console.error("Error deleting user:", error);
+        console.error("Error checking user:", error);
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      res.json({ success: true });
+      if (results.length > 0) {
+        console.log("User is associated with a production line");
+        return res.status(400).json({ error: "User is associated with a production line" });
+      }
+
+      const deleteQuery = "DELETE FROM users WHERE UserID = ?";
+      db.query(deleteQuery, [userId], (error, results) => {
+        if (error) {
+          console.error("Error deleting user:", error);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        res.json({ success: true });
+      });
     });
   } catch (error) {
     console.error("Error deleting user:", error);
