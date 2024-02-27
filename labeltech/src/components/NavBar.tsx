@@ -77,12 +77,14 @@ const StickyNavbar = () => {
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             <div className="flex items-center gap-x-1">
+                <a href="/">
               <Button
                               variant="gradient"
                               size="sm"
                               className="hidden lg:inline-block bg-black" placeholder={undefined}              >
                 <span>Log Out</span>
               </Button>
+                </a>
             </div>
             <div style={{ color: 'black' }}>
             <IconButton
@@ -127,9 +129,11 @@ const StickyNavbar = () => {
         <MobileNav open={openNav}>
           {navList}
           <div className="flex items-center gap-x-1">
+            <a href="/">
             <Button fullWidth variant="gradient" size="sm" className="bg-black" placeholder={undefined}>
               <span>Log Out</span>
             </Button>
+            </a>
           </div>
         </MobileNav>
       </Navbar>
