@@ -20,7 +20,7 @@ const initialUserState = {
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [currentUser, setCurrentUser] = useState(initialUserState);
+  const [currentUser, setCurrentUser] = useState<{ id: number | null; userName: string; userEmail: string; userLevel: string; userPassword: string; }>({ id: null, userName: '', userEmail: '', userLevel: '', userPassword: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -41,13 +41,21 @@ const UserList = () => {
   };
 
   const handleDeleteUser = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      try {
+    try {
+      // Vérifier d'abord si l'utilisateur est associé à une ligne de production
+      const checkResponse = await axios.get(`http://localhost:4000/api/checkUser/${id}`);
+      if (checkResponse.data.isAssociated) {
+        alert('This user is associated with a production line and cannot be deleted.');
+        return;
+      }
+  
+      // Demander une confirmation pour la suppression
+      if (window.confirm('Are you sure you want to delete this user?')) {
         await axios.delete(`http://localhost:4000/api/users/${id}`);
         fetchUsers();
-      } catch (error) {
-        console.error('Error deleting user:', error);
       }
+    } catch (error) {
+      console.error('Error processing user deletion:', error);
     }
   };
 
@@ -77,7 +85,7 @@ const UserList = () => {
 
     if (name === 'userPassword') {
       if (!passwordRegex.test(value)) {
-        setPasswordError('Le mot de passe doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.');
+        setPasswordError('The password must contain at least 8 characters, including an upper case letter, a lower case letter, a number and a special character.');
       } else {
         setPasswordError('');
       }
@@ -116,7 +124,7 @@ const UserList = () => {
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userEmail}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{user.userLevel}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button onClick={() => handleEditUserClick(user)} className="text-indigo-600 hover:text-indigo-900 mr-3">
+                <button onClick={() => handleEditUserClick(user)} className="text-blue-500 hover:text-blue-700 mr-3">
                   <PencilIcon className="h-5 w-5" />
                 </button>
                 <button onClick={() => handleDeleteUser(user.id)} className="text-red-600 hover:text-red-900">
@@ -168,7 +176,7 @@ const UserList = () => {
                 value={currentUser.userPassword}
                 onChange={handleInputChange}
                 className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
-                required={!currentUser.isEditing}
+                required={!currentUser} // .isediting
               />
               {passwordError && <p className="text-red-500 text-xs mt-2">{passwordError}</p>}
             </div>

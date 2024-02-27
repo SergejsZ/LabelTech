@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import SideBar from '@/components/SideBar';
+import NavBar from '@/components/NavBar';
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -7,8 +8,9 @@ interface PageLayoutProps {
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <div className='flex h-screen'>
-      <SideBar />
+    <div className='h-screen'>
+        {/* <SideBar /> */}
+        <NavBar />
       {children}
     </div>
   );

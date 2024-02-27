@@ -60,7 +60,7 @@ const Page = () => {
 
   return (
     <PageLayout >
-      <div className='ml-96 mt-10 w-9/12'>
+      <div className='pl-8 mt-10 w-full'>
         <h2 className='text-2xl font-bold mb-10'>Label Error History</h2>
         <button className="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
         onClick={() => {
@@ -71,7 +71,9 @@ const Page = () => {
         }}>
             Export Label Error Data to CSV
         </button>
-        <div className='w-full flex'>
+
+        {/* si l'écran est petit, affiche en colonne, sinon en ligne */}
+        <div className='w-full flex flex-col lg:flex-row'>
           <div className='w-6/12'>
             <div>
             <CustomCalendar 

@@ -28,9 +28,10 @@ function ProductList({ products }: { products: Array<{ productName: string, prod
                 productCode={product.productCode}
                 productWeight={product.productWeight}
                 productCustomerID={product.productCustomerID}
-                productExpiryDate={product.productExpiryDate} 
-                ProductImage={product.ProductImage}
-              />
+                productExpiryDate={product.productExpiryDate}
+                ProductImage={product.ProductImage} productId={0} onClick={function (): void {
+                  throw new Error("Function not implemented.");
+                } }              />
             </div>
           );
         })}
