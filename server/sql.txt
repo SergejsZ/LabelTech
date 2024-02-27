@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS ProductsScannedLog (
 );
 -- Create the LabelErrorHistory table
 
-CREATE TABLE IF NOT EXISTS LabelErrorHistory ( LabelErrorID INT PRIMARY KEY, ProductCode INT, DispatchDate DATE, CameraCapture VARCHAR(255), ErrorDispatchDate DATE, Output VARCHAR(255), FOREIGN KEY (ProductCode) REFERENCES Product(ProductCode) );
+CREATE TABLE IF NOT EXISTS LabelErrorHistory ( LabelErrorID INT PRIMARY KEY, ProductCode INT, DispatchDate DATE, CameraCapture VARCHAR(255), ErrorDispatchDate DATE, Output VARCHAR(255), FOREIGN KEY (ProductCode) REFERENCES Product(ProductId) );
 
 -- Create the Users table
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Users ( UserID INT PRIMARY KEY, UserName VARCHAR(255)
 
 -- Create the BadProducts table
 
-CREATE TABLE IF NOT EXISTS BadProducts ( BadProductID INT PRIMARY KEY, ProductCode INT, DateRecorded DATE, DefectID VARCHAR(255), ProductDefectTally INT, FOREIGN KEY (ProductCode) REFERENCES Product(ProductCode), FOREIGN KEY (DefectID) REFERENCES Defects(DefectID) );
+CREATE TABLE IF NOT EXISTS BadProducts ( BadProductID INT PRIMARY KEY, ProductCode INT, DateRecorded DATE, DefectID VARCHAR(255), ProductDefectTally INT, FOREIGN KEY (ProductCode) REFERENCES Product(ProductId), FOREIGN KEY (DefectID) REFERENCES Defects(DefectID) );
 
 -- Create the ProductionLine table
 
