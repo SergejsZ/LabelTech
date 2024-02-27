@@ -1,5 +1,5 @@
 {
-  "/admin/productManagement/page": "app/admin/productManagement/page.js",
-  "/page": "app/page.js",
-  "/admin/userManagement/page": "app/admin/userManagement/page.js"
+  "/admin/productionLineManagement/page": "app/admin/productionLineManagement/page.js",
+  "/admin/labelErrorHistory/page": "app/admin/labelErrorHistory/page.js",
+  "/admin/productManagement/page": "app/admin/productManagement/page.js"
 }
