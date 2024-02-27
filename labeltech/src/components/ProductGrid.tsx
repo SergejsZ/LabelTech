@@ -68,7 +68,6 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
   }, []);
 
   useEffect(() => {
-    // Filtrer les produits en fonction de la chaîne de recherche
     const filtered = products.filter(product =>
       product.productName.toLowerCase().includes(searchString.toLowerCase())
     );
@@ -206,7 +205,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Rechercher un produit..."
+            placeholder="looking for something.."
             value={searchString}
             onChange={(e) => setSearchString(e.target.value)}
             className="search-input"
