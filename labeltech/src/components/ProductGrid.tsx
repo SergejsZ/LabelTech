@@ -2,6 +2,7 @@ import Product from "./Product";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
+import { Storage } from '@google-cloud/storage';
 
 type Customer = {
   CustomerID: number;
@@ -168,43 +169,62 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
     const productImageFile = formData.get('productUrl') as File | null;
     // let productUrl2 = ''; // Initialize as an empty string
 
+    
+
     if (productImageFile) {
+
+      console.log(productImageFile);
+          
       productUrl2 = ('https://storage.googleapis.com/labeltech/'+productImageFile.name).toString(); // Store the filename
+
+      axios.post('http://localhost:4000/upload-image', productImageFile) // Adjust to your endpoint
+    .then(response => {
+        // Handle successful image upload (use response.data.imageUrl)
+    })
+    .catch(error => {
+        // Handle upload failure
+    });
     }
 
-      // You can now send this data to the server to add it to the database
-      const response = await fetch('http://localhost:4000/api/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId,
-          productCode,
-          productName,
-          productWeight,
-          productCustomerID,
-          productExpiryDate,
-          productUrl2,
-        }),
-      });
+    
 
-      const data = await response.json();
+    //   // You can now send this data to the server to add it to the database
+    //   const response = await fetch('http://localhost:4000/api/products', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       productId,
+    //       productCode,
+    //       productName,
+    //       productWeight,
+    //       productCustomerID,
+    //       productExpiryDate,
+    //       productUrl2,
+    //     }),
+    //   });
 
-      if (response.ok) {
-        // Product added successfully, you can handle this as needed
-        console.log('Product added successfully:', data);
-        setIsFormVisible(false); // Hide the form after successful submission
-        // rerender the page
-        window.location.reload();
-      } else {
-        // Error adding product, handle accordingly
-        console.error('Error adding product:', data.error);
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
-  };
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     // Product added successfully, you can handle this as needed
+    //     console.log('Product added successfully:', data);
+    //     setIsFormVisible(false); // Hide the form after successful submission
+    //     // rerender the page
+    //     window.location.reload();
+    //   } else {
+    //     // Error adding product, handle accordingly
+    //     console.error('Error adding product:', data.error);
+    //   }
+    // } catch (error) {
+    //   console.error('Error submitting form:', error);
+    // }
+  }
+  catch (error) {
+    //   console.error('Error submitting form:', error);
+     }}
+  ;
 
     return (
       <div>

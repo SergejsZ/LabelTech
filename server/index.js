@@ -6,6 +6,20 @@ const jwt = require("jsonwebtoken");
 const mysql = require("mysql");
 require("dotenv").config();
 
+//GCS
+const multer = require('multer'); 
+const { Storage } = require('@google-cloud/storage');
+// GCP Storage Setup
+const storage = new Storage();
+const bucketName = 'labeltech'; // Replace with your bucket name
+const bucket = storage.bucket(bucketName);
+// Optional: Multer Configuration (customize as needed)
+const upload = multer({ 
+  // Example: Store uploads in memory
+  storage: multer.memoryStorage(), 
+}); 
+
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -39,6 +53,41 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Image Upload Route
+app.post('/upload-image', upload.single('productImageFile'), async (req, res) => {
+  console.log("Incoming Request (req):", req); // Log the entire request object
+
+  try {
+    if (!req.file) {
+      return res.status(400).send('Please select an image to upload');
+    } 
+
+    console.log("Parsed File Object (req.file):", req.file); // Log file object
+
+    const blob = bucket.file(req.file.originalname);
+    const blobStream = blob.createWriteStream({
+      resumable: false,
+      metadata: { contentType: req.file.mimetype }
+    });
+
+    blobStream.on('error', err => {
+      console.error("Upload Error:", err);
+      res.status(500).send('Error uploading image'); 
+    });
+
+    blobStream.on('finish', () => {
+      const publicUrl = `https://storage.googleapis.com/${bucketName}/${req.file.originalname}`;
+      res.status(200).send({ imageUrl: publicUrl });
+    });
+
+    blobStream.end(req.file.buffer); 
+
+  } catch (error) {
+    console.error("Error handling upload:", error);
+    res.status(500).send('Error uploading image');
+  }
+});
 
 // app.get('/api/users/first', async (req, res) => {
 //     try {
