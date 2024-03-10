@@ -10,19 +10,20 @@ type Customer = {
 
 function ProductGrid({ products }: { products: Array<{ productId:number, productName: string, productCode: number,productWeight:number, productCustomerID: number, productExpiryDate: string, productUrl: string}> }) {
   
+  let productUrl2 = ''; // Initialize as an empty string
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
   const totalPages = Math.ceil(products.length / productsPerPage);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
   const [searchString, setSearchString] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditingUser, setIsEditingUser] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [customers, setCustomers] = useState<Customer[]>([]);
+
   const [editProduct, setEditProduct] = useState({
     productId: "",
     productName: "",
@@ -83,11 +84,12 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       console.error('Error fetching customers:', error);
     }
   };
- 
 
+  //editing a product
   const handleEdit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Assurez-vous que productId est défini
+
+    // Make sure productId is defined
     if (!editProduct.productId) {
       console.error("Product ID is required for editing.");
       return;
@@ -103,14 +105,13 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
       const productUrl = formData.get('productUrl') as string;
-      // const NameImage = ProductImage.name;
+     
       console.log('Product ID:', productId);
       console.log('Product Code:', productCode);
       console.log('Product Name:', productName);
       console.log('Product Weight:', productWeight);
       console.log('Product Customer ID:', productCustomerID);
       console.log('Product Expiry Date:', productExpiryDate);
-      // console.log('Product Image:', NameImage);
 
       const response = await axios.put(
         `http://localhost:4000/api/products/${productId}`,
@@ -139,32 +140,37 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
     }
   }
 
+  //adding a product
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+   
     try {
       const formData = new FormData(event.currentTarget);
-
+      
       const productId = formData.get('productId') as string;
       const productCode = formData.get('productCode') as string;
       const productName = formData.get('productName') as string;
       const productWeight = formData.get('productWeight') as string;
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
-      const productUrl = formData.get('productUrl') as string;
-      //const [productImage, setProductImage] = useState(null);
-
-      // const NameImage = ProductImage.name;
+      const productUrl = formData.get('productUrl') as File;
       
-
       // Log the form data
-      console.log('Product ID:', productId);
-      console.log('Product Code:', productCode);
-      console.log('Product Name:', productName);
-      console.log('Product Weight:', productWeight);
-      console.log('Product Customer ID:', productCustomerID);
-      console.log('Product Expiry Date:', productExpiryDate);
-      // console.log('Product Image:', NameImage);
+      // console.log('Product ID:', productId);
+      // console.log('Product Code:', productCode);
+      // console.log('Product Name:', productName);
+      // console.log('Product Weight:', productWeight);
+      // console.log('Product Customer ID:', productCustomerID);
+      // console.log('Product Expiry Date:', productExpiryDate);
+      //console.log('Product Url:', productUrl);
+
+         // Extract filename from productUrl
+    const productImageFile = formData.get('productUrl') as File | null;
+    // let productUrl2 = ''; // Initialize as an empty string
+
+    if (productImageFile) {
+      productUrl2 = ('https://storage.googleapis.com/labeltech/'+productImageFile.name).toString(); // Store the filename
+    }
 
       // You can now send this data to the server to add it to the database
       const response = await fetch('http://localhost:4000/api/products', {
@@ -179,19 +185,11 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
           productWeight,
           productCustomerID,
           productExpiryDate,
-          productUrl,
+          productUrl2,
         }),
       });
 
       const data = await response.json();
-
-      {/*const handleChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-          isEditingUser 
-            ? setEditProduct({ ...editProduct, productImage: e.target.files[0] }) 
-            : setAddProduct({ ...addProduct, productImage: e.target.files[0] });
-        }
-      }; */}
 
       if (response.ok) {
         // Product added successfully, you can handle this as needed
@@ -207,7 +205,6 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       console.error('Error submitting form:', error);
     }
   };
-
 
     return (
       <div>
@@ -317,14 +314,14 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       <label className="block text-gray-800 text-sm font-semibold mb-2">
         Product Image:
       </label>
-      <label htmlFor="productImage" className="bg-gray-200 border border-gray-400 rounded-lg w-full py-2 px-4 cursor-pointer">
+      <label htmlFor="productUrl" className="bg-gray-200 border border-gray-400 rounded-lg w-full py-2 px-4 cursor-pointer">
         Upload Image
       </label>
       <input
         className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" /* Notice the style change */
         type="file"
-        name="productImage"
-        id="productImage"
+        name="productUrl"
+        id="productUrl"
         required
         style={{ display: 'none' }}
         //onChange={handleChange}

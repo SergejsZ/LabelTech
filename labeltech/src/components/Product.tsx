@@ -55,8 +55,8 @@ const Product = ({productId, productName, productCode, productWeight,  productCu
       console.error('Error fetching customers:', error);
     }
   };
-console.log("Product weight:", productWeight);
-console.log("Product url:", productUrl);
+//console.log("Product weight:", productWeight);
+//console.log("Product url:", productUrl);
   return (
     <div>
       <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">

@@ -196,7 +196,7 @@ app.post("/api/products", async (req, res) => {
       productWeight,
       productCustomerID,
       productExpiryDate,
-      productUrl,
+      productUrl2,
     } = req.body;
 
     console.log("Request body:", req.body);
@@ -211,7 +211,7 @@ app.post("/api/products", async (req, res) => {
         productWeight,
         productCustomerID,
         productExpiryDate,
-        productUrl,
+        productUrl2,
       ],
       (error, results) => {
         if (error) {
@@ -226,7 +226,8 @@ app.post("/api/products", async (req, res) => {
     console.error("Error adding product:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-});
+}
+);
 
 // Add this route to get all users
 app.get("/api/users", async (req, res) => {
