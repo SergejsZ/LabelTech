@@ -152,6 +152,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       const productCustomerID = formData.get('productCustomerID') as string;
       const productExpiryDate = formData.get('productExpiryDate') as string;
       const productUrl = formData.get('productUrl') as string;
+      //const [productImage, setProductImage] = useState(null);
 
       // const NameImage = ProductImage.name;
       
@@ -183,6 +184,14 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       });
 
       const data = await response.json();
+
+      {/*const handleChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+          isEditingUser 
+            ? setEditProduct({ ...editProduct, productImage: e.target.files[0] }) 
+            : setAddProduct({ ...addProduct, productImage: e.target.files[0] });
+        }
+      }; */}
 
       if (response.ok) {
         // Product added successfully, you can handle this as needed
@@ -296,13 +305,31 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
               </select>
             </div>
 
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productUrl">
                 Product Image Url:
               </label>
               <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productUrl" id="productUrl" required 
                       value={isEditingUser ? (editProduct.productUrl) : (addProduct.productUrl)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productUrl: e.target.value }) : setAddProduct({ ...addProduct, productUrl: e.target.value })} />
-            </div>
+            </div> */}
+
+<div className="flex flex-col">
+      <label className="block text-gray-800 text-sm font-semibold mb-2">
+        Product Image:
+      </label>
+      <label htmlFor="productImage" className="bg-gray-200 border border-gray-400 rounded-lg w-full py-2 px-4 cursor-pointer">
+        Upload Image
+      </label>
+      <input
+        className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" /* Notice the style change */
+        type="file"
+        name="productImage"
+        id="productImage"
+        required
+        style={{ display: 'none' }}
+        //onChange={handleChange}
+      />
+    </div>
             
             <div className="flex flex-col">
               {/* Uncomment if you need to upload an image
