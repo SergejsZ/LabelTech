@@ -158,6 +158,48 @@ app.delete("/api/products/:productId", async (req, res) => {
   }
 });
 
+// Product Search Route
+app.get("/api/products/search", async (req, res) => {
+  try {
+    const searchTerm = req.query.name;
+
+    if (!searchTerm) {
+      return res.status(400).json({ error: "Please provide a 'name' query parameter" });
+    }
+
+    const query = `
+      SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, 
+             DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, 
+             ProductImageURL 
+      FROM product
+      WHERE LOWER(ProductName) LIKE ? 
+    `;
+
+    db.query(query, ['%' + searchTerm.toLowerCase() + '%'], (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const products = results.map((product) => ({
+        productId: product.ProductId,
+        productCode: product.ProductCode,
+        productName: product.ProductName,
+        productWeight: product.ProductWeight,
+        productCustomerID: product.ProductCustomerID,
+        productExpiryDate: product.ProductExpiryDate,
+        productUrl: product.ProductImageURL,
+      }));
+
+      res.json(products);
+    });
+
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //display all products
 app.get("/api/products", async (req, res) => {
   try {
