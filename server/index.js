@@ -158,6 +158,49 @@ app.delete("/api/products/:productId", async (req, res) => {
   }
 });
 
+// Filter by Customer ID Route
+app.get("/api/products/by-customer/:customerId", async (req, res) => {
+  try {
+    const customerId = req.params.customerId;
+
+    // Basic Validation for Customer ID
+    if (!customerId || isNaN(customerId)) {
+      return res.status(400).json({ error: "Invalid customer ID" });
+    }
+
+    const query = `
+      SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, 
+             DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, 
+             ProductImageURL 
+      FROM product
+      WHERE ProductCustomerID = ? 
+    `;
+
+    db.query(query, [customerId], (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const products = results.map((product) => ({
+        productId: product.ProductId,
+        productCode: product.ProductCode,
+        productName: product.ProductName,
+        productWeight: product.ProductWeight,
+        productCustomerID: product.ProductCustomerID,
+        productExpiryDate: product.ProductExpiryDate,
+        productUrl: product.ProductImageURL,
+      }));
+
+      res.json(products);
+    });
+
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Product Search Route
 app.get("/api/products/search", async (req, res) => {
   try {
