@@ -278,7 +278,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
         </button>
         )}
         {isFormVisible && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center">
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center z-10">
           <form onSubmit={isEditingUser ? handleEdit : handleSubmit} className="space-y-6 bg-gray-100 shadow-xl rounded-lg p-8 w-full max-w-lg mx-auto">
             {isEditingUser && (
               <input
