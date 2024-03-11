@@ -82,15 +82,21 @@ useEffect(() => {
     setIsButtonDisabled(false);
   };
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem('productCode');
-    localStorage.removeItem('dispatchDate');
-    setCriticalPackingError(0);
-    setPackingError(0);
-    setPackedWithoutError(0);
-    setProductCode('');
-    setDispatchDate('');
-    setIsButtonDisabled(true);
+  const clearLocalStorage = async () => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to reset? This action will stop the Scan and reset the data!`
+    );
+    if (confirmDelete) {
+      setRunning(false);
+      localStorage.removeItem('productCode');
+      localStorage.removeItem('dispatchDate');
+      setCriticalPackingError(0);
+      setPackingError(0);
+      setPackedWithoutError(0);
+      setProductCode('');
+      setDispatchDate('');
+      setIsButtonDisabled(true);
+    }
   };
 
   useEffect(() => {
