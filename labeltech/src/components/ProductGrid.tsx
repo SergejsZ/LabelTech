@@ -166,64 +166,64 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
       //console.log('Product Url:', productUrl);
 
          // Extract filename from productUrl
-    const productImageFile = formData.get('productUrl') as File | null;
+    //const productImageFile = formData.get('productUrl') as File | null;
     // let productUrl2 = ''; // Initialize as an empty string
 
     
 
-    if (productImageFile) {
+    // if (productImageFile) {
 
-      console.log(productImageFile);
+    //   console.log(productImageFile);
           
-      productUrl2 = ('https://storage.googleapis.com/labeltech/'+productImageFile.name).toString(); // Store the filename
+    //   productUrl2 = ('https://storage.googleapis.com/labeltech/'+productImageFile.name).toString(); // Store the filename
 
-      axios.post('http://localhost:4000/upload-image', productImageFile) // Adjust to your endpoint
-    .then(response => {
-        // Handle successful image upload (use response.data.imageUrl)
-    })
-    .catch(error => {
-        // Handle upload failure
-    });
-    }
+    //   axios.post('http://localhost:4000/upload-image', productImageFile) // Adjust to your endpoint
+    // .then(response => {
+    //     // Handle successful image upload (use response.data.imageUrl)
+    // })
+    // .catch(error => {
+    //     // Handle upload failure
+    // });
+    // }
 
     
 
-    //   // You can now send this data to the server to add it to the database
-    //   const response = await fetch('http://localhost:4000/api/products', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       productId,
-    //       productCode,
-    //       productName,
-    //       productWeight,
-    //       productCustomerID,
-    //       productExpiryDate,
-    //       productUrl2,
-    //     }),
-    //   });
+    // You can now send this data to the server to add it to the database
+    const response = await fetch('http://localhost:4000/api/products', {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+    productId,
+    productCode,
+    productName,
+    productWeight,
+    productCustomerID,
+    productExpiryDate,
+    productUrl,
+    }),
+    });
 
-    //   const data = await response.json();
+      const data = await response.json();
 
-    //   if (response.ok) {
-    //     // Product added successfully, you can handle this as needed
-    //     console.log('Product added successfully:', data);
-    //     setIsFormVisible(false); // Hide the form after successful submission
-    //     // rerender the page
-    //     window.location.reload();
-    //   } else {
-    //     // Error adding product, handle accordingly
-    //     console.error('Error adding product:', data.error);
-    //   }
-    // } catch (error) {
-    //   console.error('Error submitting form:', error);
-    // }
+      if (response.ok) {
+        // Product added successfully, you can handle this as needed
+        console.log('Product added successfully:', data);
+        setIsFormVisible(false); // Hide the form after successful submission
+        // rerender the page
+        window.location.reload();
+      } else {
+        // Error adding product, handle accordingly
+        console.error('Error adding product:', data.error);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   }
-  catch (error) {
-    //   console.error('Error submitting form:', error);
-     }}
+  // catch (error) {
+  //   //   console.error('Error submitting form:', error);
+  //    }}
   ;
 
     return (
@@ -333,31 +333,15 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
               </select>
             </div>
 
-            {/* <div className="flex flex-col">
+            <div className="flex flex-col">
               <label className="block text-gray-800 text-sm font-semibold mb-2" htmlFor="productUrl">
                 Product Image Url:
               </label>
               <input className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" type="text" name="productUrl" id="productUrl" required 
                       value={isEditingUser ? (editProduct.productUrl) : (addProduct.productUrl)} onChange={(e) => isEditingUser ? setEditProduct({ ...editProduct, productUrl: e.target.value }) : setAddProduct({ ...addProduct, productUrl: e.target.value })} />
-            </div> */}
+            </div> 
 
-<div className="flex flex-col">
-      <label className="block text-gray-800 text-sm font-semibold mb-2">
-        Product Image:
-      </label>
-      <label htmlFor="productUrl" className="bg-gray-200 border border-gray-400 rounded-lg w-full py-2 px-4 cursor-pointer">
-        Upload Image
-      </label>
-      <input
-        className="shadow appearance-none border border-gray-400 bg-white rounded-lg w-full py-2 px-4 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" /* Notice the style change */
-        type="file"
-        name="productUrl"
-        id="productUrl"
-        required
-        style={{ display: 'none' }}
-        //onChange={handleChange}
-      />
-    </div>
+
             
             <div className="flex flex-col">
               {/* Uncomment if you need to upload an image

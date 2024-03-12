@@ -56,6 +56,18 @@ app.use(cookieParser());
 
 // Image Upload Route
 app.post('/upload-image', upload.single('productImageFile'), async (req, res) => {
+  const path = require('path');
+  const filename = productImageFile.originalname;
+
+  console.log("test a"+filename);
+  const objectName = path.join(filename); 
+  // Replace placeholders with your actual values
+  // curl -X POST --data-binary @C:\Users\john8\Downloads\${filename} \
+  // -H "Authorization: Bearer ya29.a0Ad52N381pilvFY8lEHpAdN3OiPKsY-_KNAAg6YAfbU7sfbILz5hb5y6JLFo7D4XNjMHmN5xl0ZWPGRM1PWTgMl4d36DinvTZqEUKX1E_DUEgWRK-3lCJ4UqLFKUV1_RBz2dTJsKpWpnSwXEHQ5mDdPHHtpYUVQhzDFLQaCgYKAXUSARASFQHGX2MipZy3Jq-UqOlrpo3IGxNGpQ0171" \ 
+  // -H "Content-Type: ${productImageFile.mimetype}" \  // Replace with your image's content type
+  // "https://storage.googleapis.com/upload/storage/v1/b/labeltech/o?uploadType=media&name=${filename}" 
+
+
   console.log("Incoming Request (req):", req); // Log the entire request object
 
   try {
@@ -330,7 +342,7 @@ app.post("/api/products", async (req, res) => {
       productWeight,
       productCustomerID,
       productExpiryDate,
-      productUrl2,
+      productUrl,
     } = req.body;
 
     console.log("Request body:", req.body);
@@ -345,7 +357,7 @@ app.post("/api/products", async (req, res) => {
         productWeight,
         productCustomerID,
         productExpiryDate,
-        productUrl2,
+        productUrl,
       ],
       (error, results) => {
         if (error) {
