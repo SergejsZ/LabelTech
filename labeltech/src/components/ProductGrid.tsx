@@ -13,17 +13,17 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
   
   let productUrl2 = ''; // Initialize as an empty string
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8;
-  const totalPages = Math.ceil(products.length / productsPerPage);
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const [itemsPerPage] = useState(3);
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const [searchString, setSearchString] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(products);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isEditingUser, setIsEditingUser] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const currentItems = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   const [editProduct, setEditProduct] = useState({
     productId: "",
@@ -251,7 +251,8 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
         <div className="grid grid-cols-1 gap-10 p-4 w-full" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
         {/* {currentProducts.map((product) => ( */}
 
-        {filteredProducts.map((product) => (
+        {/* {filteredProducts.map((product) => ( */}
+        {currentItems.map((product) => (
           <div 
             className="relative transform transition-transform duration-500 hover:scale-110 w-full"
             key={product.productId}
@@ -389,6 +390,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
         )}
         </div>
         </div>
+        <br />
         <div className="flex items-center gap-2 align-middle justify-center">
           <button
             className="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
