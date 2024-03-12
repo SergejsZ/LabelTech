@@ -44,6 +44,12 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
     productUrl: "",
   });
 
+  useEffect(() => {
+    if (searchString !== "") {
+      setCurrentPage(1);
+    }
+  }, [searchString]);
+
   const paginate = (totalPages:any) => setCurrentPage(totalPages);
 
   const handleAddProduct = () => {
