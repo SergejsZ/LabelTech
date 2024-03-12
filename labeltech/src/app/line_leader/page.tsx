@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
@@ -26,7 +26,21 @@ const Page = () => {
   const [previouscriticalPackingError, setPreviouscriticalPackingError] = useState(criticalPackingError);
   const [showAlert, setShowAlert] = useState(false);
   
-    const [errorData, setErrorData] = useState([]);
+const [errorData, setErrorData] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/products');
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
 
     useEffect(() => {
       const fetchErrorData = async () => {
@@ -68,15 +82,21 @@ useEffect(() => {
     setIsButtonDisabled(false);
   };
 
-  const clearLocalStorage = () => {
-    localStorage.removeItem('productCode');
-    localStorage.removeItem('dispatchDate');
-    setCriticalPackingError(0);
-    setPackingError(0);
-    setPackedWithoutError(0);
-    setProductCode('');
-    setDispatchDate('');
-    setIsButtonDisabled(true);
+  const clearLocalStorage = async () => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to reset? This action will stop the Scan and reset the data!`
+    );
+    if (confirmDelete) {
+      setRunning(false);
+      localStorage.removeItem('productCode');
+      localStorage.removeItem('dispatchDate');
+      setCriticalPackingError(0);
+      setPackingError(0);
+      setPackedWithoutError(0);
+      setProductCode('');
+      setDispatchDate('');
+      setIsButtonDisabled(true);
+    }
   };
 
   useEffect(() => {
