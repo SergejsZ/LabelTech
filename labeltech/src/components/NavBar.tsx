@@ -54,6 +54,15 @@ const StickyNavbar = () => {
               variant="small"
               color="blue-gray"
               className="p-1 font-normal" placeholder={undefined}      >
+        <a href="/admin/customerManagement" className="flex items-center">
+            Customer Management
+        </a>
+      </Typography>
+      <Typography
+              as="li"
+              variant="small"
+              color="blue-gray"
+              className="p-1 font-normal" placeholder={undefined}      >
         <a href="/admin/labelErrorHistory" className="flex items-center">
             Label Error History
         </a>

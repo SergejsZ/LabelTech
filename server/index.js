@@ -678,3 +678,114 @@ app.get('/api/labelErrors', async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+//add customer
+app.post("/api/customer", async (req, res) => {
+  try {
+    const { customerName, customerEmail } = req.body;
+
+    console.log("Request body:", req.body);
+
+    const addQuery = "INSERT INTO Customer (CustomerName, CustomerEmail) VALUES (?, ?)";
+    db.query(addQuery, [customerName, customerEmail], (error, results) => {
+      if (error) {
+        console.error("Error adding customer:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error("Error adding customer:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//edit customer
+app.put("/api/customer/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+    const { customerName, customerEmail } = req.body;
+
+    console.log("Request body:", req.body);
+
+    const updateQuery = "UPDATE Customer SET CustomerName = ? , CustomerEmail = ? WHERE CustomerID = ?";
+    db.query(updateQuery, [customerName, customerEmail, customerId], (error, results) => {
+      if (error) {
+        console.error("Error updating customer:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//delete customer
+app.delete("/api/customer/:customerId", async (req, res) => {
+  try {
+    const { customerId } = req.params;
+
+    console.log("Request body:", req.params);
+
+    const deleteQuery = "DELETE FROM Customer WHERE CustomerID = ?";
+    db.query(deleteQuery, [customerId], (error, results) => {
+      if (error) {
+        console.error("Error deleting customer:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error("Error deleting customer:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// get all Customers
+app.get("/api/customersManagement", async (req, res) => {
+  try {
+    const query = "SELECT CustomerID, CustomerName, CustomerEmail FROM Customer";
+
+    db.query(query, (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const customers = results.map((customer) => ({
+        id: customer.CustomerID,
+        customerName: customer.CustomerName,
+        customerEmail: customer.CustomerEmail,
+      }));
+
+      res.json(customers);
+    });
+  } catch (error) {
+    console.error("Error fetching customers data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// check if customer is associated with a product
+app.get("/api/checkCustomer/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const checkQuery = "SELECT * FROM product WHERE ProductCustomerID = ?";
+  db.query(checkQuery, [userId], (error, results) => {
+    if (error) {
+      console.error("Error checking customer:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    if (results.length > 0) {
+      console.log("Customer is associated with a product");
+      return res.json({ isAssociated: true });
+    } else {
+      return res.json({ isAssociated: false });
+    }
+  });
+}
+);
