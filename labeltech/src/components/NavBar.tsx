@@ -31,7 +31,7 @@ const StickyNavbar = () => {
         Product Managment
         </a>
     </Typography>
-      <Typography
+      {/* <Typography
               as="li"
               variant="small"
               color="blue-gray"
@@ -39,7 +39,7 @@ const StickyNavbar = () => {
         <a href="/admin/productionLineManagement" className="flex items-center">
             Production Line Management
         </a>
-      </Typography>
+      </Typography> */}
       <Typography
               as="li"
               variant="small"

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import ProgressionBar from '@/components/ProgressionBar';
 
 const formatDate = (date: Date) => {
   const day = String(date.getDate()).padStart(2, '0');
@@ -25,6 +26,9 @@ const Page = () => {
   const [products, setProducts] = useState([]);
   const [previouscriticalPackingError, setPreviouscriticalPackingError] = useState(criticalPackingError);
   const [showAlert, setShowAlert] = useState(false);
+
+  //last ten scans is a list of strings, each string represents a scan
+  const [lastTenScans, setLastTenScans] = useState<string[]>([]);
   
 const [errorData, setErrorData] = useState([]);
 
@@ -41,6 +45,27 @@ const [errorData, setErrorData] = useState([]);
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const fetchErrorData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/labelErrors');
+        // Assuming the API returns the data sorted, or you might need to sort it here based on timestamp
+        setErrorData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching error data:", error);
+      }
+    };
+  
+    fetchErrorData();
+  
+    // Set up a poll interval
+    const intervalId = setInterval(fetchErrorData, 5000); // Adjust the 5000ms (5 seconds) as needed
+  
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
+  
 
     useEffect(() => {
       const fetchErrorData = async () => {
@@ -106,9 +131,29 @@ useEffect(() => {
         setPackedWithoutError((prev) => prev + 1);
         if ((packedWithoutError + 1) % 5 === 0) {
           setPackingError((err) => err + 1);
+          //add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
+          if (lastTenScans.length === 10) {
+            setLastTenScans((prev) => prev.slice(1).concat('missplacement'));
+          } else {
+            setLastTenScans((prev) => prev.concat('missplacement'));
+          }
         }
-        if ((packedWithoutError + 1) % 8 === 0) {
+        else if ((packedWithoutError + 1) % 8 === 0) {
           setCriticalPackingError((err) => err + 1);
+          //add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
+          if (lastTenScans.length === 10) {
+            setLastTenScans((prev) => prev.slice(1).concat('date'));
+          } else {
+            setLastTenScans((prev) => prev.concat('date'));
+          }
+        }
+        else{
+          //add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
+          if (lastTenScans.length === 10) {
+            setLastTenScans((prev) => prev.slice(1).concat(''));
+          } else {
+            setLastTenScans((prev) => prev.concat(''));
+          }
         }
       }, 2000);
     }
@@ -218,6 +263,9 @@ useEffect(() => {
       </div>
     </div>
     )}
+    
+      {/* Progression bar component */}
+      <ProgressionBar errorData={lastTenScans} />
     </div>
   );
 };

@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS ProductsScannedLog (
 );
 -- Create the LabelErrorHistory table
 
-CREATE TABLE IF NOT EXISTS LabelErrorHistory ( LabelErrorID INT PRIMARY KEY, ProductCode INT, DispatchDate DATE, CameraCapture VARCHAR(255), ErrorDispatchDate DATE, Output VARCHAR(255), FOREIGN KEY (ProductCode) REFERENCES Product(ProductId) );
+CREATE TABLE IF NOT EXISTS LabelErrorHistory ( LabelErrorID INT PRIMARY KEY AUTO_INCREMENT, ProductCode INT, DispatchDate DATE, CameraCapture VARCHAR(255), ErrorDispatchDate DATE, Output VARCHAR(255), FOREIGN KEY (ProductCode) REFERENCES Product(ProductId) );
 
 -- Create the Users table
 

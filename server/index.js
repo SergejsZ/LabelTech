@@ -673,6 +673,7 @@ app.get('/api/labelErrors', async (req, res) => {
               return res.status(500).json({ error: "Internal Server Error" });
           }
           res.json(results);
+          console.log(results);
       });
   } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
