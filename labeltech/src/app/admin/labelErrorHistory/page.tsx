@@ -58,6 +58,18 @@ const Page = () => {
     document.body.removeChild(link);
   }
 
+  function simulate() {
+    axios.post('http://localhost:4000/api/systemSimulation', {
+      // Any data you want to send to the endpoint goes here
+    })
+    .then(() => {
+      // Handle success (e.g., display a confirmation message)
+    })
+    .catch((error) => {
+      console.error("Error running simulation:", error);
+    }); 
+  }
+
   return (
     <PageLayout >
       <div className='pl-8 mt-10 w-full'>
@@ -70,6 +82,17 @@ const Page = () => {
           exportToCSV(errorData, fileName);
         }}>
             Export Label Error Data to CSV
+        </button>
+
+        <button className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => {
+          // const today = new Date();
+          // const dateString = today.toISOString().split('T')[0];
+          // const fileName = `label_error_data_${dateString}.csv`; 
+          // exportToCSV(errorData, fileName);
+          simulate();
+        }}>
+            Simulate Test Performance
         </button>
 
         {/* si l'écran est petit, affiche en colonne, sinon en ligne */}

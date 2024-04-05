@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS ProductsScannedLog (
   ProductScannedDate DATE,
   TotalScanned INT,
   TotalNumberErrors INT,
-  FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductId)  -- Corrected reference to ProductId
+  -- FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductId)  -- Corrected reference to ProductId
+  FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductCode)
 );
 -- Create the LabelErrorHistory table
 

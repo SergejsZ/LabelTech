@@ -125,6 +125,27 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
 //     }
 //   });
 
+//simulation
+app.post("/api/systemSimulation", async (req, res) => {
+  try {
+    const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
+    const values = [5, '2023-04-12', 0, 0]; 
+
+    db.query(insertQuery, values, (error, results) => {
+      if (error) {
+        console.error("Error updating product:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      res.json({ success: true });
+    });
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 //edit a product
 app.put("/api/products/:productId", async (req, res) => {
   try {
