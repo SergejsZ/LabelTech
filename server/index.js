@@ -126,25 +126,18 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
 //     }
 //   });
 
-// //simulation
-// app.post("/api/systemSimulation", async (req, res) => {
-//   try {
-//     const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
-//     const values = [5, '2023-04-12', 0, 0]; 
-
-//     db.query(insertQuery, values, (error, results) => {
-//       if (error) {
-//         console.error("Error updating product:", error);
-//         return res.status(500).json({ error: "Internal Server Error" });
-//       }
-
-//       res.json({ success: true });
-//     });
-//   } catch (error) {
-//     console.error("Error updating product:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
+// Endpoint for stopping the simulation
+app.post("/api/simulation/stop", async (req, res) => {
+  try {
+    // Clear the interval to stop updating TotalScanned
+    clearInterval(intervalId);
+    res.json({ success: true, message: "Simulation stopped" });
+    console.log("simulation stopped")
+  } catch (error) {
+    console.error("Error stopping simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 // Endpoint for starting the simulation by inserting a row and updating TotalScanned
 app.post("/api/systemSimulation", async (req, res) => {
@@ -174,6 +167,7 @@ app.post("/api/systemSimulation", async (req, res) => {
       }, 3000); // 3000 milliseconds = 3 seconds
 
       res.json({ success: true, message: "Simulation started" });
+      console.error("Simulation started");
     });
   } catch (error) {
     console.error("Error starting simulation:", error);
@@ -574,37 +568,37 @@ app.put("/api/users/:userId", async (req, res) => {
   }
 });
 
-//display all errors
-app.get("/api/errors", async (req, res) => {
-  try {
-    const query =
-      'SELECT `LabelErrorID`, `ProductCode`, `DispatchDate`, `CameraCapture`, `ErrorDispatchDate`, `Output`, `ErrorLine`, `ErrorTime`, `ErrorDate` FROM `LabelErrorHistory` WHERE 1';
+// //display all errors
+// app.get("/api/errors", async (req, res) => {
+//   try {
+//     const query =
+//       'SELECT `LabelErrorID`, `ProductCode`, `DispatchDate`, `CameraCapture`, `ErrorDispatchDate`, `Output`, `ErrorLine`, `ErrorTime`, `ErrorDate` FROM `LabelErrorHistory` WHERE 1';
 
-    db.query(query, (error, results) => {
-      if (error) {
-        console.error("Error executing SQL query:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
+//     db.query(query, (error, results) => {
+//       if (error) {
+//         console.error("Error executing SQL query:", error);
+//         return res.status(500).json({ error: "Internal Server Error" });
+//       }
 
-      const errors = results.map((error) => ({
-        labelErrorID: error.LabelErrorID,
-        productCode: error.ProductCode,
-        dispatchDate: error.DispatchDate,
-        cameraCapture: error.CameraCapture,
-        errorDispatchDate: error.ErrorDispatchDate,
-        output: error.Output,
-        errorLine: error.ErrorLine,
-        errorTime: error.ErrorTime,
-        errorDate: error.ErrorDate,
-      }));
+//       const errors = results.map((error) => ({
+//         labelErrorID: error.LabelErrorID,
+//         productCode: error.ProductCode,
+//         dispatchDate: error.DispatchDate,
+//         cameraCapture: error.CameraCapture,
+//         errorDispatchDate: error.ErrorDispatchDate,
+//         output: error.Output,
+//         errorLine: error.ErrorLine,
+//         errorTime: error.ErrorTime,
+//         errorDate: error.ErrorDate,
+//       }));
 
-      res.json(errors);
-    });
-  } catch (error) {
-    console.error("Error fetching product data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//       res.json(errors);
+//     });
+//   } catch (error) {
+//     console.error("Error fetching product data:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 
 //display LineDetails

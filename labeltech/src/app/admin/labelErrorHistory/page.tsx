@@ -58,11 +58,25 @@ const Page = () => {
     document.body.removeChild(link);
   }
 
-  function simulate() {
+  function startSimulation() {
     axios.post('http://localhost:4000/api/systemSimulation', {
       // Any data you want to send to the endpoint goes here
     })
-    .then(() => {
+    .then((response) => {
+      console.log("Simulation started successfully:");
+      // Handle success (e.g., display a confirmation message)
+    })
+    .catch((error) => {
+      console.error("Error running simulation:", error);
+    }); 
+  }
+
+  function stopSimulation() {
+    axios.post('http://localhost:4000/api/simulation/stop', {
+      // Any data you want to send to the endpoint goes here
+    })
+    .then((response) => {
+      console.log("Simulation stopped successfully:");
       // Handle success (e.g., display a confirmation message)
     })
     .catch((error) => {
@@ -90,10 +104,23 @@ const Page = () => {
           // const dateString = today.toISOString().split('T')[0];
           // const fileName = `label_error_data_${dateString}.csv`; 
           // exportToCSV(errorData, fileName);
-          simulate();
+          startSimulation();
         }}>
             Simulate Test Performance
         </button>
+
+        <button className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        onClick={() => {
+          // const today = new Date();
+          // const dateString = today.toISOString().split('T')[0];
+          // const fileName = `label_error_data_${dateString}.csv`; 
+          // exportToCSV(errorData, fileName);
+          stopSimulation();
+        }}>
+            stopSimulation
+        </button>
+
+        
 
         {/* si l'écran est petit, affiche en colonne, sinon en ligne */}
         <div className='w-full flex flex-col lg:flex-row'>
