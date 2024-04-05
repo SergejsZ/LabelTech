@@ -2,8 +2,10 @@
 
 import PageLayout from '@/components/PageLayout';
 import List from '@/components/List';
-import React, { use, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '@/app/hooks/useAuth';
+import Loading from '@/components/Loading';
 
 const FakelinesData = [
   { number: 1, leader: 'Paul Aubry', state: 'Ready', action: () => console.log('Start line 1') },
@@ -21,6 +23,17 @@ type LineDetails = {
 };
 
 const Page = () => {
+  useAuth();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500); 
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const [loading, setLoading] = useState(true);
 
   const [lines, setLines] = useState<LineDetails[]>([]);
 
@@ -38,6 +51,12 @@ const Page = () => {
   }
   );
 
+  if (loading) {
+    return(
+      <Loading />
+    );
+  }
+  else{
   return (
     <PageLayout >
     <div className='pl-8 mt-10 w-full pr-16'>
@@ -46,6 +65,7 @@ const Page = () => {
     </div>
     </PageLayout >
   );
+  }
 };
 
 export default Page;

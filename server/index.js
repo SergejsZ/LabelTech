@@ -368,15 +368,22 @@ app.post("/api/login", async (req, res) => {
         return res.status(401).json({ error: "Invalid login credentials" });
       }
 
+      const token = jwt.sign(
+        { userId: user.UserID, username: user.UserName, role: user.UserLevel },
+        process.env.JWT_SECRET, // Assurez-vous d'avoir une clé secrète pour JWT dans vos variables d'environnement
+        { expiresIn: '24h' } 
+      );
+
       const userLevel = user.UserLevel.toLowerCase();
       if (userLevel === "admin") {
-        return res.json({ redirect: "/admin/productManagement" });
+        return res.json({ redirect: "/admin/productManagement", token });
       } else if (userLevel === "leader") {
-        return res.json({ redirect: "/line_leader" });
+        return res.json({ redirect: "/line_leader", token });
       } else {
-        return res.json({ redirect: "/quality" });
+        return res.json({ redirect: "/quality", token });
       }
     });
+
   } catch (error) {
     console.error("Error processing login request:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -840,3 +847,33 @@ app.get("/api/checkCustomer/:userId", async (req, res) => {
   });
 }
 );
+
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+app.get("/api/protected", authenticateToken, (req, res) => {
+  res.json({ message: "Contenu protégé accessible" });
+});
+
+
+app.post("/api/logout", (req, res) => {
+
+  const { refreshToken } = req.body;
+
+  invalidateRefreshToken(refreshToken).then(() => {
+    res.json({ message: "disconected" });
+  }).catch(error => {
+    console.error("error on disconection:", error);
+    res.status(500).json({ error: "internal server error" });
+  });
+});

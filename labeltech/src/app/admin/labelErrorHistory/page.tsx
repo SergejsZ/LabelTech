@@ -9,9 +9,23 @@ import ErrorBarChart from '@/components/ErrorBarChart';
 import Timeline from '@/components/TimeLine';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { useAuth } from '@/app/hooks/useAuth';
+import Loading from '@/components/Loading';
 
 
 const Page = () => {
+
+  useAuth();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500); 
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const [loading, setLoading] = useState(true);
 
   const [date, setDate] = useState<any>(new Date());
   const [selectRange, setSelectRange] = useState<boolean>(false);
@@ -84,67 +98,75 @@ const Page = () => {
     }); 
   }
 
-  return (
-    <PageLayout >
-      <div className='pl-8 mt-10 w-full'>
-        <h2 className='text-2xl font-bold mb-10'>Label Error History</h2>
-        <button className="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => {
-          const today = new Date();
-          const dateString = today.toISOString().split('T')[0];
-          const fileName = `label_error_data_${dateString}.csv`; 
-          exportToCSV(errorData, fileName);
-        }}>
-            Export Label Error Data to CSV
-        </button>
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
 
-        <button className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => {
-          // const today = new Date();
-          // const dateString = today.toISOString().split('T')[0];
-          // const fileName = `label_error_data_${dateString}.csv`; 
-          // exportToCSV(errorData, fileName);
-          startSimulation();
-        }}>
-            Simulate Test Performance
-        </button>
+  else{
+    return (
+      <PageLayout >
+        <div className='pl-8 mt-10 w-full'>
+          <h2 className='text-2xl font-bold mb-10'>Label Error History</h2>
+          <button className="bg-green-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => {
+            const today = new Date();
+            const dateString = today.toISOString().split('T')[0];
+            const fileName = `label_error_data_${dateString}.csv`; 
+            exportToCSV(errorData, fileName);
+          }}>
+              Export Label Error Data to CSV
+          </button>
 
-        <button className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => {
-          // const today = new Date();
-          // const dateString = today.toISOString().split('T')[0];
-          // const fileName = `label_error_data_${dateString}.csv`; 
-          // exportToCSV(errorData, fileName);
-          stopSimulation();
-        }}>
-            stopSimulation
-        </button>
+          <button className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => {
+            // const today = new Date();
+            // const dateString = today.toISOString().split('T')[0];
+            // const fileName = `label_error_data_${dateString}.csv`; 
+            // exportToCSV(errorData, fileName);
+            startSimulation();
+          }}>
+              Simulate Test Performance
+          </button>
 
-        
+          <button className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => {
+            // const today = new Date();
+            // const dateString = today.toISOString().split('T')[0];
+            // const fileName = `label_error_data_${dateString}.csv`; 
+            // exportToCSV(errorData, fileName);
+            stopSimulation();
+          }}>
+              stopSimulation
+          </button>
 
-        {/* si l'écran est petit, affiche en colonne, sinon en ligne */}
-        <div className='w-full flex flex-col lg:flex-row'>
-          <div className='w-6/12'>
-            <div>
-            <CustomCalendar 
-              date={date}
-              setDate={setDate}
-              selectRange={selectRange}
-              setSelectRange={setSelectRange}
-            />
+          
 
+          {/* si l'écran est petit, affiche en colonne, sinon en ligne */}
+          <div className='w-full flex flex-col lg:flex-row'>
+            <div className='w-6/12'>
+              <div>
+              <CustomCalendar 
+                date={date}
+                setDate={setDate}
+                selectRange={selectRange}
+                setSelectRange={setSelectRange}
+              />
+
+              </div>
+              <div className='mt-16'>
+                <ErrorBarChart />
+              </div>
             </div>
-            <div className='mt-16'>
-              <ErrorBarChart />
+            <div className='w-9/12'>
+              <Timeline selectedDate={date} />
             </div>
-          </div>
-          <div className='w-9/12'>
-            <Timeline selectedDate={date} />
           </div>
         </div>
-      </div>
-    </PageLayout >
-  );
+      </PageLayout >
+    );
+  }
 };
 
 export default Page;

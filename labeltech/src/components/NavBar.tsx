@@ -17,6 +17,12 @@ const StickyNavbar = () => {
       () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
+
+  async function logout() {
+    localStorage.removeItem('token');
+    await fetch('/api/logout');
+    window.location.href = '/login';
+  }
  
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 text-black">
@@ -90,7 +96,8 @@ const StickyNavbar = () => {
               <Button
                               variant="gradient"
                               size="sm"
-                              className="hidden lg:inline-block bg-blue-500 hover:bg-blue-700" placeholder={undefined}              >
+                              className="hidden lg:inline-block bg-blue-500 hover:bg-blue-700" placeholder={undefined}
+                              onClick={logout}>
                 <span>Log Out</span>
               </Button>
                 </a>
@@ -138,11 +145,9 @@ const StickyNavbar = () => {
         <MobileNav open={openNav}>
           {navList}
           <div className="flex items-center gap-x-1">
-            <a href="/">
-            <Button fullWidth variant="gradient" size="sm" className="bg-blue-500 hover:bg-blue-700" placeholder={undefined}>
+            <Button fullWidth variant="gradient" size="sm" className="bg-blue-500 hover:bg-blue-700" placeholder={undefined} onClick={logout}>
               <span>Log Out</span>
             </Button>
-            </a>
           </div>
         </MobileNav>
       </Navbar>

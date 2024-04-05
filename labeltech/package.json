@@ -13,6 +13,8 @@
     "@material-tailwind/react": "^2.1.8",
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "next": "14.0.1",
     "next-auth": "^4.24.5",
     "react": "^18",
@@ -21,6 +23,8 @@
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "18.2.48",
     "@types/react-dom": "^18",
