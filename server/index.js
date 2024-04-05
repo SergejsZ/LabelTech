@@ -19,6 +19,7 @@ const upload = multer({
   storage: multer.memoryStorage(), 
 }); 
 
+let intervalId;
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -125,26 +126,60 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
 //     }
 //   });
 
-//simulation
+// //simulation
+// app.post("/api/systemSimulation", async (req, res) => {
+//   try {
+//     const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
+//     const values = [5, '2023-04-12', 0, 0]; 
+
+//     db.query(insertQuery, values, (error, results) => {
+//       if (error) {
+//         console.error("Error updating product:", error);
+//         return res.status(500).json({ error: "Internal Server Error" });
+//       }
+
+//       res.json({ success: true });
+//     });
+//   } catch (error) {
+//     console.error("Error updating product:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+// Endpoint for starting the simulation by inserting a row and updating TotalScanned
 app.post("/api/systemSimulation", async (req, res) => {
   try {
+    // Insert a row into the database
     const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
-    const values = [5, '2023-04-12', 0, 0]; 
+    const insertValues = [5, '2023-04-12', 0, 0];
 
-    db.query(insertQuery, values, (error, results) => {
-      if (error) {
-        console.error("Error updating product:", error);
+    db.query(insertQuery, insertValues, (insertError, insertResults) => {
+      if (insertError) {
+        console.error("Error inserting row:", insertError);
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      res.json({ success: true });
+      //update TotalScanned every 3 seconds
+      intervalId = setInterval(() => {
+        const updateQuery = "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
+        const updateValues = [5];
+
+        db.query(updateQuery, updateValues, (updateError, updateResults) => {
+          if (updateError) {
+            console.error("Error updating TotalScanned:", updateError);
+            clearInterval(intervalId); // Stop the interval if an error occurs
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+        });
+      }, 3000); // 3000 milliseconds = 3 seconds
+
+      res.json({ success: true, message: "Simulation started" });
     });
   } catch (error) {
-    console.error("Error updating product:", error);
+    console.error("Error starting simulation:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 
 //edit a product
 app.put("/api/products/:productId", async (req, res) => {
