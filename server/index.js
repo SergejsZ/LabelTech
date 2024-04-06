@@ -102,47 +102,28 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
   }
 });
 
-// app.get('/api/users/first', async (req, res) => {
-//     try {
-//       const query = 'SELECT UserName FROM users WHERE UserID = 1';
-
-//       db.query(query, (error, results) => {
-//         if (error) {
-//           console.error('Error executing SQL query:', error);
-//           return res.status(500).json({ error: 'Internal Server Error' });
-//         }
-
-//         const user = results[0];
-
-//         if (!user) {
-//           return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         res.json({ username: user.UserName });
-//       });
-//     } catch (error) {
-//       console.error('Error fetching user data:', error);
-//       res.status(500).json({ error: 'Internal Server Error' });
-//     }
-//   });
+//Simulation
+let scanIntervalId; // Declare scanIntervalId variable globally
+let errorUpdateIntervalId; // Declare errorUpdateIntervalId variable globally
 
 // Endpoint for stopping the simulation
 app.post("/api/simulation/stop", async (req, res) => {
   try {
-    // Clear the interval to stop updating TotalScanned
-    clearInterval(intervalId);
+    // Clear the intervals to stop updating TotalScanned and TotalNumberErrors
+    clearInterval(scanIntervalId);
+    clearInterval(errorUpdateIntervalId);
     res.json({ success: true, message: "Simulation stopped" });
-    console.log("simulation stopped")
+    console.log("Simulation stopped");
   } catch (error) {
     console.error("Error stopping simulation:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// Endpoint for starting the simulation by inserting a row and updating TotalScanned
-app.post("/api/systemSimulation", async (req, res) => {
+// Endpoint for starting the simulation by inserting a row and updating TotalScanned and having an error after minute
+// 1 line scanning every 2 seconds, error after 1 minute, based on analysis intervention after 8 seconds -> stop the line
+app.post("/api/systemSimulation1", async (req, res) => {
   try {
-    // Insert a row into the database
     const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
     const insertValues = [5, '2023-04-12', 0, 0];
 
@@ -152,19 +133,41 @@ app.post("/api/systemSimulation", async (req, res) => {
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      //update TotalScanned every 3 seconds
-      intervalId = setInterval(() => {
+      //update TotalScanned every 2 seconds
+      scanIntervalId = setInterval(() => {
         const updateQuery = "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
         const updateValues = [5];
 
         db.query(updateQuery, updateValues, (updateError, updateResults) => {
           if (updateError) {
             console.error("Error updating TotalScanned:", updateError);
-            clearInterval(intervalId); // Stop the interval if an error occurs
+            clearInterval(scanIntervalId); // Stop the interval if an error occurs
             return res.status(500).json({ error: "Internal Server Error" });
           }
         });
-      }, 3000); // 3000 milliseconds = 3 seconds
+      }, 2000);
+
+      //loop to execute the error update query four times with a 2-second delay between each execution
+      setTimeout(() => {
+      
+        errorUpdateIntervalId = setInterval(() => {
+        
+
+          const updateQuery = "UPDATE productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode = ?";
+          const updateValues = [5];
+
+          db.query(updateQuery, updateValues, (updateError, updateResults) => {
+            if (updateError) {
+              console.error("Error updating TotalNumberErrors:", updateError);
+              clearInterval(scanIntervalId); // Stop the scan interval if an error occurs
+              clearInterval(errorUpdateIntervalId); // Stop the error update interval if an error occurs
+              return res.status(500).json({ error: "Internal Server Error" });
+            }
+          });
+
+         
+        }, 2000); 
+      }, 60000); 
 
       res.json({ success: true, message: "Simulation started" });
       console.error("Simulation started");
@@ -174,6 +177,9 @@ app.post("/api/systemSimulation", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+
 
 //edit a product
 app.put("/api/products/:productId", async (req, res) => {
