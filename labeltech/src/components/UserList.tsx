@@ -19,14 +19,13 @@ const initialUserState = {
 };
 
 const UserList = () => {
+
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<{ id: number | null; userName: string; userEmail: string; userLevel: string; userPassword: string; }>({ id: null, userName: '', userEmail: '', userLevel: '', userPassword: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [sortDirection, setSortDirection] = useState('asc');
   const [sortConfig, setSortConfig] = useState({ column: "userName", direction: 'ascending' });
-
-
 
   const [passwordError, setPasswordError] = useState('');
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
