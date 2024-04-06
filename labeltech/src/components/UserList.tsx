@@ -23,6 +23,10 @@ const UserList = () => {
   const [currentUser, setCurrentUser] = useState<{ id: number | null; userName: string; userEmail: string; userLevel: string; userPassword: string; }>({ id: null, userName: '', userEmail: '', userLevel: '', userPassword: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [sortConfig, setSortConfig] = useState({ column: "userName", direction: 'ascending' });
+
+
 
   const [passwordError, setPasswordError] = useState('');
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -98,6 +102,49 @@ const UserList = () => {
     setCurrentUser(initialUserState);
   };
 
+  const toggleSortUsersByLevel = () => {
+    const sortedUsers = [...users].sort((a, b) => {
+      if (sortDirection === 'asc') {
+        return a.userLevel.localeCompare(b.userLevel);
+      } else {
+        return b.userLevel.localeCompare(a.userLevel);
+      }
+    });
+  
+    setUsers(sortedUsers);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  const toggleSortUsersByName = () => {
+    const sortedUsers = [...users].sort((a, b) => {
+      if (sortDirection === 'asc') {
+        return a.userName.localeCompare(b.userName);
+      } else {
+        return b.userName.localeCompare(a.userName);
+      }
+    });
+  
+    setUsers(sortedUsers);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+  
+  const requestSort = (column: string) => {
+    let direction = 'ascending';
+    if (sortConfig.column === column && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ column, direction });
+    if (column === 'userName') {
+      toggleSortUsersByName();
+    }
+    if (column === 'userLevel') {
+      toggleSortUsersByLevel();
+    }
+  };
+  
+
+  
+
   return (
     <div className="container mx-auto p-5">
       <div className="flex justify-end">
@@ -109,14 +156,23 @@ const UserList = () => {
         </button>
       </div>
       <table className="w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
+      <thead className="bg-gray-50">
+  <tr>
+    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('userName')}>
+      Name {sortConfig.column === 'userName' ? (sortConfig.direction === 'ascending' ? '▼' : '▲') : '▶'}
+    </th>
+    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Email
+    </th>
+    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => requestSort('userLevel')}>
+      Level {sortConfig.column === 'userLevel' ? (sortConfig.direction === 'ascending' ? '▼' : '▲') : '▶'}
+    </th>
+    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      Actions
+    </th>
+  </tr>
+</thead>
+
         <tbody className="bg-white divide-y divide-gray-200">
           {users.map((user) => (
             <tr key={user.id}>

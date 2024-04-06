@@ -13,7 +13,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
   
   let productUrl2 = ''; // Initialize as an empty string
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(3);
+  const [itemsPerPage] = useState(16);
   const totalPages = Math.ceil(products.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
