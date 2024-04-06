@@ -102,23 +102,9 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
   }
 });
 
-//Simulation
+//Simulation 1 Line
 let scanIntervalId; // Declare scanIntervalId variable globally
 let errorUpdateIntervalId; // Declare errorUpdateIntervalId variable globally
-
-// Endpoint for stopping the simulation
-app.post("/api/simulation/stop", async (req, res) => {
-  try {
-    // Clear the intervals to stop updating TotalScanned and TotalNumberErrors
-    clearInterval(scanIntervalId);
-    clearInterval(errorUpdateIntervalId);
-    res.json({ success: true, message: "Simulation stopped" });
-    console.log("Simulation stopped");
-  } catch (error) {
-    console.error("Error stopping simulation:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 
 // Endpoint for starting the simulation by inserting a row and updating TotalScanned and having an error after minute
 // 1 line scanning every 2 seconds, error after 1 minute, based on analysis intervention after 8 seconds -> stop the line
@@ -172,6 +158,72 @@ app.post("/api/systemSimulation1", async (req, res) => {
       res.json({ success: true, message: "Simulation started" });
       console.error("Simulation started");
     });
+  } catch (error) {
+    console.error("Error starting simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Endpoint for stopping the simulation
+app.post("/api/simulation/stop", async (req, res) => {
+  try {
+    // Clear the intervals to stop updating TotalScanned and TotalNumberErrors
+    clearInterval(scanIntervalId);
+    clearInterval(errorUpdateIntervalId);
+    res.json({ success: true, message: "Simulation stopped" });
+    console.log("Simulation stopped");
+  } catch (error) {
+    console.error("Error stopping simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/api/systemSimulation2", async (req, res) => {
+  try {
+    const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)";
+    const insertValues = [5, '2023-04-12', 0, 0, 6, '2023-04-12', 0, 0, 7, '2023-04-12', 0, 0, 8, '2023-04-12', 0, 0, 10, '2023-04-12', 0, 0];
+
+    db.query(insertQuery, insertValues, (insertError, insertResults) => {
+      if (insertError) {
+        console.error("Error inserting rows:", insertError);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      scanIntervalId = setInterval(() => {
+        const updateQueries = [
+          "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode IN (?, ?, ?, ?, ?)",
+        ];
+        const updateValues = [5, 6, 7, 8, 10];
+
+        db.query(updateQueries.join(';'), updateValues, (updateError, updateResults) => {
+          if (updateError) {
+            console.error("Error updating TotalScanned:", updateError);
+            clearInterval(scanIntervalId); 
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+        });
+      }, 2000); 
+
+      setTimeout(() => {
+        errorUpdateIntervalId = setInterval(() => {
+          const errorUpdateQueries = [
+            "UPDATE productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode IN (?, ?, ?, ?, ?)",
+          ];
+          const errorUpdateValues = [5, 6, 7, 8, 10];
+
+          db.query(errorUpdateQueries.join(';'), errorUpdateValues, (updateError, updateResults) => {
+            if (updateError) {
+              console.error("Error updating TotalNumberErrors:", updateError);
+              clearInterval(errorUpdateIntervalId); 
+              return res.status(500).json({ error: "Internal Server Error" });
+            }
+          });
+        }, 2000);
+      }, 60000);
+
+      res.json({ success: true, message: "Simulation started" });
+      console.error("Simulation started");
+    }); 
   } catch (error) {
     console.error("Error starting simulation:", error);
     res.status(500).json({ error: "Internal Server Error" });

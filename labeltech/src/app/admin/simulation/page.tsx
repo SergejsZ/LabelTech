@@ -18,6 +18,17 @@ const Simuation = () => {
       });
   }
 
+  function startSimulation2() {
+    axios
+      .post("http://localhost:4000/api/systemSimulation2", {})
+      .then((response) => {
+        console.log("Simulation started successfully:");
+      })
+      .catch((error) => {
+        console.error("Error running simulation:", error);
+      });
+  }
+
   function stopSimulation() {
     axios
       .post("http://localhost:4000/api/simulation/stop", {})
@@ -46,23 +57,36 @@ const Simuation = () => {
   } else {
     return (
       <PageLayout>
-        <button
-          className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => {
-            startSimulation();
-          }}
-        >
-          Simulate 1 Line
-        </button>
+        <div>
+          <button
+            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => {
+              startSimulation();
+            }}
+          >
+            Simulate 1 Line
+          </button>
+        </div>
 
-        <button
-          className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => {
-            stopSimulation();
-          }}
-        >
-          Stop Simulation
-        </button>
+        <div>
+          <button
+            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => {
+              startSimulation2();
+            }}
+          >
+            Simulate 5 Lines
+          </button>
+
+          <button
+            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => {
+              stopSimulation();
+            }}
+          >
+            Stop Simulation
+          </button>
+        </div>
       </PageLayout>
     );
   }

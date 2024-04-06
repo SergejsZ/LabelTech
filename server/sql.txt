@@ -30,13 +30,13 @@ CREATE TABLE IF NOT EXISTS Defects ( DefectID VARCHAR(255) PRIMARY KEY, DefectTy
 -- Create the ProductsScannedLog table
 
 CREATE TABLE IF NOT EXISTS ProductsScannedLog (
-  ProductScannedID INT PRIMARY KEY,
+  ProductScannedID INT AUTO_INCREMENT PRIMARY KEY,
   ProductScannedCode INT,
   ProductScannedDate DATE,
   TotalScanned INT,
   TotalNumberErrors INT,
-  -- FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductId)  -- Corrected reference to ProductId
-  FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductCode)
+  FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductId)  -- Corrected reference to ProductId
+  -- FOREIGN KEY (ProductScannedCode) REFERENCES Product(ProductCode)
 );
 -- Create the LabelErrorHistory table
 
