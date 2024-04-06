@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/PageLayout';
 import CustomerList from '@/components/CustomerList';
 import { useAuth } from '@/app/hooks/useAuth';
+import Loading from '@/components/Loading';
 
 const Page = () => {
   useAuth();
@@ -19,7 +20,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   else{
     return (

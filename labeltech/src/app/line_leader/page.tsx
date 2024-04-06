@@ -6,6 +6,7 @@ import { CheckCircleIcon, ExclamationCircleIcon, ExclamationTriangleIcon } from 
 import ProgressionBar from '@/components/ProgressionBar';
 import { useAuth } from '../hooks/useAuth';
 import Loading from '@/components/Loading';
+import { json } from 'stream/consumers';
 
 const formatDate = (date: Date) => {
   const day = String(date.getDate()).padStart(2, '0');
@@ -45,6 +46,8 @@ const Page = () => {
   const [products, setProducts] = useState([]);
   const [previouscriticalPackingError, setPreviouscriticalPackingError] = useState(criticalPackingError);
   const [showAlert, setShowAlert] = useState(false);
+  const [productLog, setProductLog] = useState([]);
+  const [productLogTmp, setProductLogTmp] = useState([]);
 
   //last ten scans is a list of strings, each string represents a scan
   const [lastTenScans, setLastTenScans] = useState<string[]>([]);
@@ -64,26 +67,26 @@ const [errorData, setErrorData] = useState([]);
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    const fetchErrorData = async () => {
-      try {
-        const response = await axios.get('http://localhost:4000/api/labelErrors');
-        // Assuming the API returns the data sorted, or you might need to sort it here based on timestamp
-        setErrorData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching error data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchErrorData = async () => {
+  //     try {
+  //       const response = await axios.get('http://localhost:4000/api/labelErrors');
+  //       // Assuming the API returns the data sorted, or you might need to sort it here based on timestamp
+  //       setErrorData(response.data);
+  //       console.log(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching error data:", error);
+  //     }
+  //   };
   
-    fetchErrorData();
+  //   fetchErrorData();
   
-    // Set up a poll interval
-    const intervalId = setInterval(fetchErrorData, 5000); // Adjust the 5000ms (5 seconds) as needed
+  //   // Set up a poll interval
+  //   const intervalId = setInterval(fetchErrorData, 5000); // Adjust the 5000ms (5 seconds) as needed
   
-    // Clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, []);
+  //   // Clear the interval when the component unmounts
+  //   return () => clearInterval(intervalId);
+  // }, []);
   
 
     useEffect(() => {
@@ -116,7 +119,7 @@ useEffect(() => {
       setDispatchDate(formatDate(new Date(storedDispatchDate)));
       setIsButtonDisabled(false);
     }
-  }, []);
+  }, []);  
 
   const handleConfirm = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
@@ -125,6 +128,7 @@ useEffect(() => {
     localStorage.setItem('dispatchDate', dispatchDate);
     setIsButtonDisabled(false);
   };
+
 
   const clearLocalStorage = async () => {
     const confirmDelete = window.confirm(
@@ -140,17 +144,21 @@ useEffect(() => {
       setProductCode('');
       setDispatchDate('');
       setIsButtonDisabled(true);
+      setLastTenScans([]);
     }
   };
 
   useEffect(() => {
     let interval: string | number | NodeJS.Timeout | undefined;
+
     if (running) {
       interval = setInterval(() => {
+
+
         setPackedWithoutError((prev) => prev + 1);
         if ((packedWithoutError + 1) % 5 === 0) {
           setPackingError((err) => err + 1);
-          //add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
+          // add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
           if (lastTenScans.length === 10) {
             setLastTenScans((prev) => prev.slice(1).concat('missplacement'));
           } else {
@@ -159,7 +167,7 @@ useEffect(() => {
         }
         else if ((packedWithoutError + 1) % 8 === 0) {
           setCriticalPackingError((err) => err + 1);
-          //add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
+          // add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
           if (lastTenScans.length === 10) {
             setLastTenScans((prev) => prev.slice(1).concat('date'));
           } else {
@@ -167,7 +175,7 @@ useEffect(() => {
           }
         }
         else{
-          //add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
+          // add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
           if (lastTenScans.length === 10) {
             setLastTenScans((prev) => prev.slice(1).concat(''));
           } else {
@@ -257,12 +265,12 @@ useEffect(() => {
               </div>
 
               {/* Packing Error Display */}
-              <div className="flex justify-between items-center mb-4 p-3 bg-gray-100 border border-gray-300 rounded">
+              {/* <div className="flex justify-between items-center mb-4 p-3 bg-gray-100 border border-gray-300 rounded">
                 <span>Non-critical error:</span>
                 <span className="text-xl font-bold p-2 bg-gray-200 rounded flex">{packingError} {packingError !== 0 && <ExclamationTriangleIcon className="h-8 w-8 text-yellow-500" />}</span>
-              </div>
+              </div> */}
               <div className="flex justify-between items-center mb-4 p-3 bg-gray-100 border border-gray-300 rounded">
-                <span>Critical error</span>
+                <span>Errors</span>
                 <span className="text-xl font-bold p-2 bg-gray-200 rounded flex">{criticalPackingError} {criticalPackingError !== 0 && <ExclamationCircleIcon className='h-8 h-8 text-red-500' />}</span>
               </div>
             </div>
@@ -279,7 +287,7 @@ useEffect(() => {
           </button>
         </div>
         {showAlert && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-md flex items-center justify-center z-50">
         <div className="flex flex-col items-center justify-center bg-white p-4 rounded">
           <div>
             <ExclamationTriangleIcon className="h-30 w-30 text-red-500 animate-blink" />
@@ -290,7 +298,6 @@ useEffect(() => {
       </div>
       )}
       
-        {/* Progression bar component */}
         <ProgressionBar errorData={lastTenScans} />
       </div>
     );

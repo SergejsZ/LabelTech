@@ -260,7 +260,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
         {/* {filteredProducts.map((product) => ( */}
         {currentItems.map((product) => (
           <div 
-            className="relative transform transition-transform duration-500 hover:scale-110 w-full"
+            className="relative transform transition-transform duration-500 hover:scale-105 w-full"
             key={product.productId}
           >
             <Product

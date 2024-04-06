@@ -9,6 +9,10 @@ interface PageLayoutProps {
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
     <div className='h-screen'>
+        <div id="loader-wrapper">
+          <div className='loader-section section-left'></div>
+          <div className='loader-section section-right'></div>
+        </div>
         {/* <SideBar /> */}
         <NavBar />
       {children}

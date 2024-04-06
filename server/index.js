@@ -144,7 +144,7 @@ app.post("/api/systemSimulation", async (req, res) => {
   try {
     // Insert a row into the database
     const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
-    const insertValues = [5, '2023-04-12', 0, 0];
+    const insertValues = [4, '2023-04-12', 0, 0];
 
     db.query(insertQuery, insertValues, (insertError, insertResults) => {
       if (insertError) {
@@ -155,7 +155,7 @@ app.post("/api/systemSimulation", async (req, res) => {
       //update TotalScanned every 3 seconds
       intervalId = setInterval(() => {
         const updateQuery = "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
-        const updateValues = [5];
+        const updateValues = [4];
 
         db.query(updateQuery, updateValues, (updateError, updateResults) => {
           if (updateError) {
@@ -730,7 +730,7 @@ app.get('/api/labelErrors', async (req, res) => {
               return res.status(500).json({ error: "Internal Server Error" });
           }
           res.json(results);
-          console.log(results);
+          // console.log(results);
       });
   } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
@@ -876,4 +876,32 @@ app.post("/api/logout", (req, res) => {
     console.error("error on disconection:", error);
     res.status(500).json({ error: "internal server error" });
   });
+});
+
+//get the productscanlog of the product select
+app.get('/api/productscanlog/:productCode', async (req, res) => {
+  try {
+    const { productCode } = req.params;
+
+    const query = 'SELECT * FROM `ProductsScannedLog` WHERE ProductScannedCode = (SELECT ProductId FROM `Product` WHERE ProductCode = ?)';
+
+    db.query(query, [productCode], (error, results) => {
+      if (error) {
+        console.error('Error executing SQL query:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      const productScanLog = results.map((product) => ({
+        productScannedCode: product.ProductScannedCode,
+        productScannedDate: product.ProductScannedDate,
+        totalScanned: product.TotalScanned,
+        totalNumberErrors: product.TotalNumberErrors,
+      }));
+
+      res.json(productScanLog);
+    });
+  } catch (error) {
+    console.error('Error fetching product data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
