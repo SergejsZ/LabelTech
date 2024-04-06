@@ -22,8 +22,11 @@ const Home: React.FC = () => {
         console.log('Decoded:', decodedUserData);
         if (decodedUserData.role === 'Admin') {
           window.location.href = '/admin';
-        } else {
+        } else if (decodedUserData.role === 'Leader') {
           window.location.href = '/line_leader';
+        }
+        else{
+          window.location.href = '/quality';
         }
       }
     }
