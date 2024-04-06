@@ -27,7 +27,7 @@ const Page = () => {
   else{
     return (
       <PageLayout >
-      <div className='ml-8 mt-10 w-full'>
+      <div className='pl-8 pt-10 w-full'>
         <h2 className='text-2xl font-bold mb-10'>User Managment</h2>
         <UserList />
       </div>

@@ -70,7 +70,7 @@ const Page = () => {
   else{
     return (
       <PageLayout >
-      <div className='pl-8 mt-10 w-full'>
+      <div className='pl-8 pt-10 w-full'>
         <h2 className='text-2xl font-bold mb-10'>Products Managment</h2>
         <ProductGrid products={products.map((product) => ({ productId: product.productId,productName: product.productName, productCode: product.productCode,productWeight:product.productWeight, productCustomerID: product.productCustomerID, productExpiryDate: product.productExpiryDate, productUrl: product.productUrl }))} />
       </div>
