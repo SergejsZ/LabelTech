@@ -73,7 +73,7 @@ const Page = () => {
   }
 
   function startSimulation() {
-    axios.post('http://localhost:4000/api/systemSimulation', {
+    axios.post('http://localhost:4000/api/systemSimulation1', {
       // Any data you want to send to the endpoint goes here
     })
     .then((response) => {
