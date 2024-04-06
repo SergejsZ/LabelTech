@@ -125,7 +125,7 @@ app.post("/api/simulation/stop", async (req, res) => {
 app.post("/api/systemSimulation1", async (req, res) => {
   try {
     const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
-    const insertValues = [4, '2023-04-12', 0, 0];
+    const insertValues = [5, '2023-04-12', 0, 0];
 
     db.query(insertQuery, insertValues, (insertError, insertResults) => {
       if (insertError) {
@@ -136,7 +136,7 @@ app.post("/api/systemSimulation1", async (req, res) => {
       //update TotalScanned every 2 seconds
       scanIntervalId = setInterval(() => {
         const updateQuery = "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
-        const updateValues = [4];
+        const updateValues = [5];
 
         db.query(updateQuery, updateValues, (updateError, updateResults) => {
           if (updateError) {
