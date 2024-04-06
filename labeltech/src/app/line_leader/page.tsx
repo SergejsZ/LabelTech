@@ -14,6 +14,12 @@ const formatDate = (date: Date) => {
   return `${year}-${month}-${day}`;
 };
 
+async function logout() {
+  localStorage.removeItem('token');
+  await fetch('/api/logout');
+  window.location.href = '/login';
+}
+
 const Page = () => {
   useAuth();
 
@@ -177,7 +183,7 @@ useEffect(() => {
     setRunning(!running);
   }
 
-  if (Loading) {
+  if (loading) {
     return <Loading />;
   }
 
@@ -187,8 +193,10 @@ useEffect(() => {
         {/* Page content */}
         <div className='flex justify-end w-full mt-10'>
           <p className='mr-5'>Today&apos;s date:</p>
-          <p className='greyinput mr-16'>{currentDate}</p>
+          <p className='greyinput mr-8'>{currentDate}</p>
+          <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-16' onClick={logout}>Logout</button>
         </div>
+        
         <div className="flex p-5 flex-col space-y-10 md:flex-row md:space-x-5 md:space-y-0">
           {/* Form for product code and dispatch date */}
           <form onSubmit={handleConfirm} className="flex-1 bg-white shadow-lg rounded-lg p-6 mr-3 text-center">
