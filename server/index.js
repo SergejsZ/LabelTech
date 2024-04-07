@@ -397,6 +397,50 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+//display a specific product
+app.get("/api/products/:productId", async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const query = `
+      SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, 
+             DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, 
+             ProductImageURL 
+      FROM Product
+      WHERE ProductId = ?
+    `;
+
+    console.log("Request body:", req.params);
+
+    db.query(query, [productId], (error, results) => {
+      if (error) {
+        console.error("Error executing SQL query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+
+      const product = results[0];
+      res.json({
+        productId: product.ProductId,
+        productCode: product.ProductCode,
+        productName: product.ProductName,
+        productWeight: product.ProductWeight,
+        productCustomerID: product.ProductCustomerID,
+        productExpiryDate: product.ProductExpiryDate,
+        productUrl: product.ProductImageURL,
+      });
+    });
+
+  } catch (error) {
+    console.error("Error fetching product data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+);
+
 //login
 app.post("/api/login", async (req, res) => {
   try {
