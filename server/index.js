@@ -152,6 +152,21 @@ app.post("/api/simulation/stop", async (req, res) => {
   }
 });
 
+app.post("/api/simulation/stop/:line", async (req, res) => {
+  try {
+    const selectedLine = req.params.line;
+    // Clear the intervals associated with the selected line
+    clearInterval(scanIntervalId[selectedLine]);
+    clearInterval(errorUpdateIntervalId[selectedLine]);
+    res.json({ success: true, message: "Simulation stopped" });
+    console.log("Simulation stopped");
+  } catch (error) {
+    console.error("Error stopping simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 //Simulation 1 Line
 let scanIntervalId; // Declare scanIntervalId variable globally
 let errorUpdateIntervalId; // Declare errorUpdateIntervalId variable globally
@@ -160,19 +175,20 @@ let errorUpdateIntervalId; // Declare errorUpdateIntervalId variable globally
 // 1 line scanning every 2 seconds, error after 1 minute, based on analysis intervention after 8 seconds -> stop the line
 app.post("/api/systemSimulation1", async (req, res) => {
   try {
-    const insertQuery = "INSERT INTO Productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
-    const insertValues = [4, '2023-04-12', 0, 0];
+    // const insertQuery = "INSERT INTO Productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
+    // const insertValues = [4, '2023-04-12', 0, 0];
 
-    db.query(insertQuery, insertValues, (insertError, insertResults) => {
-      if (insertError) {
-        console.error("Error inserting row:", insertError);
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
+    db.query(
+       (insertError, insertResults) => {
+      // if (insertError) {
+      //   console.error("Error inserting row:", insertError);
+      //   return res.status(500).json({ error: "Internal Server Error" });
+      // }
 
       //update TotalScanned every 2 seconds
       scanIntervalId = setInterval(() => {
         const updateQuery = "UPDATE Productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
-        const updateValues = [4];
+        const updateValues = [88];
 
         db.query(updateQuery, updateValues, (updateError, updateResults) => {
           if (updateError) {
@@ -190,7 +206,7 @@ app.post("/api/systemSimulation1", async (req, res) => {
         
 
           const updateQuery = "UPDATE Productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode = ?";
-          const updateValues = [5];
+          const updateValues = [88];
 
           db.query(updateQuery, updateValues, (updateError, updateResults) => {
             if (updateError) {
@@ -214,16 +230,85 @@ app.post("/api/systemSimulation1", async (req, res) => {
   }
 });
 
+app.post("/api/startLine/:line", async (req, res) => {
+  try {
+    const selectedLine = req.params.line;
+    const lineCodeMap = {
+      Line1: 1,
+      Line2: 2,
+      Line3: 3,
+      Line4: 4,
+      Line5: 5,
+      Line6: 6,
+      Line7: 7,
+      Line8: 8,
+      Line9: 9, // Added missing Line9
+      Line10: 10,
+    };
+
+    const lineCode = lineCodeMap[selectedLine];
+    if (!lineCode) {
+      return res.status(400).json({ error: "Invalid line" });
+    }
+
+    db.query(
+      (insertError, insertResults) => {
+        // update TotalScanned every 2 seconds
+        const scanIntervalId = setInterval(() => {
+          const updateQuery = "UPDATE Productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
+          const updateValues = [lineCode];
+          db.query(updateQuery, updateValues, (updateError, updateResults) => {
+            if (updateError) {
+              console.error("Error updating TotalScanned:", updateError);
+              clearInterval(scanIntervalId); // Stop the interval if an error occurs
+              return res.status(500).json({ error: "Internal Server Error" });
+            }
+          });
+        }, 2000);
+
+        // loop to execute the error update query four times with a 2-second delay between each execution
+        setTimeout(() => {
+          const errorUpdateIntervalId = setInterval(() => {
+            const updateQuery = "UPDATE Productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode = ?";
+            const updateValues = [lineCode];
+            db.query(updateQuery, updateValues, (updateError, updateResults) => {
+              if (updateError) {
+                console.error("Error updating TotalNumberErrors:", updateError);
+                clearInterval(scanIntervalId); // Stop the scan interval if an error occurs
+                clearInterval(errorUpdateIntervalId); // Stop the error update interval if an error occurs
+                return res.status(500).json({ error: "Internal Server Error" });
+              }
+            });
+          }, 2000);
+        }, 60000);
+
+        res.json({ success: true, message: "Simulation started" });
+        console.log("Simulation started");
+      }
+    );
+  } catch (error) {
+    console.error("Error starting simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
 app.post("/api/systemSimulation2", async (req, res) => {
   try {
-    const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)";
-    const insertValues = [5, '2023-04-12', 0, 0, 6, '2023-04-12', 0, 0, 7, '2023-04-12', 0, 0, 8, '2023-04-12', 0, 0, 10, '2023-04-12', 0, 0];
+    // const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)";
+    // const insertValues = [5, '2023-04-12', 0, 0, 6, '2023-04-12', 0, 0, 7, '2023-04-12', 0, 0, 8, '2023-04-12', 0, 0, 10, '2023-04-12', 0, 0];
 
-    db.query(insertQuery, insertValues, (insertError, insertResults) => {
-      if (insertError) {
-        console.error("Error inserting rows:", insertError);
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
+    // db.query(insertQuery, insertValues, (insertError, insertResults) => {
+    //   if (insertError) {
+    //     console.error("Error inserting rows:", insertError);
+    //     return res.status(500).json({ error: "Internal Server Error" });
+    //   }
+
+     db.query((insertError, insertResults) => {
+      // if (insertError) {
+      //   console.error("Error inserting rows:", insertError);
+      //   return res.status(500).json({ error: "Internal Server Error" });
+      // }
 
       scanIntervalId = setInterval(() => {
         const updateQueries = [
@@ -246,6 +331,64 @@ app.post("/api/systemSimulation2", async (req, res) => {
             "UPDATE productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode IN (?, ?, ?, ?, ?)",
           ];
           const errorUpdateValues = [5, 6, 7, 8, 10];
+
+          db.query(errorUpdateQueries.join(';'), errorUpdateValues, (updateError, updateResults) => {
+            if (updateError) {
+              console.error("Error updating TotalNumberErrors:", updateError);
+              clearInterval(errorUpdateIntervalId); 
+              return res.status(500).json({ error: "Internal Server Error" });
+            }
+          });
+        }, 2000);
+      }, 60000);
+
+      res.json({ success: true, message: "Simulation started" });
+      console.error("Simulation started");
+    }); 
+  } catch (error) {
+    console.error("Error starting simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/api/systemSimulation3", async (req, res) => {
+  try {
+    // const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?)";
+    // const insertValues = [5, '2023-04-12', 0, 0, 6, '2023-04-12', 0, 0, 7, '2023-04-12', 0, 0, 8, '2023-04-12', 0, 0, 10, '2023-04-12', 0, 0];
+
+    // db.query(insertQuery, insertValues, (insertError, insertResults) => {
+    //   if (insertError) {
+    //     console.error("Error inserting rows:", insertError);
+    //     return res.status(500).json({ error: "Internal Server Error" });
+    //   }
+
+      db.query((insertError, insertResults) => {
+        // if (insertError) {
+        //   console.error("Error inserting rows:", insertError);
+        //   return res.status(500).json({ error: "Internal Server Error" });
+        // }
+
+      scanIntervalId = setInterval(() => {
+        const updateQueries = [
+          "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        ];
+        const updateValues = [1, 2, 3, 4, 5, 6, 7, 8, 10, 88];
+
+        db.query(updateQueries.join(';'), updateValues, (updateError, updateResults) => {
+          if (updateError) {
+            console.error("Error updating TotalScanned:", updateError);
+            clearInterval(scanIntervalId); 
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+        });
+      }, 2000); 
+
+      setTimeout(() => {
+        errorUpdateIntervalId = setInterval(() => {
+          const errorUpdateQueries = [
+            "UPDATE productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          ];
+          const errorUpdateValues = [1, 2, 3, 4, 5, 6, 7, 8, 10, 88];
 
           db.query(errorUpdateQueries.join(';'), errorUpdateValues, (updateError, updateResults) => {
             if (updateError) {

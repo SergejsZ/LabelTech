@@ -8,6 +8,20 @@ import Chart from "chart.js/auto";
 const Simulation = () => {
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [selectedLine, setSelectedLine] = useState(""); // State to hold the selected line
+
+  const lines = [
+    "Line 1",
+    "Line 2",
+    "Line 3",
+    "Line 4",
+    "Line 5",
+    "Line 6",
+    "Line 7",
+    "Line 8",
+    "Line 9",
+    "Line 10",
+  ];
   // const [productData, setProductData] = useState({
   //   TotalNumberErrors: 0,
   //   TotalScanned: 0,
@@ -49,17 +63,61 @@ const Simulation = () => {
       });
   }
 
-  function stopSimulation() {
+  function startSimulation3() {
     axios
-      .post("http://localhost:4000/api/simulation/stop", {})
+      .post("http://localhost:4000/api/systemSimulation3", {})
       .then((response) => {
-        setIsSimulationRunning(false);
-        console.log("Simulation stopped successfully:");
+        setIsSimulationRunning(true);
+        console.log("Simulation started successfully:");
       })
       .catch((error) => {
         console.error("Error running simulation:", error);
       });
   }
+
+  function startLine() {
+    axios
+      .post(`http://localhost:4000/api/startLine/${selectedLine}`, {})
+      .then((response) => {
+        setIsSimulationRunning(true);
+        console.log("Simulation started successfully:");
+      })
+      .catch((error) => {
+        console.error("Error running simulation:", error);
+      });
+  }
+
+  // function stopSimulation() {
+  //   axios
+  //     .post("http://localhost:4000/api/simulation/stop", {})
+  //     .then((response) => {
+  //       setIsSimulationRunning(false);
+  //       console.log("Simulation stopped successfully:");
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error running simulation:", error);
+  //     });
+  // }
+
+  const stopSimulation = () => {
+    // Check if a line is selected
+    if (selectedLine) {
+      axios
+        .post(`http://localhost:4000/api/simulation/stop/${selectedLine}`)
+        .then((response) => {
+          setIsSimulationRunning(false);
+          console.log(
+            `Simulation stopped successfully for ${selectedLine}:`,
+            response.data
+          );
+        })
+        .catch((error) => {
+          console.error("Error stopping simulation:", error);
+        });
+    } else {
+      console.error("No line selected to stop simulation.");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,7 +188,7 @@ const Simulation = () => {
           ],
           datasets: [
             {
-              label: "Errors",
+              //label: "Errors",
               data: [
                 productData.Line1.TotalNumberErrors,
                 productData.Line2.TotalNumberErrors,
@@ -143,17 +201,57 @@ const Simulation = () => {
                 productData.Line9.TotalNumberErrors,
                 productData.Line10.TotalNumberErrors,
               ],
-              backgroundColor: "red", // Specify color for bars
-              borderColor: "red",
+              backgroundColor: [
+                "red",
+                "blue",
+                "green",
+                "yellow",
+                "purple",
+                "orange",
+                "cyan",
+                "magenta",
+                "lime",
+                "indigo",
+              ],
+              borderColor: [
+                "red",
+                "blue",
+                "green",
+                "yellow",
+                "purple",
+                "orange",
+                "cyan",
+                "magenta",
+                "lime",
+                "indigo",
+              ],
               borderWidth: 1,
             },
           ],
         },
         options: {
-          animation: false, // Disable animations
+          animation: false,
           scales: {
             y: {
-              beginAtZero: true,
+              title: {
+                display: true,
+                text: "No. of Errors",
+              },
+              //beginAtZero: true,
+              suggestedMax: 100,
+            },
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: "Errors",
+              font: {
+                size: 16,
+                weight: "bold",
+              },
+            },
+            legend: {
+              display: false,
             },
           },
         },
@@ -201,17 +299,57 @@ const Simulation = () => {
                 productData.Line9.TotalScanned,
                 productData.Line10.TotalScanned,
               ],
-              backgroundColor: "blue", // Specify color for bars
-              borderColor: "blue",
+              backgroundColor: [
+                "red",
+                "blue",
+                "green",
+                "yellow",
+                "purple",
+                "orange",
+                "cyan",
+                "magenta",
+                "lime",
+                "indigo",
+              ],
+              borderColor: [
+                "red",
+                "blue",
+                "green",
+                "yellow",
+                "purple",
+                "orange",
+                "cyan",
+                "magenta",
+                "lime",
+                "indigo",
+              ],
               borderWidth: 1,
             },
           ],
         },
         options: {
-          animation: false, // Disable animations
+          animation: false,
           scales: {
             y: {
-              beginAtZero: true,
+              title: {
+                display: true,
+                text: "No. of Total Scanned",
+              },
+              beginAtZero: false,
+              suggestedMax: 100,
+            },
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: "Total Scanned",
+              font: {
+                size: 16,
+                weight: "bold",
+              },
+            },
+            legend: {
+              display: false,
             },
           },
         },
@@ -226,44 +364,83 @@ const Simulation = () => {
   return (
     <PageLayout>
       <div>
-        <button
-          className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-          onClick={startSimulation}
-        >
-          Simulate Line 1 start
-        </button>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <select
+            value={selectedLine}
+            onChange={(e) => setSelectedLine(e.target.value)}
+          >
+            <option value="">Select Line</option>
+            <option value="Line1">Line 1</option>
+            <option value="Line2">Line 2</option>
+            <option value="Line3">Line 3</option>
+            <option value="Line4">Line 4</option>
+            <option value="Line5">Line 5</option>
+            <option value="Line6">Line 6</option>
+            <option value="Line7">Line 7</option>
+            <option value="Line8">Line 8</option>
+            <option value="Line9">Line 9</option>
+            <option value="Line10">Line 10</option>
+          </select>
 
-        <button
-          className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-          onClick={startSimulation2}
-        >
-          Simulate Line 1-5 start
-        </button>
+          <button
+            className="bg-blue-500 hover:bg-green-500 text-white font-bold py-2 px-4 rounded ml-2 mt-2"
+            onClick={startLine}
+          >
+            Start Line
+          </button>
 
-        <button
-          className="bg-red-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2"
-          onClick={stopSimulation}
-        >
-          Simulation stop intervention
-        </button>
-
-        {/* Visual indicator for simulation status */}
-        {isSimulationRunning ? (
-          <span className="ml-2">Simulation Running 🟢</span>
-        ) : (
-          <span className="ml-2">Simulation Stopped 🔴</span>
-        )}
-      </div>
-
-      <div style={{ width: "600px", height: "400px" }}>
-        <div>
-          <h2></h2>
-          <canvas id="errorChart" width="100px" height="50px"></canvas>
+          {/* Visual indicator for simulation status */}
+          {isSimulationRunning ? (
+            <span className="ml-2">Lines Running 🟢</span>
+          ) : (
+            <span className="ml-2">Lines Not Running 🔴</span>
+          )}
         </div>
 
-        <div>
-          <h2></h2>
-          <canvas id="totalScannedChart" width="100px" height="50px"></canvas>
+        <div style={{ marginTop: "10px" }}>
+          {/* <button
+            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
+            onClick={startSimulation}
+          >
+            Simulate Line 1 start
+          </button>
+
+          <button
+            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
+            onClick={startSimulation2}
+          >
+            Simulate Line 1-5 start
+          </button>
+
+          <button
+            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
+            onClick={startSimulation3}
+          >
+            Simulate Line 1-10 start
+          </button> */}
+        </div>
+      </div>
+
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            width: "600px",
+            height: "800px",
+            marginRight: "80px",
+            marginLeft: "20px",
+          }}
+        >
+          <div>
+            {/* <h2>Errors</h2> */}
+            <canvas id="errorChart" width="100px" height="50px"></canvas>
+          </div>
+        </div>
+
+        <div style={{ width: "600px", height: "800px" }}>
+          <div>
+            {/* <h2>Total Scanned</h2> */}
+            <canvas id="totalScannedChart" width="100px" height="50px"></canvas>
+          </div>
         </div>
       </div>
     </PageLayout>
