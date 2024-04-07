@@ -173,7 +173,7 @@ const Page = () => {
                       </div> */}
                     </div>
                     <div className="flex items-center">
-                      <span className="inline-block bg-green-200 rounded-full px-3 py-1 text-sm font-semibold text-green-800 mr-2 mb-2">{error.Output}</span>
+                      <span className="inline-block bg-green-200 rounded-full px-3 py-1 text-sm font-semibold text-green-800 mr-2 mb-2">Error type : {error.Output}</span>
                     </div>
                   </div>
                ))}

@@ -429,8 +429,6 @@ app.get("/api/products/:productId", async (req, res) => {
       WHERE ProductId = ?
     `;
 
-    console.log("Request body:", req.params);
-
     db.query(query, [productId], (error, results) => {
       if (error) {
         console.error("Error executing SQL query:", error);
