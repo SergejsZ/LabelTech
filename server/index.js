@@ -104,9 +104,27 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
 
 //Charts
 // Endpoint to get product data
+// app.get('/api/productData', (req, res) => {
+//   // Query to get latest values of TotalScanned and TotalNumberErrors
+//   const query = "SELECT TotalScanned, TotalNumberErrors FROM productsscannedlog";
+
+//   db.query(query, (error, results) => {
+//     if (error) {
+//       console.error("Error fetching product data:", error);
+//       return res.status(500).json({ error: "Internal Server Error" });
+//     }
+
+//     // Extract TotalScanned and TotalNumberErrors from the result
+//     const { TotalScanned, TotalNumberErrors } = results[0];
+
+//     res.json({ TotalScanned, TotalNumberErrors });
+//   });
+// });
+
+// Endpoint to get product data for the first 5 rows
 app.get('/api/productData', (req, res) => {
-  // Query to get latest values of TotalScanned and TotalNumberErrors
-  const query = "SELECT TotalScanned, TotalNumberErrors FROM productsscannedlog";
+  // Query to get the first 5 rows of product data
+  const query = "SELECT TotalScanned, TotalNumberErrors FROM productsscannedlog LIMIT 10";
 
   db.query(query, (error, results) => {
     if (error) {
@@ -114,12 +132,11 @@ app.get('/api/productData', (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
 
-    // Extract TotalScanned and TotalNumberErrors from the result
-    const { TotalScanned, TotalNumberErrors } = results[0];
-
-    res.json({ TotalScanned, TotalNumberErrors });
+    // Send the results as JSON response
+    res.json(results);
   });
 });
+
 
 // Endpoint for stopping the simulation
 app.post("/api/simulation/stop", async (req, res) => {
