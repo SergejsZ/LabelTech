@@ -104,7 +104,11 @@ const CustomerList = () => {
           {customers.map((customer) => (
             <tr key={customer.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{customer.customerName}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.customerEmail}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <a href={`mailto:${customer.customerEmail}`} className="ttext-black font-bold no-underline hover:no-underline">
+                  {customer.customerEmail}
+                </a>
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button onClick={() => handleEditcustomerClick(customer)} className="text-blue-500 hover:text-blue-700 mr-3">
                   <PencilIcon className="h-5 w-5" />
