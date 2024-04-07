@@ -287,7 +287,7 @@ function ProductGrid({ products }: { products: Array<{ productId:number, product
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-10 p-4 w-full" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+        <div className="grid grid-cols-1 gap-10 pr-16 pl-8 w-full" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
         {/* {currentProducts.map((product) => ( */}
 
         {/* {filteredProducts.map((product) => ( */}

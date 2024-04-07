@@ -110,8 +110,8 @@ let errorUpdateIntervalId; // Declare errorUpdateIntervalId variable globally
 // 1 line scanning every 2 seconds, error after 1 minute, based on analysis intervention after 8 seconds -> stop the line
 app.post("/api/systemSimulation1", async (req, res) => {
   try {
-    const insertQuery = "INSERT INTO productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
-    const insertValues = [5, '2023-04-12', 0, 0];
+    const insertQuery = "INSERT INTO Productsscannedlog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, ?, ?)";
+    const insertValues = [4, '2023-04-12', 0, 0];
 
     db.query(insertQuery, insertValues, (insertError, insertResults) => {
       if (insertError) {
@@ -121,8 +121,8 @@ app.post("/api/systemSimulation1", async (req, res) => {
 
       //update TotalScanned every 2 seconds
       scanIntervalId = setInterval(() => {
-        const updateQuery = "UPDATE productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
-        const updateValues = [5];
+        const updateQuery = "UPDATE Productsscannedlog SET TotalScanned = TotalScanned + 1 WHERE ProductScannedCode = ?";
+        const updateValues = [4];
 
         db.query(updateQuery, updateValues, (updateError, updateResults) => {
           if (updateError) {
@@ -139,7 +139,7 @@ app.post("/api/systemSimulation1", async (req, res) => {
         errorUpdateIntervalId = setInterval(() => {
         
 
-          const updateQuery = "UPDATE productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode = ?";
+          const updateQuery = "UPDATE Productsscannedlog SET TotalNumberErrors = TotalNumberErrors + 1 WHERE ProductScannedCode = ?";
           const updateValues = [5];
 
           db.query(updateQuery, updateValues, (updateError, updateResults) => {
@@ -240,7 +240,7 @@ app.put("/api/products/:productId", async (req, res) => {
     const { productCode, productName, productWeight, productCustomerID, productExpiryDate, productUrl } =
       req.body;
 
-    const updateQuery = "UPDATE product SET ProductCode = ?, ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ?, ProductImageURL = ? WHERE ProductId = ?";
+    const updateQuery = "UPDATE Product SET ProductCode = ?, ProductName = ?, ProductWeight = ?, ProductCustomerID = ?, ProductExpiryDate = ?, ProductImageURL = ? WHERE ProductId = ?";
     db.query(updateQuery, [productCode, productName, productWeight, productCustomerID, productExpiryDate, productUrl, productId], (error, results) => {
         if (error) {
           console.error("Error updating product:", error);
@@ -292,7 +292,7 @@ app.get("/api/products/by-customer/:customerId", async (req, res) => {
       SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, 
              DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, 
              ProductImageURL 
-      FROM product
+      FROM Product
       WHERE ProductCustomerID = ? 
     `;
 
@@ -334,7 +334,7 @@ app.get("/api/products/search", async (req, res) => {
       SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, 
              DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, 
              ProductImageURL 
-      FROM product
+      FROM Product
       WHERE LOWER(ProductName) LIKE ? 
     `;
 
@@ -367,7 +367,7 @@ app.get("/api/products/search", async (req, res) => {
 app.get("/api/products", async (req, res) => {
   try {
     const query =
-      'SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImageURL FROM product';
+      'SELECT ProductId, ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImageURL FROM Product';
       //'SELECT ProductCode, ProductName, ProductWeight, ProductCustomerID, DATE_FORMAT(ProductExpiryDate, "%Y-%m-%d") AS ProductExpiryDate, ProductImageURL FROM product';
 
     db.query(query, (error, results) => {
@@ -407,7 +407,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(400).json({ error: "Invalid request body" });
     }
 
-    const query = "SELECT UserID, UserPassword, UserLevel FROM users WHERE BINARY UserName = ?";
+    const query = "SELECT UserID, UserPassword, UserLevel FROM Users WHERE BINARY UserName = ?";
 
     db.query(query, [id], async (error, results) => {
       if (error) {
@@ -463,7 +463,7 @@ app.post("/api/products", async (req, res) => {
     console.log("Request body:", req.body);
 
     const addQuery =
-      "INSERT INTO product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate, ProductImageURL) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO Product (ProductCode, ProductName, ProductWeight, ProductCustomerID, ProductExpiryDate, ProductImageURL) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(
       addQuery,
       [
@@ -493,7 +493,7 @@ app.post("/api/products", async (req, res) => {
 // Add this route to get all users
 app.get("/api/users", async (req, res) => {
   try {
-    const query = "SELECT UserID, UserName, UserLevel, UserEmail FROM users";
+    const query = "SELECT UserID, UserName, UserLevel, UserEmail FROM Users";
 
     db.query(query, (error, results) => {
       if (error) {
@@ -537,7 +537,7 @@ app.delete("/api/users/:userId", async (req, res) => {
         return res.status(400).json({ error: "User is associated with a production line" });
       }
 
-      const deleteQuery = "DELETE FROM users WHERE UserID = ?";
+      const deleteQuery = "DELETE FROM Users WHERE UserID = ?";
       db.query(deleteQuery, [userId], (error, results) => {
         if (error) {
           console.error("Error deleting user:", error);
@@ -593,7 +593,7 @@ app.post("/api/users", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(userPassword, 10);
 
-    const addUserQuery = "INSERT INTO users (UserName, UserPassword, UserEmail, UserLevel) VALUES (?, ?, ?, ?)";
+    const addUserQuery = "INSERT INTO Users (UserName, UserPassword, UserEmail, UserLevel) VALUES (?, ?, ?, ?)";
     db.query(addUserQuery, [userName, hashedPassword, userEmail, userLevel], (error, results) => {
       if (error) {
         console.error("Error adding user:", error);
@@ -617,7 +617,7 @@ app.put("/api/users/:userId", async (req, res) => {
     console.log("Request body:", req.body);
 
     const editUserQuery =
-      "UPDATE users SET UserName = ?, UserLevel = ?, UserEmail = ? WHERE UserID = ?";
+      "UPDATE Users SET UserName = ?, UserLevel = ?, UserEmail = ? WHERE UserID = ?";
 
     db.query(editUserQuery, [userName, userLevel, userEmail, userId], (error, results) => {
       if (error) {
@@ -767,7 +767,7 @@ app.get("/api/customers", async (req, res) => {
 //get the quality errors for exporting
 app.get('/api/qualityErrors', async (req, res) => {
   try {
-      const errorQuery = "SELECT * FROM defects";
+      const errorQuery = "SELECT * FROM Defects";
       db.query(errorQuery, (error, results) => {
           if (error) {
               return res.status(500).json({ error: "Internal Server Error" });
@@ -782,7 +782,7 @@ app.get('/api/qualityErrors', async (req, res) => {
 //get the label errors for exporting
 app.get('/api/labelErrors', async (req, res) => {
   try {
-      const errorQuery = "SELECT * FROM labelerrorhistory";
+      const errorQuery = "SELECT * FROM Labelerrorhistory";
       db.query(errorQuery, (error, results) => {
           if (error) {
               return res.status(500).json({ error: "Internal Server Error" });
@@ -889,7 +889,7 @@ app.get("/api/customersManagement", async (req, res) => {
 // check if customer is associated with a product
 app.get("/api/checkCustomer/:userId", async (req, res) => {
   const { userId } = req.params;
-  const checkQuery = "SELECT * FROM product WHERE ProductCustomerID = ?";
+  const checkQuery = "SELECT * FROM Product WHERE ProductCustomerID = ?";
   db.query(checkQuery, [userId], (error, results) => {
     if (error) {
       console.error("Error checking customer:", error);
@@ -920,7 +920,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 app.get("/api/protected", authenticateToken, (req, res) => {
-  res.json({ message: "Contenu protégé accessible" });
+  res.json({ message: "Authorize" });
 });
 
 
