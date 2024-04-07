@@ -37,7 +37,7 @@ return (
         {errorData.slice(-10).map((error, index) => (
           <div
             key={index}
-            className={`h-10 w-10 ${bgColorForError(error)} rounded-full flex justify-center items-center shadow-lg ring-2 ring-white slide-in-right`}
+            className={`h-16 w-16 ${bgColorForError(error)} rounded-full flex justify-center items-center shadow-lg ring-2 ring-white slide-in-right`}
             title={`Scan ${index + 1}: Output ${error}`}
           >
             <span className="text-sm font-bold text-white">{textForError(error)}</span>
