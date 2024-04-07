@@ -102,6 +102,39 @@ app.post('/upload-image', upload.single('productImageFile'), async (req, res) =>
   }
 });
 
+//Charts
+// Endpoint to get product data
+app.get('/api/productData', (req, res) => {
+  // Query to get latest values of TotalScanned and TotalNumberErrors
+  const query = "SELECT TotalScanned, TotalNumberErrors FROM productsscannedlog";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error fetching product data:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    // Extract TotalScanned and TotalNumberErrors from the result
+    const { TotalScanned, TotalNumberErrors } = results[0];
+
+    res.json({ TotalScanned, TotalNumberErrors });
+  });
+});
+
+// Endpoint for stopping the simulation
+app.post("/api/simulation/stop", async (req, res) => {
+  try {
+    // Clear the intervals to stop updating TotalScanned and TotalNumberErrors
+    clearInterval(scanIntervalId);
+    clearInterval(errorUpdateIntervalId);
+    res.json({ success: true, message: "Simulation stopped" });
+    console.log("Simulation stopped");
+  } catch (error) {
+    console.error("Error stopping simulation:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 //Simulation 1 Line
 let scanIntervalId; // Declare scanIntervalId variable globally
 let errorUpdateIntervalId; // Declare errorUpdateIntervalId variable globally
@@ -160,20 +193,6 @@ app.post("/api/systemSimulation1", async (req, res) => {
     });
   } catch (error) {
     console.error("Error starting simulation:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-// Endpoint for stopping the simulation
-app.post("/api/simulation/stop", async (req, res) => {
-  try {
-    // Clear the intervals to stop updating TotalScanned and TotalNumberErrors
-    clearInterval(scanIntervalId);
-    clearInterval(errorUpdateIntervalId);
-    res.json({ success: true, message: "Simulation stopped" });
-    console.log("Simulation stopped");
-  } catch (error) {
-    console.error("Error stopping simulation:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
