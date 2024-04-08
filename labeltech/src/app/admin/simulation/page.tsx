@@ -10,6 +10,7 @@ const Simulation = () => {
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedLine, setSelectedLine] = useState(""); // State to hold the selected line
+  // const [line1Performance, setLine1Performance] = useState([]);
 
   const lines = [
     "Line 1",
@@ -38,6 +39,16 @@ const Simulation = () => {
     Line8: { TotalNumberErrors: 0, TotalScanned: 0 },
     Line9: { TotalNumberErrors: 0, TotalScanned: 0 },
     Line10: { TotalNumberErrors: 0, TotalScanned: 0 },
+  });
+
+  const [individualLineData, setIndividualLineData] = useState({
+    Monday: { TotalNumberErrors: 0, TotalScanned: 0 },
+    Tuesday: { TotalNumberErrors: 0, TotalScanned: 0 },
+    Wednesday: { TotalNumberErrors: 0, TotalScanned: 0 },
+    Thursday: { TotalNumberErrors: 0, TotalScanned: 0 },
+    Friday: { TotalNumberErrors: 0, TotalScanned: 0 },
+    Saturday: { TotalNumberErrors: 0, TotalScanned: 0 },
+    Sunday: { TotalNumberErrors: 0, TotalScanned: 0 },
   });
 
   function startSimulation() {
@@ -145,6 +156,27 @@ const Simulation = () => {
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
+
+      try {
+        const lineDataResponse = await axios.get(
+          "http://localhost:4000/api/invidualLineData"
+        );
+        console.log("Fetched data:", lineDataResponse.data);
+        //setProductData(response.data);
+        // Inside useEffect
+        setIndividualLineData({
+          Monday: lineDataResponse.data[0],
+          Tuesday: lineDataResponse.data[1],
+          Wednesday: lineDataResponse.data[2],
+          Thursday: lineDataResponse.data[3],
+          Friday: lineDataResponse.data[4],
+          Saturday: lineDataResponse.data[5],
+          Sunday: lineDataResponse.data[6],
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
     };
 
     fetchData();
@@ -165,6 +197,85 @@ const Simulation = () => {
       drawPieChart();
     }
   }, [loading, productData]);
+
+  useEffect(() => {
+    if (!loading) {
+      drawLineChart();
+    }
+  }, [loading, individualLineData]);
+
+  const drawLineChart = () => {
+    const lineCanvas = document.getElementById(
+      "lineChart"
+    ) as HTMLCanvasElement | null;
+    if (lineCanvas) {
+      // Destroy existing chart instance if it exists
+      Chart.getChart(lineCanvas)?.destroy();
+
+      const lineChart = new Chart(lineCanvas, {
+        type: "line",
+        data: {
+          labels: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ],
+          datasets: [
+            {
+              label: "Line 1 Performance",
+              data: [
+                individualLineData.Monday.TotalScanned,
+                individualLineData.Tuesday.TotalScanned,
+                individualLineData.Wednesday.TotalScanned,
+                individualLineData.Thursday.TotalScanned,
+                individualLineData.Friday.TotalScanned,
+                individualLineData.Saturday.TotalScanned,
+                individualLineData.Sunday.TotalScanned,
+              ],
+              borderColor: "blue",
+              backgroundColor: "transparent",
+              pointBackgroundColor: "blue",
+              pointBorderColor: "blue",
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              tension: 0.4,
+            },
+          ],
+        },
+        options: {
+          animation: false,
+          scales: {
+            y: {
+              title: {
+                display: true,
+                text: "No. of Trays Scanned",
+              },
+              //beginAtZero: true,
+              //suggestedMax: 100,
+            },
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: "Line 1 Total Trays Scanned",
+              font: {
+                size: 16,
+                weight: "bold",
+              },
+            },
+            legend: {
+              display: false,
+              position: "bottom",
+            },
+          },
+        },
+      });
+    }
+  };
 
   const totalErrors = Object.values(productData).reduce(
     (acc: number, line: { TotalNumberErrors: number }) =>
@@ -335,7 +446,7 @@ const Simulation = () => {
             y: {
               title: {
                 display: true,
-                text: "No. of Errors",
+                text: "No. of Trays with Errors",
               },
               //beginAtZero: true,
               suggestedMax: 100,
@@ -386,7 +497,7 @@ const Simulation = () => {
           ],
           datasets: [
             {
-              label: "Total Scanned",
+              label: "Total Trays Scanned",
               data: [
                 productData.Line1.TotalScanned,
                 productData.Line2.TotalScanned,
@@ -433,7 +544,7 @@ const Simulation = () => {
             y: {
               title: {
                 display: true,
-                text: "No. of Total Scanned",
+                text: "Total No. of Trays Scanned",
               },
               beginAtZero: false,
               suggestedMax: 100,
@@ -464,30 +575,22 @@ const Simulation = () => {
   return (
     <PageLayout>
       <div style={{ marginLeft: "600px", marginTop: "10px" }}>
-        <select>
-          <option>WEEK 14 - 01/04/2024</option>
-          <option>WEEK 15 - 08/04/2024</option>
+        {/* Dropdown for selecting week */}
+        <select
+          style={{
+            width: "200px",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          <option style={{ fontWeight: "bold" }}>WEEK 14 - 01/04/2024</option>
+          <option style={{ fontWeight: "bold" }}>WEEK 15 - 08/04/2024</option>
         </select>
       </div>
+
+      {/* Line selection and simulation controls */}
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <select
-            value={selectedLine}
-            onChange={(e) => setSelectedLine(e.target.value)}
-          >
-            <option value="">Select Line</option>
-            <option value="Line1">Line 1</option>
-            <option value="Line2">Line 2</option>
-            <option value="Line3">Line 3</option>
-            <option value="Line4">Line 4</option>
-            <option value="Line5">Line 5</option>
-            <option value="Line6">Line 6</option>
-            <option value="Line7">Line 7</option>
-            <option value="Line8">Line 8</option>
-            <option value="Line9">Line 9</option>
-            <option value="Line10">Line 10</option>
-          </select>
-
           <button
             className="bg-blue-500 hover:bg-green-500 text-white font-bold py-2 px-4 rounded ml-2 mt-2"
             onClick={startLine}
@@ -504,61 +607,73 @@ const Simulation = () => {
         </div>
 
         <div style={{ marginTop: "10px" }}>
-          {/* <button
-            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-            onClick={startSimulation}
-          >
-            Simulate Line 1 start
-          </button>
-
-          <button
-            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-            onClick={startSimulation2}
-          >
-            Simulate Line 1-5 start
-          </button>
-
-          <button
-            className="bg-blue-700 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2 mt-2"
-            onClick={startSimulation3}
-          >
-            Simulate Line 1-10 start
-          </button> */}
+          {/* Buttons for starting simulations */}
+          {/* Include your buttons for simulation control here */}
         </div>
       </div>
 
+      {/* Chart area */}
       <div style={{ display: "flex" }}>
+        {/* totalScannedChart chart */}
         <div
           style={{
             width: "600px",
-            height: "800px",
+            height: "300px",
             marginRight: "80px",
             marginLeft: "20px",
-            //marginBottom: "80px",
           }}
         >
-          <div>
-            {/* <h2>Errors</h2> */}
-            <canvas id="errorChart" width="100px" height="50px"></canvas>
-          </div>
+          <canvas
+            id="totalScannedChart"
+            width="100px"
+            height="50px"
+            style={{ marginBottom: "80px" }}
+          ></canvas>
         </div>
 
-        <div style={{ width: "600px", height: "800px" }}>
+        {/* Errors chart */}
+        <div style={{ width: "600px", height: "400px" }}>
           <div>
-            {/* <h2>Total Scanned</h2> */}
             <canvas
-              id="totalScannedChart"
+              id="errorChart"
               width="100px"
               height="50px"
-              style={{
-                marginBottom: "80px",
-              }}
+              style={{ marginBottom: "130px" }}
             ></canvas>
           </div>
-          <div style={{ width: "350px", height: "350px" }}>
+
+          {/* Error percentage pie chart */}
+          <div style={{ width: "350px", height: "350px", marginLeft: "120px" }}>
             <canvas id="errorPercentageChart"></canvas>
           </div>
         </div>
+      </div>
+
+      <div style={{ marginLeft: "300px", marginBottom: "10px" }}>
+        <select
+          style={{
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+          value={selectedLine}
+          onChange={(e) => setSelectedLine(e.target.value)}
+        >
+          <option value="Line1">Line 1</option>
+          <option value="Line2">Line 2</option>
+          <option value="Line3">Line 3</option>
+          <option value="Line4">Line 4</option>
+          <option value="Line5">Line 5</option>
+          <option value="Line6">Line 6</option>
+          <option value="Line7">Line 7</option>
+          <option value="Line8">Line 8</option>
+          <option value="Line9">Line 9</option>
+          <option value="Line10">Line 10</option>
+        </select>
+      </div>
+
+      {/* Line chart */}
+      <div style={{ width: "600px", height: "800px", marginLeft: "15px" }}>
+        <canvas id="lineChart" width="100px" height="50px"></canvas>
       </div>
     </PageLayout>
   );

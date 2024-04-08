@@ -137,6 +137,22 @@ app.get('/api/productData', (req, res) => {
   });
 });
 
+// Endpoint to get product data for the Line 1 performace for week 14
+app.get('/api/invidualLineData', (req, res) => {
+
+  const query = "SELECT TotalScanned, TotalNumberErrors FROM productsscannedlog where ProductScannedCode = 31";
+
+  db.query(query, (error, results) => {
+    if (error) {
+      console.error("Error fetching product data:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    // Send the results as JSON response
+    res.json(results);
+  });
+});
+
 
 // Endpoint for stopping the simulation
 app.post("/api/simulation/stop", async (req, res) => {
