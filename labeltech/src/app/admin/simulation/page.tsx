@@ -4,6 +4,7 @@ import PageLayout from "@/components/PageLayout";
 import Loading from "@/components/Loading";
 import axios from "axios";
 import Chart from "chart.js/auto";
+import "chartjs-plugin-datalabels"; // Import the plugin for data labels
 
 const Simulation = () => {
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
@@ -158,6 +159,105 @@ const Simulation = () => {
       drawCharts();
     }
   }, [loading, productData]);
+
+  useEffect(() => {
+    if (!loading) {
+      drawPieChart();
+    }
+  }, [loading, productData]);
+
+  const totalErrors = Object.values(productData).reduce(
+    (acc: number, line: { TotalNumberErrors: number }) =>
+      acc + line.TotalNumberErrors,
+    0
+  );
+  const errorPercentages = Object.keys(productData).map((line: string) => ({
+    line,
+    percentage:
+      (productData[line as keyof typeof productData].TotalNumberErrors /
+        totalErrors) *
+      100,
+  }));
+
+  const drawPieChart = () => {
+    // Draw pie chart for error percentages
+    const errorPercentageCanvas = document.getElementById(
+      "errorPercentageChart"
+    ) as HTMLCanvasElement | null;
+    if (errorPercentageCanvas) {
+      // Check if a chart instance already exists
+      const existingErrorPercentageChart = Chart.getChart(
+        errorPercentageCanvas
+      );
+      if (existingErrorPercentageChart) {
+        existingErrorPercentageChart.destroy(); // Destroy the existing chart
+      }
+
+      // Create a new Chart instance
+      const errorPercentageChart = new Chart(errorPercentageCanvas, {
+        type: "pie",
+        data: {
+          labels: errorPercentages.map((data) => data.line),
+          datasets: [
+            {
+              data: errorPercentages.map((data) => data.percentage),
+              backgroundColor: [
+                "red",
+                "blue",
+                "green",
+                "yellow",
+                "purple",
+                "orange",
+                "cyan",
+                "magenta",
+                "lime",
+                "indigo",
+              ],
+              borderColor: [
+                "red",
+                "blue",
+                "green",
+                "yellow",
+                "purple",
+                "orange",
+                "cyan",
+                "magenta",
+                "lime",
+                "indigo",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          animation: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Line Errors Pie Chart",
+              font: {
+                size: 16,
+                weight: "bold",
+              },
+            },
+            legend: {
+              display: true,
+              position: "right",
+            },
+            datalabels: {
+              display: true,
+              align: "bottom",
+              backgroundColor: "#ccc",
+              borderRadius: 3,
+              font: {
+                size: 18,
+              },
+            },
+          },
+        },
+      });
+    }
+  };
 
   const drawCharts = () => {
     // Draw error chart
@@ -363,6 +463,12 @@ const Simulation = () => {
 
   return (
     <PageLayout>
+      <div style={{ marginLeft: "600px", marginTop: "10px" }}>
+        <select>
+          <option>WEEK 14 - 01/04/2024</option>
+          <option>WEEK 15 - 08/04/2024</option>
+        </select>
+      </div>
       <div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <select
@@ -428,6 +534,7 @@ const Simulation = () => {
             height: "800px",
             marginRight: "80px",
             marginLeft: "20px",
+            //marginBottom: "80px",
           }}
         >
           <div>
@@ -439,7 +546,17 @@ const Simulation = () => {
         <div style={{ width: "600px", height: "800px" }}>
           <div>
             {/* <h2>Total Scanned</h2> */}
-            <canvas id="totalScannedChart" width="100px" height="50px"></canvas>
+            <canvas
+              id="totalScannedChart"
+              width="100px"
+              height="50px"
+              style={{
+                marginBottom: "80px",
+              }}
+            ></canvas>
+          </div>
+          <div style={{ width: "350px", height: "350px" }}>
+            <canvas id="errorPercentageChart"></canvas>
           </div>
         </div>
       </div>

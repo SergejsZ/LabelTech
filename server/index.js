@@ -234,16 +234,16 @@ app.post("/api/startLine/:line", async (req, res) => {
   try {
     const selectedLine = req.params.line;
     const lineCodeMap = {
-      Line1: 1,
-      Line2: 2,
-      Line3: 3,
-      Line4: 4,
-      Line5: 5,
-      Line6: 6,
-      Line7: 7,
-      Line8: 8,
-      Line9: 9, // Added missing Line9
-      Line10: 10,
+      Line1: 11,
+      Line2: 12,
+      Line3: 13,
+      Line4: 14,
+      Line5: 15,
+      Line6: 16,
+      Line7: 17,
+      Line8: 18,
+      Line9: 19,
+      Line10: 20,
     };
 
     const lineCode = lineCodeMap[selectedLine];
