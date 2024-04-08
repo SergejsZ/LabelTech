@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : mar. 13 fév. 2024 à 15:40
+-- Généré le : dim. 07 avr. 2024 à 16:24
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -52,10 +52,13 @@ CREATE TABLE `Customer` (
 --
 
 INSERT INTO `Customer` (`CustomerID`, `CustomerName`, `CustomerEmail`) VALUES
-(1, 'Tesco', 'tesco@gmail.com'),
-(2, 'Lidl', 'lidl@gmail.com'),
-(3, 'M&S', 'mands@gmail.com'),
-(12, 'dunnes', 'dunnes@gmail.com');
+(1, 'Dunnes store', 'dunnes.store@gmail.com'),
+(3, 'Tesco', 'tesco@gmail.com'),
+(4, 'SuperValu', 'supervalu@gmail.com'),
+(5, 'Morrisons', 'morrisons@gmail.com'),
+(6, 'Lidl', 'lidl@gmail.com'),
+(7, 'Monaghan', 'monaghan.mushies@gmail.com'),
+(8, 'sainsbury', 'sainsbury@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -83,18 +86,18 @@ CREATE TABLE `LabelErrorHistory` (
   `DispatchDate` date DEFAULT NULL,
   `CameraCapture` varchar(255) DEFAULT NULL,
   `ErrorDispatchDate` date DEFAULT NULL,
-  `Output` varchar(255) DEFAULT NULL,
-  `ErrorLine` int(11) NOT NULL,
-  `ErrorTime` varchar(255) NOT NULL,
-  `ErrorDate` date NOT NULL
+  `Output` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `LabelErrorHistory`
 --
 
-INSERT INTO `LabelErrorHistory` (`LabelErrorID`, `ProductCode`, `DispatchDate`, `CameraCapture`, `ErrorDispatchDate`, `Output`, `ErrorLine`, `ErrorTime`, `ErrorDate`) VALUES
-(1, 1, '2024-02-15', 'error.png', '2024-02-16', 'bad dispatch date', 2, '17:11', '2024-02-05');
+INSERT INTO `LabelErrorHistory` (`LabelErrorID`, `ProductCode`, `DispatchDate`, `CameraCapture`, `ErrorDispatchDate`, `Output`) VALUES
+(1, 1, '2024-03-12', 'cam.png', '2024-03-21', 'date'),
+(2, 1, '2024-03-20', NULL, '2024-03-20', 'missplacement'),
+(3, 2, '2024-03-06', NULL, '2024-03-13', 'date'),
+(4, 8, '2024-03-06', NULL, '2024-03-14', 'date');
 
 -- --------------------------------------------------------
 
@@ -104,24 +107,40 @@ INSERT INTO `LabelErrorHistory` (`LabelErrorID`, `ProductCode`, `DispatchDate`, 
 
 CREATE TABLE `Product` (
   `ProductId` int(11) NOT NULL,
-  `ProductCode` varchar(255) NOT NULL,
+  `ProductCode` int(11) DEFAULT NULL,
   `ProductName` varchar(255) DEFAULT NULL,
   `ProductWeight` int(11) DEFAULT NULL,
   `ProductCustomerID` int(11) DEFAULT NULL,
   `ProductExpiryDate` date DEFAULT NULL,
-  `ProductImage` varchar(255) DEFAULT NULL
+  `ProductImageURL` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `Product`
 --
 
-INSERT INTO `Product` (`ProductId`, `ProductCode`, `ProductName`, `ProductWeight`, `ProductCustomerID`, `ProductExpiryDate`, `ProductImage`) VALUES
-(1, '1A1985B1', 'Slice mushrooms', 122, 12, NULL, NULL),
-(3, '2P3901A4', 'Organic Mushrooms', 140, 1, NULL, NULL),
-(4, '6H1944B1', 'Portobello mushrooms', 230, 2, NULL, NULL),
-(10, '1P19A121', 'Paris Mushrooms', 310, 3, NULL, NULL),
-(11, '1J1901C1', 'Baby mushrooms', 200, 3, NULL, NULL);
+INSERT INTO `Product` (`ProductId`, `ProductCode`, `ProductName`, `ProductWeight`, `ProductCustomerID`, `ProductExpiryDate`, `ProductImageURL`) VALUES
+(1, 123, 'Chestnut Mushrooms', 200, 1, '2024-12-31', 'https://storage.googleapis.com/labeltech/chestnut_mushrooms.jpg'),
+(2, 456, 'Sliced', 150, 1, NULL, 'https://storage.googleapis.com/labeltech/sliced_mushrooms.jpg'),
+(3, 652, 'Mushroom Medley', 250, 3, NULL, 'https://storage.googleapis.com/labeltech/mushroom_medley.jpg'),
+(4, 789, 'Baby button', 250, 1, NULL, 'https://storage.googleapis.com/labeltech/baby_button_mushrooms.jpg'),
+(8, 60131, 'Organic baby button', 150, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_organicbabybutton.jpg'),
+(9, 169, 'Chestnut mushrooms', 250, 7, NULL, 'https://storage.googleapis.com/labeltech/early_chestnut.jpeg'),
+(10, 50131, 'Organic chestnut', 250, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_organicChestnut.jpg'),
+(11, 56381, 'Oyster', 120, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_oyster.jpg'),
+(13, 715312, 'Closed cup', 250, 5, NULL, 'https://storage.googleapis.com/labeltech/closed_cup.jpeg'),
+(14, 173548, 'Baby button white', 200, 7, NULL, 'https://storage.googleapis.com/labeltech/sainsburyswhite.jpeg'),
+(15, 90686, 'Button Mushrooms', 180, 5, NULL, 'https://storage.googleapis.com/labeltech/button.jpeg'),
+(17, 567485, 'Rustica ', 150, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_rustica.jpg'),
+(18, 658163, 'Closed cup', 230, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_closed_cup.jpg'),
+(19, 658254, 'Sliced', 240, 7, NULL, 'https://storage.googleapis.com/labeltech/monghan_sliced.jpg'),
+(20, 873654, 'Sliced', 120, 5, NULL, 'https://storage.googleapis.com/labeltech/sliced.jpg'),
+(21, 202831, 'Mini portobello', 250, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_portabello.jpg'),
+(22, 674267, 'Baby button', 120, 7, NULL, 'https://storage.googleapis.com/labeltech/monaghan_baby_button.jpg'),
+(23, 671364, 'Sliced', 200, 4, NULL, 'https://storage.googleapis.com/labeltech/sv_mushrooms.jpeg'),
+(24, 784812, 'Irish large', 120, 1, NULL, 'https://storage.googleapis.com/labeltech/irish_large_mushrooms.jpg'),
+(25, 674874, 'Irish', 200, 1, NULL, 'https://storage.googleapis.com/labeltech/irish_mushrooms.jpg'),
+(26, 613845, 'Irish closed cup', 250, 1, NULL, 'https://storage.googleapis.com/labeltech/irish_closed_cup_mushrooms.jpg');
 
 -- --------------------------------------------------------
 
@@ -134,20 +153,6 @@ CREATE TABLE `ProductionLine` (
   `LineLeader` int(11) DEFAULT NULL,
   `State` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `ProductionLine`
---
-
-INSERT INTO `ProductionLine` (`LineNumber`, `LineLeader`, `State`) VALUES
-(1, 18, 'Active'),
-(2, NULL, 'Ready'),
-(3, NULL, 'Ready'),
-(4, NULL, 'Ready'),
-(5, NULL, 'Ready'),
-(6, NULL, 'Ready'),
-(7, NULL, 'Ready'),
-(8, NULL, 'Ready');
 
 -- --------------------------------------------------------
 
@@ -162,6 +167,14 @@ CREATE TABLE `ProductsScannedLog` (
   `TotalScanned` int(11) DEFAULT NULL,
   `TotalNumberErrors` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `ProductsScannedLog`
+--
+
+INSERT INTO `ProductsScannedLog` (`ProductScannedID`, `ProductScannedCode`, `ProductScannedDate`, `TotalScanned`, `TotalNumberErrors`) VALUES
+(7, 4, '2023-04-12', 39, 0),
+(9, 4, '2023-04-12', 34, 0);
 
 -- --------------------------------------------------------
 
@@ -182,12 +195,12 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`UserID`, `UserName`, `UserPassword`, `UserEmail`, `UserLevel`) VALUES
-(18, 'Alexandre', '$2b$10$mKf1kkT52l0LX5yMPH8TWurDjocN/Iaw1nKzFKk6RirD33TIIVT1u', 'alexandre@gmail.com', 'Admin'),
-(20, 'Sergej', '$2b$10$UGkIyPye6stQ.3lhhFPQceqzJJ2MP5M7FasMzKfsGHoL6X8w3U1Iq', 'sergej@gmail.com', 'Leader'),
-(21, 'John', '$2b$10$a.cEANnMvp.zaCCtliUQF.Vj46uS575aERJa49paHrDWNkKM1lP8.', 'john@gmail.com', 'Quality'),
-(23, 'Patrick', '$2b$10$0MDfnqp5AmuZkp/rNdrnhuFRCz9h2zQrISHmc3jHJo6wbffNYNkaK', 'patrick@gmail.com', 'Admin'),
-(25, 'Enda', '$2b$10$09Y5axCJwl3fAOym3WECFerIYJHzUDC1WcVU9w1cwsKhMXt587WMW', 'enda@gmail.com', 'Admin'),
-(26, 'Nathan', '$2b$10$QHxwbFT3D3TSPn12/dYsYe2H5Y543bv7hT75.MQqkcr5nqtM6Q3lO', 'nathan@gmail.com', 'Leader');
+(1, 'Alex', '$2b$10$4OAvN2nAlgjoNl/pqaPr8.nxlxnp9.Az.MPtRFUlz8VTgEcGDrlIm', 'Alex.desbos@gmail.com', 'Admin'),
+(2, 'john', '$2b$10$/HrmJqZwnvt17Kx4y1zK3unZMYj6YNlAkmQ1RUWLGlrB.TTN60l2e', 'john@gmail.com', 'Admin'),
+(3, 'Yue', '$2b$10$h.ePNs2F2.bcdfl9AzN7AeFwoXOVANr91bpnXQ61dpIQDW9Zd1BPO', 'yue@gmail.com', 'Leader'),
+(4, 'Nathan', '$2b$10$tWjtGL4sbbD.nTAL0ZCoguRCBiU01Fd4CCgfyMa.wvh39v/nnbQD.', 'nathan@gmail.com', 'Leader'),
+(6, 'Patrick', '$2b$10$x0bYfMFqxS.uIV.Imn1OX.R3dWIX6g38pEXKgXNDeCLX6ybLGYZhy', 'patrick@gmail.com', 'Admin'),
+(7, 'Sergej', '$2b$10$7UOuFX1sMDNbhp3Ue9zJwu4DdwnzV0I5zaSxNcXYCmsa3RZmCupw.', 'sergej@gmail.com', 'Leader');
 
 --
 -- Index pour les tables déchargées
@@ -252,16 +265,34 @@ ALTER TABLE `Users`
 --
 
 --
+-- AUTO_INCREMENT pour la table `Customer`
+--
+ALTER TABLE `Customer`
+  MODIFY `CustomerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pour la table `LabelErrorHistory`
+--
+ALTER TABLE `LabelErrorHistory`
+  MODIFY `LabelErrorID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT pour la table `Product`
 --
 ALTER TABLE `Product`
-  MODIFY `ProductId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `ProductId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT pour la table `ProductsScannedLog`
+--
+ALTER TABLE `ProductsScannedLog`
+  MODIFY `ProductScannedID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pour la table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Contraintes pour les tables déchargées
