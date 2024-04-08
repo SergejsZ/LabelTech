@@ -12,7 +12,7 @@ FROM
 SELECT
 PORTOBELLO
 ~FARMS
-we know € trust
+we know ï¿½ trust
 Best}
 MUSHROOMS
 stored
