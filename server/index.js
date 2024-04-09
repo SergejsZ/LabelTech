@@ -1173,12 +1173,50 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
-//get the productscanlog of the product select
-app.get('/api/productscanlog/:productCode', async (req, res) => {
+
+//create a new productscanlog
+app.post('/api/productscanlog', async (req, res) => {
+  try {
+    console.log('Request body:', req.body);
+    const { productCode, productScannedDate } = req.body;
+
+    const productIdQuery = 'SELECT ProductId FROM Product WHERE ProductCode = ?';
+    db.query(productIdQuery, [productCode], (error, results) => {
+      if (error) {
+        console.error('Error executing SQL query:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      const productId = results[0].ProductId;
+      const insertQuery = 'INSERT INTO ProductsScannedLog (ProductScannedCode, ProductScannedDate, TotalScanned, TotalNumberErrors) VALUES (?, ?, 0, 0)';
+      db.query(insertQuery, [productId, productScannedDate], (error, results) => {
+        if (error) {
+          console.error('Error adding product scan log:', error);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        res.json({ success: true });
+      });
+    });
+
+    
+  } catch (error) {
+    console.error('Error adding product scan log:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Get the value of the total scanned and total number of errors for a product, get only the last value
+// to be used like this  fetch(`http://localhost:4000/api/productscanlog/${productCode}`, {
+app.get('/api/productscanlogs/:productCode', async (req, res) => {
   try {
     const { productCode } = req.params;
 
-    const query = 'SELECT * FROM `ProductsScannedLog` WHERE ProductScannedCode = (SELECT ProductId FROM `Product` WHERE ProductCode = ?)';
+    const query = 'SELECT * FROM `ProductsScannedLog` WHERE ProductScannedID = ( SELECT MAX(ProductScannedID) FROM `ProductsScannedLog` WHERE ProductScannedCode = (SELECT ProductId FROM `Product` WHERE ProductCode = ?) )';
 
     db.query(query, [productCode], (error, results) => {
       if (error) {
@@ -1186,17 +1224,21 @@ app.get('/api/productscanlog/:productCode', async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
 
-      const productScanLog = results.map((product) => ({
-        productScannedCode: product.ProductScannedCode,
-        productScannedDate: product.ProductScannedDate,
-        totalScanned: product.TotalScanned,
-        totalNumberErrors: product.TotalNumberErrors,
-      }));
+      if (results.length > 0) {
+        const productScanLog = {
+          totalScanned: results[0].TotalScanned,
+          totalNumberErrors: results[0].TotalNumberErrors,
+        };
 
-      res.json(productScanLog);
+        console.log('Product scan log:', productScanLog);
+        res.json(productScanLog);
+      } else {
+        res.status(404).json({ message: 'No data found' });
+      }
     });
   } catch (error) {
     console.error('Error fetching product data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-});
+}
+);
