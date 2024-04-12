@@ -66,6 +66,18 @@ const [errorData, setErrorData] = useState([]);
     fetchProducts();
   }, []);  
 
+  useEffect(() => {
+    if (showAlert) {
+      if (navigator.vibrate) {
+        // Vibrate until showAlert is false
+        const interval = setInterval(() => {
+          navigator.vibrate(200);
+          console.log('Vibrating');
+        }, 200);
+      }
+    }
+  }, [showAlert]);
+
     useEffect(() => {
       const fetchErrorData = async () => {
         try {
