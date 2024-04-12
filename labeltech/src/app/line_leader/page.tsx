@@ -248,11 +248,12 @@ useEffect(() => {
     return (
       <div className='text-3xl'>
         {/* Page content */}
-        <div className='flex justify-end w-full mt-10'>
-          <p className='mr-5'>Today&apos;s date:</p>
-          <p className='greyinput mr-8'>{currentDate}</p>
-          <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-16' onClick={logout}>Logout</button>
+        <div className='flex flex-col md:flex-row justify-end items-center w-full mt-10'>
+          <p className='md:mr-5 mb-2 md:mb-0'>Today&apos;s date:</p>
+          <p className='greyinput mb-2 md:mb-0 md:mr-8'>{currentDate}</p>
+          <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onClick={logout}>Logout</button>
         </div>
+
         
         <div className="flex p-5 flex-col space-y-10 md:flex-row md:space-x-5 md:space-y-0">
           {/* Form for product code and dispatch date */}
@@ -309,8 +310,8 @@ useEffect(() => {
               <div className="text-lg font-semibold mb-4">Scanning</div>
               
               {/* Packed Without Error Display */}
-              <div className="flex justify-between items-center mb-6 p-3 bg-gray-100 border border-gray-300 rounded mb-8">
-                <span>scanned package:</span>
+              <div className="flex justify-between items-center mb-4 p-3 bg-gray-100 border border-gray-300 rounded">
+                <span>Scanned package:</span>
                 <span className="text-xl font-bold p-2 bg-gray-200 rounded">{packedWithoutError}</span>
               </div>
 
@@ -320,7 +321,7 @@ useEffect(() => {
                 <span className="text-xl font-bold p-2 bg-gray-200 rounded flex">{packingError} {packingError !== 0 && <ExclamationTriangleIcon className="h-8 w-8 text-yellow-500" />}</span>
               </div> */}
               <div className="flex justify-between items-center mb-4 p-3 bg-gray-100 border border-gray-300 rounded">
-                <span>Errors</span>
+                <span>Errors:</span>
                 <span className="text-xl font-bold p-2 bg-gray-200 rounded flex">{criticalPackingError} {criticalPackingError !== 0 && <ExclamationCircleIcon className='h-8 h-8 text-red-500' />}</span>
               </div>
             </div>
