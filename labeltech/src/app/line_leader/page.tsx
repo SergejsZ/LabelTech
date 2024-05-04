@@ -206,7 +206,7 @@ useEffect(() => {
           setLastTenScans((prev) => prev.concat('missplacement'));
         }
       }
-      else if ((packedWithoutError + 1) % 8 === 0) {
+      else if ((packedWithoutError + 1) % 14 === 0) {
         setCriticalPackingError((err) => err + 1);
         // add a new scan to the last ten scans, if the last ten scans is full, remove the first scan
         if (lastTenScans.length === 10) {
@@ -260,10 +260,10 @@ useEffect(() => {
     return (
       <div className='text-3xl'>
         {/* Page content */}
-        <div className='flex flex-col md:flex-row justify-end items-center w-full mt-10'>
+        <div className='flex flex-col md:flex-row justify-end items-center w-full mt-10 mr'>
           <p className='md:mr-5 mb-2 md:mb-0'>Today&apos;s date:</p>
           <p className='greyinput mb-2 md:mb-0 md:mr-8'>{currentDate}</p>
-          <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded' onClick={logout}>Logout</button>
+          <button className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-8' onClick={logout}>Logout</button>
         </div>
 
         

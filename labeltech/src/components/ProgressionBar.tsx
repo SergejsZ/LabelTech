@@ -11,7 +11,7 @@ const ProgressionBar = ({ errorData }: { errorData: any[] }) => {
 const bgColorForError = (errorData: any) => {
     switch (errorData) {
         case "missplacement":
-            return "bg-yellow-500"; // Non-critical error
+            return "bg-green-500"; // Non-critical error
         case "date":
             return "bg-red-500"; // Critical error
         default:
@@ -22,9 +22,9 @@ const bgColorForError = (errorData: any) => {
 const textForError = (errorData: any) => {
     switch (errorData) {
         case "missplacement":
-            return "M"; // Non-critical error
+            return "OK"; // Non-critical error
         case "date":
-            return "D"; // Critical error
+            return "X"; // Critical error
         default:
             return "OK"; // Unknown Output
     }
